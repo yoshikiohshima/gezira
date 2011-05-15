@@ -12,6 +12,7 @@ typedef struct {
 #include <ApplicationServices/ApplicationServices.h>
 #include <objc/objc-runtime.h>
 #define NSTitledWindowMask     1
+#define NSBorderlessWindowMask 0
 #define NSBackingStoreBuffered 2
 
 struct gezira_Window_ {
@@ -26,7 +27,7 @@ struct gezira_Window_ {
 };
 
 static void
-gezira_Window_init (gezira_Window_t *window, int width, int height)
+gezira_Window_init (gezira_Window_t *window, int x, int y, int width, int height)
 {
     id nscontext;
     CGColorSpaceRef colorspace;
@@ -38,9 +39,10 @@ gezira_Window_init (gezira_Window_t *window, int width, int height)
     objc_msgSend (window->pool, sel_getUid ("init"));
     window->nswindow = objc_msgSend (objc_getClass ("NSWindow"), sel_getUid ("alloc"));
     objc_msgSend (window->nswindow, sel_getUid ("initWithContentRect:styleMask:backing:defer:"),
-        CGRectMake (0, 0, width, height),
-        NSTitledWindowMask, NSBackingStoreBuffered, NO);
+        CGRectMake (x, y, width, height),
+        NSBorderlessWindowMask, NSBackingStoreBuffered, NO);
     objc_msgSend (window->nswindow, sel_getUid ("makeKeyAndOrderFront:"), window->NSApp);
+    objc_msgSend (window->nswindow, sel_getUid ("setLevel:"), 1000);
     nscontext = objc_msgSend (objc_getClass ("NSGraphicsContext"), sel_getUid ("currentContext"));
     window->context = (CGContextRef) objc_msgSend (nscontext, sel_getUid ("graphicsPort"));
     colorspace = CGColorSpaceCreateDeviceRGB ();
@@ -99,7 +101,7 @@ struct gezira_Window_ {
 };
 
 static void
-gezira_Window_init (gezira_Window_t *window, int width, int height)
+gezira_Window_init (gezira_Window_t *window, int x, int y, int width, int height)
 {
     int depth;
     Atom atom;
@@ -116,7 +118,7 @@ gezira_Window_init (gezira_Window_t *window, int width, int height)
     window->image = XShmCreateImage (window->display, CopyFromParent, depth, ZPixmap,
                                      NULL, window->segment, width, height);
     window->x11window = XCreateWindow (window->display, DefaultRootWindow (window->display),
-                                       50, 50, width, height, 0, depth, InputOutput,
+                                       x, y, width, height, 0, depth, InputOutput,
                                        CopyFromParent, 0, NULL);
     window->segment->shmid = shmget (IPC_PRIVATE, window->image->bytes_per_line * height,
                                      IPC_CREAT | 0777);

@@ -16,6 +16,11 @@
 #define NFLAKES 1000
 #define NFRAMES_PER_FPS_UPDATE 50
 
+static int default_width = 600;
+static int default_height = 600;
+static int default_x = 0;
+static int default_y = 0;
+
 #include <unistd.h>
 #include <termios.h>
 void echo(int on) {
@@ -71,7 +76,7 @@ update_flake (gezira_snowflake_t *flake)
 {
     flake->y += flake->dy;
     flake->angle += flake->rotation;
-    if (flake->y > DEFAULT_HEIGHT + 10)
+    if (flake->y > default_height + 10)
         flake->y = -10;
 }
 
@@ -83,9 +88,9 @@ static void
 render_flake (gezira_snowflake_t *flake, nile_Process_t *init, nile_Process_t *COI)
 {
     Matrix_t M = Matrix ();
-    M = Matrix_translate (M, DEFAULT_WIDTH / 2, DEFAULT_HEIGHT / 2);
+    M = Matrix_translate (M, default_width / 2, default_height / 2);
     M = Matrix_scale (M, zoomX, zoomY);
-    M = Matrix_translate (M, -DEFAULT_WIDTH / 2, -DEFAULT_HEIGHT / 2);
+    M = Matrix_translate (M, -default_width / 2, -default_height / 2);
     M = Matrix_translate (M, flake->x, flake->y);
     M = Matrix_rotate (M, flake->angle);
     M = Matrix_scale (M, flake->scale, flake->scale);
@@ -93,7 +98,7 @@ render_flake (gezira_snowflake_t *flake, nile_Process_t *init, nile_Process_t *C
     nile_Process_t *p = nile_Process_pipe (
         nile_Funnel (init),
         gezira_TransformBeziers (init, M.a, M.b, M.c, M.d, M.e, M.f),
-        gezira_ClipBeziers (init, 0, 0, DEFAULT_WIDTH, DEFAULT_HEIGHT),
+        gezira_ClipBeziers (init, 0, 0, default_width, default_height),
         gezira_Rasterize (init),
         COI,
         NILE_NULL);
@@ -124,7 +129,18 @@ main (int argc, char **argv)
         exit (1);
     }
 
-    gezira_Window_init (&window, DEFAULT_WIDTH, DEFAULT_HEIGHT);
+    if (argc == 5) {
+      default_x = atoi(argv[1]);
+      default_y = atoi(argv[2]);
+      default_width = atoi(argv[3]);
+      default_height = atoi(argv[4]);
+      if (default_width <= 0 || default_height <= 0) {
+	fprintf(stderr, "wrong dimension\n");
+	exit(1);
+      }
+    }
+
+    gezira_Window_init (&window, default_x, default_y, default_width, default_height);
     echo (0);
 
     srand (17837643);
