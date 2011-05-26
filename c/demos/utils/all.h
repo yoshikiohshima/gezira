@@ -4,3 +4,5 @@
 #include "window.h"
 #include "snowflake.h"
 #include "star.h"
+#include "stdin.h"
+
