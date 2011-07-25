@@ -15,6 +15,7 @@ static int window_x = 0;
 static int window_y = 0;
 
 static int   is_zooming = 0;
+static int   is_paused = 0;
 static float zoom       = 1.00;
 static float dzoom      = 0.01;
 
@@ -262,6 +263,7 @@ main (int argc, char **argv)
                 case '*': nthreads = 18; break;
                 case '(': nthreads = 19; break;
                 case 'z': is_zooming = !is_zooming;  break;
+                case 's': is_paused = !is_paused;  break;
                 default: nthreads = c - '0'; break;
             }
             if (!nthreads)
@@ -283,6 +285,11 @@ main (int argc, char **argv)
         }
         if (!nthreads)
             break;
+
+        if (is_paused) {
+	  usleep(500*1000);
+	  continue;
+	}
 
         gate = gezira_Window_update_and_clear (&window, init, gate, 1, 1, 1, 1);
         for (i = 0; i < NFALLING_GLYPHS; i++) {
