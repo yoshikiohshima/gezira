@@ -3,7 +3,6 @@
 #include "nile.h"
 #include "gezira.h"
 #include "gezira-image.h"
-#define HANDLES_STDIN
 #include "utils/all.h"
 
 #define INITIAL_NBYTES_PER_THREAD 100000
@@ -12,15 +11,11 @@
 #define WINDOW_HEIGHT 600
 #define NFALLING_GLYPHS 5000
 
-static int window_width = 600;
+static int window_width  = 600;
 static int window_height = 600;
-static int window_x = 0;
-static int window_y = 0;
-
-static int   is_zooming = 0;
-static int   is_paused = 0;
-static float zoom       = 1.00;
-static float dzoom      = 0.01;
+static int   is_zooming  = 0;
+static float zoom        = 1.00;
+static float dzoom       = 0.01;
 
 static gezira_Window_t window;
 static nile_Process_t *init;
@@ -201,18 +196,20 @@ main (int argc, char **argv)
         {'y'}, {'z'},
     };
     int nglyphs = (sizeof (glyphs) / sizeof (glyphs[0]));
+    int window_x = 0;
+    int window_y = 0;
 
     if (argc == 5) {
-      window_x = atoi(argv[1]);
-      window_y = atoi(argv[2]);
-      window_width = atoi(argv[3]);
-      window_height = atoi(argv[4]);
-      if (window_width <= 0 || window_height <= 0) {
-	fprintf(stderr, "wrong dimension\n");
-	exit(1);
-      }
+        window_x      = atoi (argv[1]);
+        window_y      = atoi (argv[2]);
+        window_width  = atoi (argv[3]);
+        window_height = atoi (argv[4]);
+        if (window_width <= 0 || window_height <= 0) {
+            fprintf (stderr, "Invalid window dimensions\n");
+            exit (1);
+        }
     }
-    gezira_Window_init (&window, window_x, window_y, window_width, window_height, 0);
+    gezira_Window_init (&window, window_width, window_height, window_x, window_y);
 
     ft_error = FT_Init_FreeType (&ft);
     ft_error = FT_New_Face (ft, FONT_FILE, 0, &ft_face);
@@ -249,10 +246,7 @@ main (int argc, char **argv)
     gate = nile_Identity (init, 8);
 
     for (;;) {
-        char c = gezira_Window_key_pressed (&window);
-#ifdef HANDLES_STDIN	
-	if (c == -1) c = inputChar();
-#endif
+        char c = gezira_stdin_key_pressed ();
         while (c != -1) {
             switch (c) {
                 case ')': nthreads = 10; break;
@@ -266,7 +260,6 @@ main (int argc, char **argv)
                 case '*': nthreads = 18; break;
                 case '(': nthreads = 19; break;
                 case 'z': is_zooming = !is_zooming;  break;
-                case 's': is_paused = !is_paused;  break;
                 default: nthreads = c - '0'; break;
             }
             if (!nthreads)
@@ -283,15 +276,10 @@ main (int argc, char **argv)
                 init = nile_startup (malloc (mem_size), mem_size, nthreads);
                 gate = nile_Identity (init, 8);
             }
-            c = gezira_Window_key_pressed (&window);
+            c = gezira_stdin_key_pressed ();
         }
         if (!nthreads)
             break;
-
-        if (is_paused) {
-	  usleep(500*1000);
-	  continue;
-	}
 
         gate = gezira_Window_update_and_clear (&window, init, gate, 1, 1, 1, 1);
         for (i = 0; i < NFALLING_GLYPHS; i++) {

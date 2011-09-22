@@ -16,7 +16,7 @@ struct gezira_Window_ {
 };
 
 static void
-gezira_Window_init (gezira_Window_t *window, int x, int y, int width, int height, int has_border)
+gezira_Window_init (gezira_Window_t *window, int width, int height)
 {
     window->width = width;
     window->height = height;
@@ -60,7 +60,7 @@ struct gezira_Window_ {
 };
 
 static void
-gezira_Window_init (gezira_Window_t *window, int x, int y, int width, int height, int has_border)
+gezira_Window_init (gezira_Window_t *window, int width, int height, int x, int y)
 {
     id nscontext;
     CGColorSpaceRef colorspace;
@@ -80,7 +80,7 @@ gezira_Window_init (gezira_Window_t *window, int x, int y, int width, int height
     window->nswindow = objc_msgSend (objc_getClass ("NSWindow"), sel_getUid ("alloc"));
     objc_msgSend (window->nswindow, sel_getUid ("initWithContentRect:styleMask:backing:defer:"),
         CGRectMake (x, y, width, height),
-		  has_border ? NSTitledWindowMask : NSBorderlessWindowMask, NSBackingStoreBuffered, NO);
+        NSBorderlessWindowMask, NSBackingStoreBuffered, NO);
     objc_msgSend (window->nswindow, sel_getUid ("makeKeyAndOrderFront:"), window->NSApp);
     objc_msgSend (window->nswindow, sel_getUid ("setLevel:"), 1000);
 
@@ -160,7 +160,7 @@ struct gezira_Window_ {
 };
 
 static void
-gezira_Window_init (gezira_Window_t *window, int x, int y, int width, int height, int has_border)
+gezira_Window_init (gezira_Window_t *window, int width, int height)
 {
     int depth;
     Atom atom;
