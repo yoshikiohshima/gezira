@@ -23,17 +23,17 @@ gezira_Window_init (gezira_Window_t *window, int x, int y, int width, int height
     window->pixels = malloc (width * height * sizeof (uint32_t));
 }
 
+static char
+gezira_Window_key_pressed (gezira_Window_t *window)
+    { return -1; }
+
 static void
 gezira_Window_fini (gezira_Window_t *window)
-{
-    free (window->pixels);
-}
+    { free (window->pixels); }
 
 static nile_Buffer_t *
 gezira_WindowUpdate_prologue (nile_Process_t *p, nile_Buffer_t *out)
-{
-    return out;
-}
+    { return out; }
 
 #elif defined(__APPLE__)
 
@@ -232,7 +232,7 @@ gezira_WindowUpdate (nile_Process_t *p, gezira_Window_t *window)
 
 static nile_Process_t *
 gezira_Window_update_and_clear (gezira_Window_t *window, nile_Process_t *init, nile_Process_t *gate,
-                               float a, float r, float g, float b)
+                                float a, float r, float g, float b)
 {
     nile_Process_t *gate_ = nile_Identity (init, 1);
     nile_Process_t *clear = gezira_CompositeUniformColorOverImage_ARGB32 (init,
