@@ -35,6 +35,12 @@ ColorSpans :: (Real, Color) >> (Real, Color)
 (A : Color) ⊕ (B : Color) : Color
     A × (1 - B.a) + B × (1 - A.a)
 
+(A : Point) =# (B : Point) : Real
+    A.x = B.x ∧ A.y = B.y
+
+(A : Point) ≠# (B : Point) : Real
+    A.x ≠ B.x ∨ A.y ≠ B.y
+
 (u : Vector) ≠* (v : Vector) : Real
     u.x ≠ v.x ∨ u.y ≠ v.y
 
@@ -45,7 +51,7 @@ ColorSpans :: (Real, Color) >> (Real, Color)
     u.x × v.x + u.y × v.y
 
 ‖ (u : Vector) ‖ : Real
-    √(u ∙ u) 
+    √(u ∙ u)
 
 ^(u : Vector) : Vector
     { u / ‖ u ‖ if ‖ u ‖ ≠ 0, 0 }

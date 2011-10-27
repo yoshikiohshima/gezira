@@ -12,14 +12,14 @@ OffsetBezier (o : Real, Z : Bezier) : Bezier >> Bezier
         N = M + o × w
         E = 2 × N - (D ~ F)
         >> (D, E, F)
-    else if u ≠* 0 ∧ v ≠* 0
+    else if A ≠# M ∧ M ≠# C
         ⇒ OffsetBezier (o, (M, B ~ C, C)) → OffsetBezier (o, (A, A ~ B, M))
 
 MiterJoin (o, l : Real, P : Point, u, v : Vector) : Bezier >> Bezier
     A = P + o × u
     C = P + o × v
     w = (A ⟂ C) ?* u
-    if u ∙ w ≥ (1 / l)
+    if u ∙ w ≥ 1 / (l ▷ 1)
         p = o / (u ∙ w)
         M = P + p × w
         >> (M, M ~ C, C) >> (A, A ~ M, M)
@@ -35,12 +35,12 @@ RoundJoin (o : Real, P : Point, u, v : Vector) : Bezier >> Bezier
         B = 2 × N - (A ~ C)
         >> (A, B, C)
     else
-        ⇒ RoundJoin (o, P, u, w) → RoundJoin (o, P, w, v)
+        ⇒ RoundJoin (o, P, w, v) → RoundJoin (o, P, u, w)
 
 JoinBeziers (o, l : Real, Zi, Zj : Bezier) : Bezier >> Bezier
     u = Zi.B ⟂ Zi.C
     v = Zj.A ⟂ Zj.B
-    if l < 1
+    if l < 0
         ⇒ RoundJoin (o, (Zi.C), u, v) → (→)
     else
         ⇒ MiterJoin (o, l, (Zi.C), u, v) → (→)
@@ -54,17 +54,18 @@ CapBezier (o, c : Real, Z : Bezier) : Bezier >> Bezier
     else
         D = C + o × u
         G = C - o × u
-        E = D + c × v
-        F = G + c × v
+        E = D + o × c × v
+        F = G + o × c × v
         >> (D, D ~ E, E) >> (E, E ~ F, F) >> (F, F ~ G, G)
 
 OffsetAndJoin (o, l, c : Real, Z1, Zi : Bezier) : Bezier >> Bezier
     ∀ Zj
-        ⇒ OffsetAndJoin (o, l, c, Z1, Zj) → JoinBeziers (o, l, Zi, Zj) → OffsetBezier (o, Zi)
-    if Zi.C.x = Z1.A.x ∧ Zi.C.y = Z1.A.y
+        ⇒ OffsetAndJoin (o, l, c, Z1, Zj) →
+          JoinBeziers (o, l, Zi, Zj) → OffsetBezier (o, Zi)
+    if Zi.C =# Z1.A
         ⇒ JoinBeziers (o, l, Zi, Z1) → OffsetBezier (o, Zi)
     else
-        ⇒ CapBezier (o, c, Zi) → OffsetBezier (o, Zi)
+        ⇒ CapBezier (o, c, Zi)       → OffsetBezier (o, Zi)
 
 StrokeOneSide (w, l, c : Real) : Bezier >> Bezier
     ∀ Z1
@@ -78,13 +79,13 @@ SanitizeBezierPath : Bezier >> Bezier
     ∀ (A, B, C)
         u = A ⟂ B
         v = B ⟂ C
-        M = A ~ C
         if u ∙ v < -0.9999
-            << (A, M, C)
+            M = (A ~ B) ~ (B ~ C)
+            << (M, M ~ C, C) << (A, A ~ M, M)
         else if u ≠* 0 ∧ v ≠* 0
             >> (A, B, C)
-        else if (A ⟂ M) ≠* 0 ∧ (M ⟂ C) ≠* 0
-            >> (A, M, C)
+        else if A ~ C ≠# B
+            << (A, A ~ C, C)
 
 StrokeBezierPath (w, l, c : Real) : Bezier >> Bezier
     ⇒ SanitizeBezierPath →
