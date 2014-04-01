@@ -1,10 +1,10 @@
 NILE_RUNTIME := ../../../nile/runtimes/c
 TARGET       := $(shell $(CC) -dumpmachine)
-LDFLAGS      := -L.. -lgezira -L$(NILE_RUNTIME) -lnile #`freetype-config --libs`
+LDFLAGS      := -L.. -lgezira -L$(NILE_RUNTIME) -lnile `freetype-config --libs`
 CFLAGS       := -Wall -Werror -Wno-unused \
                 -I.. -I$(NILE_RUNTIME) \
-                -O3 -ffast-math
-                #`freetype-config --cflags` \
+                -m32 -O3 -ffast-math \
+                `freetype-config --cflags` \
 
 ifneq (,$(findstring darwin,$(TARGET)))
   LDFLAGS += -framework Cocoa
