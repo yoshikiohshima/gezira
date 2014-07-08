@@ -39,6 +39,7 @@ gezira_WindowUpdate_prologue (nile_Process_t *p, nile_Buffer_t *out)
 #include <objc/objc-runtime.h>
 #define NSTitledWindowMask                           1
 #define NSBackingStoreBuffered                       2
+#define NSBorderlessWindowMask			     0
 #define NSAnyEventMask                       ULONG_MAX
 #define NSKeyDown                                   10
 #define NSApplicationActivationPolicyRegular         0
@@ -55,7 +56,7 @@ struct gezira_Window_ {
 };
 
 static void
-gezira_Window_init (gezira_Window_t *window, int width, int height)
+gezira_Window_init (gezira_Window_t *window, int width, int height, int x, int y)
 {
     id nscontext;
     CGColorSpaceRef colorspace;
@@ -73,8 +74,8 @@ gezira_Window_init (gezira_Window_t *window, int width, int height)
     /* NSWindow */
     window->nswindow = objc_msgSend ((id)objc_getClass ("NSWindow"), sel_getUid ("alloc"));
     objc_msgSend (window->nswindow, sel_getUid ("initWithContentRect:styleMask:backing:defer:"),
-        CGRectMake (0, 0, width, height),
-        NSTitledWindowMask, NSBackingStoreBuffered, NO);
+        CGRectMake (x, y, width, height),
+        NSBorderlessWindowMask, NSBackingStoreBuffered, NO);
     objc_msgSend (window->nswindow, sel_getUid ("makeKeyAndOrderFront:"), window->NSApp);
 
     /* CGContexts */

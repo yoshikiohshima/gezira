@@ -169,6 +169,11 @@ main (int argc, char **argv)
 {
     int i;
     gezira_Window_t window;
+    int window_width  = WINDOW_WIDTH;
+    int window_height = WINDOW_HEIGHT;
+    int window_x      = 0;
+    int window_y      = 0;
+
     nile_Process_t *init;
     gezira_falling_glyph_t fglyphs[NFALLING_GLYPHS];
     int nthreads = 1;
@@ -187,7 +192,19 @@ main (int argc, char **argv)
     };
     int nglyphs = (sizeof (glyphs) / sizeof (glyphs[0]));
 
-    gezira_Window_init (&window, WINDOW_WIDTH, WINDOW_HEIGHT);
+    if (argc == 5) {
+        window_x      = atoi (argv[1]);
+        window_y      = atoi (argv[2]);
+        window_width  = atoi (argv[3]);
+        window_height = atoi (argv[4]);
+        if (window_width <= 0 || window_height <= 0) {
+            fprintf (stderr, "Invalid window dimensions\n");
+            exit (1);
+        }
+    }
+
+
+    gezira_Window_init (&window, window_width, window_height, window_x, window_y);
 
     ft_error = FT_Init_FreeType (&ft);
     ft_error = FT_New_Face (ft, FONT_FILE, 0, &ft_face);
