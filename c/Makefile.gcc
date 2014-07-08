@@ -7,7 +7,7 @@ NO_AVX_FLAG  := $(shell $(CC) -E - </dev/null >/dev/null 2>&1 -mavx;         ech
 
 CFLAGS      := -pipe -Wall -Werror -Wno-unused -Wno-uninitialized \
                -I$(NILE_RUNTIME) \
-               -O3 -ffast-math
+               -m32 -O3 -ffast-math
 
 ifneq (,$(findstring mingw,$(TARGET))$(findstring cygwin,$(TARGET)))
   CFLAGS += -mstackrealign
