@@ -262,7 +262,7 @@ main (int argc, char **argv)
             gezira_falling_glyph_update (&fglyphs[i]);
         }
 
-        if (nile_error (init)) {
+        if (nile_status (init) != NILE_STATUS_OK) {
             mem_size *= 2;
             if (mem_size > MEM_SIZE_MAX) {
                 fprintf (stderr, "Memory maxed out\n");

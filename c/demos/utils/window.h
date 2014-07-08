@@ -63,22 +63,22 @@ gezira_Window_init (gezira_Window_t *window, int width, int height)
     gezira_Image_init (&window->image, pixels, width, height, width);
 
     /* NSApp */
-    window->NSApp = objc_msgSend (objc_getClass ("NSApplication"), sel_getUid ("sharedApplication"));
-    window->pool = objc_msgSend (objc_getClass ("NSAutoreleasePool"), sel_getUid ("alloc"));
+    window->NSApp = objc_msgSend ((id)objc_getClass ("NSApplication"), sel_getUid ("sharedApplication"));
+    window->pool = objc_msgSend ((id)objc_getClass ("NSAutoreleasePool"), sel_getUid ("alloc"));
     objc_msgSend (window->pool, sel_getUid ("init"));
     if (objc_msgSend (window->NSApp, sel_getUid ("respondsToSelector:"), sel_getUid("setActivationPolicy:")))
         objc_msgSend (window->NSApp, sel_getUid ("setActivationPolicy:"), NSApplicationActivationPolicyRegular);
     objc_msgSend (window->NSApp, sel_getUid ("activateIgnoringOtherApps:"), YES);
 
     /* NSWindow */
-    window->nswindow = objc_msgSend (objc_getClass ("NSWindow"), sel_getUid ("alloc"));
+    window->nswindow = objc_msgSend ((id)objc_getClass ("NSWindow"), sel_getUid ("alloc"));
     objc_msgSend (window->nswindow, sel_getUid ("initWithContentRect:styleMask:backing:defer:"),
         CGRectMake (0, 0, width, height),
         NSTitledWindowMask, NSBackingStoreBuffered, NO);
     objc_msgSend (window->nswindow, sel_getUid ("makeKeyAndOrderFront:"), window->NSApp);
 
     /* CGContexts */
-    nscontext = objc_msgSend (objc_getClass ("NSGraphicsContext"), sel_getUid ("currentContext"));
+    nscontext = objc_msgSend ((id)objc_getClass ("NSGraphicsContext"), sel_getUid ("currentContext"));
     window->context = (CGContextRef) objc_msgSend (nscontext, sel_getUid ("graphicsPort"));
     colorspace = CGColorSpaceCreateDeviceRGB ();
     window->bitmap = CGBitmapContextCreate (pixels, width, height, 8, width * 4, colorspace,
@@ -91,7 +91,7 @@ gezira_Window_init (gezira_Window_t *window, int width, int height)
 static char
 gezira_Window_key_pressed (gezira_Window_t *window)
 {
-    id now = objc_msgSend (objc_getClass ("NSDate"), sel_getUid ("date"));
+    id now = objc_msgSend ((id)objc_getClass ("NSDate"), sel_getUid ("date"));
     id event = objc_msgSend (window->NSApp, sel_getUid ("nextEventMatchingMask:untilDate:inMode:dequeue:"),
                              NSAnyEventMask, now, NSDefaultRunLoopMode, YES);
     if (event) {
