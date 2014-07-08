@@ -2,10 +2,6 @@
 #include "nile.h"
 #include "gezira.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #define IN_QUANTUM 6
 #define OUT_QUANTUM 6
 
@@ -21,7 +17,7 @@ typedef struct {
 static nile_Buffer_t *
 gezira_TransformBeziers_prologue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_TransformBeziers_vars_t *vars = (gezira_TransformBeziers_vars_t *) nile_Process_vars (p);
+    gezira_TransformBeziers_vars_t *vars = nile_Process_vars (p);
     gezira_TransformBeziers_vars_t v = *vars;
     *vars = v;
     return out;
@@ -32,7 +28,7 @@ gezira_TransformBeziers_body (nile_Process_t *p,
                               nile_Buffer_t *in,
                               nile_Buffer_t *out)
 {
-    gezira_TransformBeziers_vars_t *vars = (gezira_TransformBeziers_vars_t *) nile_Process_vars (p);
+    gezira_TransformBeziers_vars_t *vars = nile_Process_vars (p);
     gezira_TransformBeziers_vars_t v = *vars;
     
     while (!nile_Buffer_is_empty (in) && !nile_Buffer_quota_hit (out)) {
@@ -109,7 +105,7 @@ gezira_TransformBeziers_body (nile_Process_t *p,
 static nile_Buffer_t *
 gezira_TransformBeziers_epilogue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_TransformBeziers_vars_t *vars = (gezira_TransformBeziers_vars_t *) nile_Process_vars (p);
+    gezira_TransformBeziers_vars_t *vars = nile_Process_vars (p);
     gezira_TransformBeziers_vars_t v = *vars;
     return out;
 }
@@ -127,7 +123,7 @@ gezira_TransformBeziers (nile_Process_t *p,
     gezira_TransformBeziers_vars_t v;
     p = nile_Process (p, IN_QUANTUM, sizeof (*vars), gezira_TransformBeziers_prologue, gezira_TransformBeziers_body, gezira_TransformBeziers_epilogue);
     if (p) {
-        vars = (gezira_TransformBeziers_vars_t *) nile_Process_vars (p);
+        vars = nile_Process_vars (p);
         v.v_M_a = nile_Real (v_M_a);
         v.v_M_b = nile_Real (v_M_b);
         v.v_M_c = nile_Real (v_M_c);
@@ -155,7 +151,7 @@ typedef struct {
 static nile_Buffer_t *
 gezira_ClipBeziers_prologue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_ClipBeziers_vars_t *vars = (gezira_ClipBeziers_vars_t *) nile_Process_vars (p);
+    gezira_ClipBeziers_vars_t *vars = nile_Process_vars (p);
     gezira_ClipBeziers_vars_t v = *vars;
     *vars = v;
     return out;
@@ -166,7 +162,7 @@ gezira_ClipBeziers_body (nile_Process_t *p,
                          nile_Buffer_t *in,
                          nile_Buffer_t *out)
 {
-    gezira_ClipBeziers_vars_t *vars = (gezira_ClipBeziers_vars_t *) nile_Process_vars (p);
+    gezira_ClipBeziers_vars_t *vars = nile_Process_vars (p);
     gezira_ClipBeziers_vars_t v = *vars;
     
     while (!nile_Buffer_is_empty (in) && !nile_Buffer_quota_hit (out)) {
@@ -369,109 +365,100 @@ gezira_ClipBeziers_body (nile_Process_t *p,
                 nile_Real_t t_102_2 = t_101;
                 nile_Real_t t_103_x = t_102_1;
                 nile_Real_t t_103_y = t_102_2;
-                nile_Real_t t_104_x = nile_Real_sub(v_ABBC_x, v.v_max_x);
-                nile_Real_t t_104_y = nile_Real_sub(v_ABBC_y, v.v_max_y);
-                nile_Real_t t_105 = nile_Real (0);
-                nile_Real_t t_106 = nile_Real_lt(t_104_x, t_105);
-                nile_Real_t t_107 = nile_Real_neg(t_104_x);
-                nile_Real_t t_108 = nile_Real_nz (t_106) ? t_107 : t_104_x;
-                nile_Real_t t_109 = nile_Real (0);
-                nile_Real_t t_110 = nile_Real_lt(t_104_y, t_109);
-                nile_Real_t t_111 = nile_Real_neg(t_104_y);
-                nile_Real_t t_112 = nile_Real_nz (t_110) ? t_111 : t_104_y;
-                nile_Real_t t_113_1 = t_108;
-                nile_Real_t t_113_2 = t_112;
-                nile_Real_t t_114_x = t_113_1;
-                nile_Real_t t_114_y = t_113_2;
-                nile_Real_t t_115_x = nile_Real_lt(t_103_x, t_114_x);
-                nile_Real_t t_115_y = nile_Real_lt(t_103_y, t_114_y);
-                nile_Real_t t_116_x = nile_Real_nz (t_115_x) ? v.v_min_x : v.v_max_x;
-                nile_Real_t t_116_y = nile_Real_nz (t_115_y) ? v.v_min_y : v.v_max_y;
-                nile_Real_t v_edge_x = t_116_x;
-                nile_Real_t v_edge_y = t_116_y;
-                nile_Real_t t_117_x = nile_Real_sub(v_ABBC_x, v_edge_x);
-                nile_Real_t t_117_y = nile_Real_sub(v_ABBC_y, v_edge_y);
-                nile_Real_t t_118 = nile_Real (0);
-                nile_Real_t t_119 = nile_Real_lt(t_117_x, t_118);
-                nile_Real_t t_120 = nile_Real_neg(t_117_x);
-                nile_Real_t t_121 = nile_Real_nz (t_119) ? t_120 : t_117_x;
-                nile_Real_t t_122 = nile_Real (0);
-                nile_Real_t t_123 = nile_Real_lt(t_117_y, t_122);
-                nile_Real_t t_124 = nile_Real_neg(t_117_y);
-                nile_Real_t t_125 = nile_Real_nz (t_123) ? t_124 : t_117_y;
-                nile_Real_t t_126_1 = t_121;
-                nile_Real_t t_126_2 = t_125;
-                nile_Real_t t_127_x = t_126_1;
-                nile_Real_t t_127_y = t_126_2;
-                nile_Real_t t_128 = nile_Real (0.1);
-                nile_Real_t t_129_x = t_128;
-                nile_Real_t t_129_y = t_128;
-                nile_Real_t t_130_x = nile_Real_lt(t_127_x, t_129_x);
-                nile_Real_t t_130_y = nile_Real_lt(t_127_y, t_129_y);
-                nile_Real_t t_131_x = nile_Real_nz (t_130_x) ? v_edge_x : v_ABBC_x;
-                nile_Real_t t_131_y = nile_Real_nz (t_130_y) ? v_edge_y : v_ABBC_y;
-                nile_Real_t v_M_x = t_131_x;
-                nile_Real_t v_M_y = t_131_y;
-                nile_Real_t t_133 = nile_Real_add(v_B_x, v_C_x);
-                nile_Real_t t_134 = nile_Real (2);
-                nile_Real_t t_135 = nile_Real_div(t_133, t_134);
-                nile_Real_t t_136 = nile_Real_add(v_B_y, v_C_y);
-                nile_Real_t t_137 = nile_Real (2);
-                nile_Real_t t_138 = nile_Real_div(t_136, t_137);
-                nile_Real_t t_139_1 = t_135;
-                nile_Real_t t_139_2 = t_138;
-                nile_Real_t t_140_x = t_139_1;
-                nile_Real_t t_140_y = t_139_2;
-                nile_Real_t t_132_1_x = v_M_x;
-                nile_Real_t t_132_1_y = v_M_y;
-                nile_Real_t t_132_2_x = t_140_x;
-                nile_Real_t t_132_2_y = t_140_y;
-                nile_Real_t t_132_3_x = v_C_x;
-                nile_Real_t t_132_3_y = v_C_y;
-                nile_Real_t t_141_A_x = t_132_1_x;
-                nile_Real_t t_141_A_y = t_132_1_y;
-                nile_Real_t t_141_B_x = t_132_2_x;
-                nile_Real_t t_141_B_y = t_132_2_y;
-                nile_Real_t t_141_C_x = t_132_3_x;
-                nile_Real_t t_141_C_y = t_132_3_y;
+                nile_Real_t t_104 = nile_Real (0.1);
+                nile_Real_t t_105_x = t_104;
+                nile_Real_t t_105_y = t_104;
+                nile_Real_t t_106_x = nile_Real_lt(t_103_x, t_105_x);
+                nile_Real_t t_106_y = nile_Real_lt(t_103_y, t_105_y);
+                nile_Real_t v_nearmin_x = t_106_x;
+                nile_Real_t v_nearmin_y = t_106_y;
+                nile_Real_t t_107_x = nile_Real_sub(v_ABBC_x, v.v_max_x);
+                nile_Real_t t_107_y = nile_Real_sub(v_ABBC_y, v.v_max_y);
+                nile_Real_t t_108 = nile_Real (0);
+                nile_Real_t t_109 = nile_Real_lt(t_107_x, t_108);
+                nile_Real_t t_110 = nile_Real_neg(t_107_x);
+                nile_Real_t t_111 = nile_Real_nz (t_109) ? t_110 : t_107_x;
+                nile_Real_t t_112 = nile_Real (0);
+                nile_Real_t t_113 = nile_Real_lt(t_107_y, t_112);
+                nile_Real_t t_114 = nile_Real_neg(t_107_y);
+                nile_Real_t t_115 = nile_Real_nz (t_113) ? t_114 : t_107_y;
+                nile_Real_t t_116_1 = t_111;
+                nile_Real_t t_116_2 = t_115;
+                nile_Real_t t_117_x = t_116_1;
+                nile_Real_t t_117_y = t_116_2;
+                nile_Real_t t_118 = nile_Real (0.1);
+                nile_Real_t t_119_x = t_118;
+                nile_Real_t t_119_y = t_118;
+                nile_Real_t t_120_x = nile_Real_lt(t_117_x, t_119_x);
+                nile_Real_t t_120_y = nile_Real_lt(t_117_y, t_119_y);
+                nile_Real_t v_nearmax_x = t_120_x;
+                nile_Real_t v_nearmax_y = t_120_y;
+                nile_Real_t t_121_x = nile_Real_nz (v_nearmax_x) ? v.v_max_x : v_ABBC_x;
+                nile_Real_t t_121_y = nile_Real_nz (v_nearmax_y) ? v.v_max_y : v_ABBC_y;
+                nile_Real_t t_122_x = nile_Real_nz (v_nearmin_x) ? v.v_min_x : t_121_x;
+                nile_Real_t t_122_y = nile_Real_nz (v_nearmin_y) ? v.v_min_y : t_121_y;
+                nile_Real_t v_M_x = t_122_x;
+                nile_Real_t v_M_y = t_122_y;
+                nile_Real_t t_124 = nile_Real_add(v_B_x, v_C_x);
+                nile_Real_t t_125 = nile_Real (2);
+                nile_Real_t t_126 = nile_Real_div(t_124, t_125);
+                nile_Real_t t_127 = nile_Real_add(v_B_y, v_C_y);
+                nile_Real_t t_128 = nile_Real (2);
+                nile_Real_t t_129 = nile_Real_div(t_127, t_128);
+                nile_Real_t t_130_1 = t_126;
+                nile_Real_t t_130_2 = t_129;
+                nile_Real_t t_131_x = t_130_1;
+                nile_Real_t t_131_y = t_130_2;
+                nile_Real_t t_123_1_x = v_M_x;
+                nile_Real_t t_123_1_y = v_M_y;
+                nile_Real_t t_123_2_x = t_131_x;
+                nile_Real_t t_123_2_y = t_131_y;
+                nile_Real_t t_123_3_x = v_C_x;
+                nile_Real_t t_123_3_y = v_C_y;
+                nile_Real_t t_132_A_x = t_123_1_x;
+                nile_Real_t t_132_A_y = t_123_1_y;
+                nile_Real_t t_132_B_x = t_123_2_x;
+                nile_Real_t t_132_B_y = t_123_2_y;
+                nile_Real_t t_132_C_x = t_123_3_x;
+                nile_Real_t t_132_C_y = t_123_3_y;
                 if (nile_Buffer_headroom (in) < IN_QUANTUM)
                     in = nile_Process_prefix_input (p, in);
-                nile_Buffer_push_head(in, t_141_C_y);
-                nile_Buffer_push_head(in, t_141_C_x);
-                nile_Buffer_push_head(in, t_141_B_y);
-                nile_Buffer_push_head(in, t_141_B_x);
-                nile_Buffer_push_head(in, t_141_A_y);
-                nile_Buffer_push_head(in, t_141_A_x);
-                nile_Real_t t_143 = nile_Real_add(v_A_x, v_B_x);
-                nile_Real_t t_144 = nile_Real (2);
-                nile_Real_t t_145 = nile_Real_div(t_143, t_144);
-                nile_Real_t t_146 = nile_Real_add(v_A_y, v_B_y);
-                nile_Real_t t_147 = nile_Real (2);
-                nile_Real_t t_148 = nile_Real_div(t_146, t_147);
-                nile_Real_t t_149_1 = t_145;
-                nile_Real_t t_149_2 = t_148;
-                nile_Real_t t_150_x = t_149_1;
-                nile_Real_t t_150_y = t_149_2;
-                nile_Real_t t_142_1_x = v_A_x;
-                nile_Real_t t_142_1_y = v_A_y;
-                nile_Real_t t_142_2_x = t_150_x;
-                nile_Real_t t_142_2_y = t_150_y;
-                nile_Real_t t_142_3_x = v_M_x;
-                nile_Real_t t_142_3_y = v_M_y;
-                nile_Real_t t_151_A_x = t_142_1_x;
-                nile_Real_t t_151_A_y = t_142_1_y;
-                nile_Real_t t_151_B_x = t_142_2_x;
-                nile_Real_t t_151_B_y = t_142_2_y;
-                nile_Real_t t_151_C_x = t_142_3_x;
-                nile_Real_t t_151_C_y = t_142_3_y;
+                nile_Buffer_push_head(in, t_132_C_y);
+                nile_Buffer_push_head(in, t_132_C_x);
+                nile_Buffer_push_head(in, t_132_B_y);
+                nile_Buffer_push_head(in, t_132_B_x);
+                nile_Buffer_push_head(in, t_132_A_y);
+                nile_Buffer_push_head(in, t_132_A_x);
+                nile_Real_t t_134 = nile_Real_add(v_A_x, v_B_x);
+                nile_Real_t t_135 = nile_Real (2);
+                nile_Real_t t_136 = nile_Real_div(t_134, t_135);
+                nile_Real_t t_137 = nile_Real_add(v_A_y, v_B_y);
+                nile_Real_t t_138 = nile_Real (2);
+                nile_Real_t t_139 = nile_Real_div(t_137, t_138);
+                nile_Real_t t_140_1 = t_136;
+                nile_Real_t t_140_2 = t_139;
+                nile_Real_t t_141_x = t_140_1;
+                nile_Real_t t_141_y = t_140_2;
+                nile_Real_t t_133_1_x = v_A_x;
+                nile_Real_t t_133_1_y = v_A_y;
+                nile_Real_t t_133_2_x = t_141_x;
+                nile_Real_t t_133_2_y = t_141_y;
+                nile_Real_t t_133_3_x = v_M_x;
+                nile_Real_t t_133_3_y = v_M_y;
+                nile_Real_t t_142_A_x = t_133_1_x;
+                nile_Real_t t_142_A_y = t_133_1_y;
+                nile_Real_t t_142_B_x = t_133_2_x;
+                nile_Real_t t_142_B_y = t_133_2_y;
+                nile_Real_t t_142_C_x = t_133_3_x;
+                nile_Real_t t_142_C_y = t_133_3_y;
                 if (nile_Buffer_headroom (in) < IN_QUANTUM)
                     in = nile_Process_prefix_input (p, in);
-                nile_Buffer_push_head(in, t_151_C_y);
-                nile_Buffer_push_head(in, t_151_C_x);
-                nile_Buffer_push_head(in, t_151_B_y);
-                nile_Buffer_push_head(in, t_151_B_x);
-                nile_Buffer_push_head(in, t_151_A_y);
-                nile_Buffer_push_head(in, t_151_A_x);
+                nile_Buffer_push_head(in, t_142_C_y);
+                nile_Buffer_push_head(in, t_142_C_x);
+                nile_Buffer_push_head(in, t_142_B_y);
+                nile_Buffer_push_head(in, t_142_B_x);
+                nile_Buffer_push_head(in, t_142_A_y);
+                nile_Buffer_push_head(in, t_142_A_x);
             }
         }
         v = v_;
@@ -484,7 +471,7 @@ gezira_ClipBeziers_body (nile_Process_t *p,
 static nile_Buffer_t *
 gezira_ClipBeziers_epilogue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_ClipBeziers_vars_t *vars = (gezira_ClipBeziers_vars_t *) nile_Process_vars (p);
+    gezira_ClipBeziers_vars_t *vars = nile_Process_vars (p);
     gezira_ClipBeziers_vars_t v = *vars;
     return out;
 }
@@ -500,7 +487,7 @@ gezira_ClipBeziers (nile_Process_t *p,
     gezira_ClipBeziers_vars_t v;
     p = nile_Process (p, IN_QUANTUM, sizeof (*vars), gezira_ClipBeziers_prologue, gezira_ClipBeziers_body, gezira_ClipBeziers_epilogue);
     if (p) {
-        vars = (gezira_ClipBeziers_vars_t *) nile_Process_vars (p);
+        vars = nile_Process_vars (p);
         v.v_min_x = nile_Real (v_min_x);
         v.v_min_y = nile_Real (v_min_y);
         v.v_max_x = nile_Real (v_max_x);
@@ -526,7 +513,7 @@ typedef struct {
 static nile_Buffer_t *
 gezira_CalculateBounds_prologue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_CalculateBounds_vars_t *vars = (gezira_CalculateBounds_vars_t *) nile_Process_vars (p);
+    gezira_CalculateBounds_vars_t *vars = nile_Process_vars (p);
     gezira_CalculateBounds_vars_t v = *vars;
     nile_Real_t t_6 = nile_Real (999999);
     nile_Real_t t_7_x = t_6;
@@ -548,7 +535,7 @@ gezira_CalculateBounds_body (nile_Process_t *p,
                              nile_Buffer_t *in,
                              nile_Buffer_t *out)
 {
-    gezira_CalculateBounds_vars_t *vars = (gezira_CalculateBounds_vars_t *) nile_Process_vars (p);
+    gezira_CalculateBounds_vars_t *vars = nile_Process_vars (p);
     gezira_CalculateBounds_vars_t v = *vars;
     
     while (!nile_Buffer_is_empty (in) && !nile_Buffer_quota_hit (out)) {
@@ -631,7 +618,7 @@ gezira_CalculateBounds_body (nile_Process_t *p,
 static nile_Buffer_t *
 gezira_CalculateBounds_epilogue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_CalculateBounds_vars_t *vars = (gezira_CalculateBounds_vars_t *) nile_Process_vars (p);
+    gezira_CalculateBounds_vars_t *vars = nile_Process_vars (p);
     gezira_CalculateBounds_vars_t v = *vars;
     nile_Real_t t_52_1_x = v.v_min_x;
     nile_Real_t t_52_1_y = v.v_min_y;
@@ -689,7 +676,7 @@ typedef struct {
 static nile_Buffer_t *
 gezira_OffsetBezier_prologue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_OffsetBezier_vars_t *vars = (gezira_OffsetBezier_vars_t *) nile_Process_vars (p);
+    gezira_OffsetBezier_vars_t *vars = nile_Process_vars (p);
     gezira_OffsetBezier_vars_t v = *vars;
     v.v_A_x = v.v_Z_A_x;
     v.v_A_y = v.v_Z_A_y;
@@ -913,11 +900,11 @@ gezira_OffsetBezier_prologue (nile_Process_t *p, nile_Buffer_t *out)
         nile_Buffer_push_tail(out, t_195_C_y);
     }
     else {
-        nile_Real_t t_196 = nile_Real_neq(v.v_A_x, v.v_B_x);
-        nile_Real_t t_197 = nile_Real_neq(v.v_A_y, v.v_B_y);
+        nile_Real_t t_196 = nile_Real_neq(v.v_A_x, v.v_M_x);
+        nile_Real_t t_197 = nile_Real_neq(v.v_A_y, v.v_M_y);
         nile_Real_t t_198 = nile_Real_or(t_196, t_197);
-        nile_Real_t t_199 = nile_Real_neq(v.v_B_x, v.v_C_x);
-        nile_Real_t t_200 = nile_Real_neq(v.v_B_y, v.v_C_y);
+        nile_Real_t t_199 = nile_Real_neq(v.v_M_x, v.v_C_x);
+        nile_Real_t t_200 = nile_Real_neq(v.v_M_y, v.v_C_y);
         nile_Real_t t_201 = nile_Real_or(t_199, t_200);
         nile_Real_t t_202 = nile_Real_and(t_198, t_201);
         if (nile_Real_nz (t_202)) {
@@ -984,7 +971,7 @@ gezira_OffsetBezier_prologue (nile_Process_t *p, nile_Buffer_t *out)
 static nile_Buffer_t *
 gezira_OffsetBezier_epilogue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_OffsetBezier_vars_t *vars = (gezira_OffsetBezier_vars_t *) nile_Process_vars (p);
+    gezira_OffsetBezier_vars_t *vars = nile_Process_vars (p);
     gezira_OffsetBezier_vars_t v = *vars;
     ; /* no-op */
     return out;
@@ -1004,7 +991,7 @@ gezira_OffsetBezier (nile_Process_t *p,
     gezira_OffsetBezier_vars_t v;
     p = nile_Process (p, IN_QUANTUM, sizeof (*vars), gezira_OffsetBezier_prologue, gezira_OffsetBezier_body, gezira_OffsetBezier_epilogue);
     if (p) {
-        vars = (gezira_OffsetBezier_vars_t *) nile_Process_vars (p);
+        vars = nile_Process_vars (p);
         v.v_o = nile_Real (v_o);
         v.v_Z_A_x = nile_Real (v_Z_A_x);
         v.v_Z_A_y = nile_Real (v_Z_A_y);
@@ -1043,7 +1030,7 @@ typedef struct {
 static nile_Buffer_t *
 gezira_MiterJoin_prologue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_MiterJoin_vars_t *vars = (gezira_MiterJoin_vars_t *) nile_Process_vars (p);
+    gezira_MiterJoin_vars_t *vars = nile_Process_vars (p);
     gezira_MiterJoin_vars_t v = *vars;
     nile_Real_t t_36_x = v.v_o;
     nile_Real_t t_36_y = v.v_o;
@@ -1108,119 +1095,116 @@ gezira_MiterJoin_prologue (nile_Process_t *p, nile_Buffer_t *out)
     nile_Real_t t_72 = nile_Real_mul(v.v_u_y, v.v_w_y);
     nile_Real_t t_73 = nile_Real_add(t_71, t_72);
     nile_Real_t t_74 = nile_Real (1);
-    nile_Real_t t_75 = nile_Real (1);
-    nile_Real_t t_76 = nile_Real_gt(v.v_l, t_75);
-    nile_Real_t t_77 = nile_Real_nz (t_76) ? v.v_l : t_75;
-    nile_Real_t t_78 = nile_Real_div(t_74, t_77);
-    nile_Real_t t_79 = nile_Real_geq(t_73, t_78);
-    if (nile_Real_nz (t_79)) {
-        nile_Real_t t_80 = nile_Real_mul(v.v_u_x, v.v_w_x);
-        nile_Real_t t_81 = nile_Real_mul(v.v_u_y, v.v_w_y);
-        nile_Real_t t_82 = nile_Real_add(t_80, t_81);
-        nile_Real_t t_83 = nile_Real_div(v.v_o, t_82);
-        nile_Real_t v_p = t_83;
-        nile_Real_t t_84_x = v_p;
-        nile_Real_t t_84_y = v_p;
-        nile_Real_t t_85_x = nile_Real_mul(t_84_x, v.v_w_x);
-        nile_Real_t t_85_y = nile_Real_mul(t_84_y, v.v_w_y);
-        nile_Real_t t_86_x = t_85_x;
-        nile_Real_t t_86_y = t_85_y;
-        nile_Real_t t_87_x = nile_Real_add(v.v_P_x, t_86_x);
-        nile_Real_t t_87_y = nile_Real_add(v.v_P_y, t_86_y);
-        nile_Real_t v_M_x = t_87_x;
-        nile_Real_t v_M_y = t_87_y;
-        nile_Real_t t_89 = nile_Real_add(v_M_x, v.v_C_x);
+    nile_Real_t t_75 = nile_Real_div(t_74, v.v_l);
+    nile_Real_t t_76 = nile_Real_geq(t_73, t_75);
+    if (nile_Real_nz (t_76)) {
+        nile_Real_t t_77 = nile_Real_mul(v.v_u_x, v.v_w_x);
+        nile_Real_t t_78 = nile_Real_mul(v.v_u_y, v.v_w_y);
+        nile_Real_t t_79 = nile_Real_add(t_77, t_78);
+        nile_Real_t t_80 = nile_Real_div(v.v_o, t_79);
+        nile_Real_t v_p = t_80;
+        nile_Real_t t_81_x = v_p;
+        nile_Real_t t_81_y = v_p;
+        nile_Real_t t_82_x = nile_Real_mul(t_81_x, v.v_w_x);
+        nile_Real_t t_82_y = nile_Real_mul(t_81_y, v.v_w_y);
+        nile_Real_t t_83_x = t_82_x;
+        nile_Real_t t_83_y = t_82_y;
+        nile_Real_t t_84_x = nile_Real_add(v.v_P_x, t_83_x);
+        nile_Real_t t_84_y = nile_Real_add(v.v_P_y, t_83_y);
+        nile_Real_t v_M_x = t_84_x;
+        nile_Real_t v_M_y = t_84_y;
+        nile_Real_t t_86 = nile_Real_add(v_M_x, v.v_C_x);
+        nile_Real_t t_87 = nile_Real (2);
+        nile_Real_t t_88 = nile_Real_div(t_86, t_87);
+        nile_Real_t t_89 = nile_Real_add(v_M_y, v.v_C_y);
         nile_Real_t t_90 = nile_Real (2);
         nile_Real_t t_91 = nile_Real_div(t_89, t_90);
-        nile_Real_t t_92 = nile_Real_add(v_M_y, v.v_C_y);
-        nile_Real_t t_93 = nile_Real (2);
-        nile_Real_t t_94 = nile_Real_div(t_92, t_93);
-        nile_Real_t t_95_1 = t_91;
-        nile_Real_t t_95_2 = t_94;
-        nile_Real_t t_96_x = t_95_1;
-        nile_Real_t t_96_y = t_95_2;
-        nile_Real_t t_88_1_x = v_M_x;
-        nile_Real_t t_88_1_y = v_M_y;
-        nile_Real_t t_88_2_x = t_96_x;
-        nile_Real_t t_88_2_y = t_96_y;
-        nile_Real_t t_88_3_x = v.v_C_x;
-        nile_Real_t t_88_3_y = v.v_C_y;
-        nile_Real_t t_97_A_x = t_88_1_x;
-        nile_Real_t t_97_A_y = t_88_1_y;
-        nile_Real_t t_97_B_x = t_88_2_x;
-        nile_Real_t t_97_B_y = t_88_2_y;
-        nile_Real_t t_97_C_x = t_88_3_x;
-        nile_Real_t t_97_C_y = t_88_3_y;
+        nile_Real_t t_92_1 = t_88;
+        nile_Real_t t_92_2 = t_91;
+        nile_Real_t t_93_x = t_92_1;
+        nile_Real_t t_93_y = t_92_2;
+        nile_Real_t t_85_1_x = v_M_x;
+        nile_Real_t t_85_1_y = v_M_y;
+        nile_Real_t t_85_2_x = t_93_x;
+        nile_Real_t t_85_2_y = t_93_y;
+        nile_Real_t t_85_3_x = v.v_C_x;
+        nile_Real_t t_85_3_y = v.v_C_y;
+        nile_Real_t t_94_A_x = t_85_1_x;
+        nile_Real_t t_94_A_y = t_85_1_y;
+        nile_Real_t t_94_B_x = t_85_2_x;
+        nile_Real_t t_94_B_y = t_85_2_y;
+        nile_Real_t t_94_C_x = t_85_3_x;
+        nile_Real_t t_94_C_y = t_85_3_y;
         if (nile_Buffer_tailroom (out) < OUT_QUANTUM)
             out = nile_Process_append_output (p, out);
-        nile_Buffer_push_tail(out, t_97_A_x);
-        nile_Buffer_push_tail(out, t_97_A_y);
-        nile_Buffer_push_tail(out, t_97_B_x);
-        nile_Buffer_push_tail(out, t_97_B_y);
-        nile_Buffer_push_tail(out, t_97_C_x);
-        nile_Buffer_push_tail(out, t_97_C_y);
-        nile_Real_t t_99 = nile_Real_add(v.v_A_x, v_M_x);
+        nile_Buffer_push_tail(out, t_94_A_x);
+        nile_Buffer_push_tail(out, t_94_A_y);
+        nile_Buffer_push_tail(out, t_94_B_x);
+        nile_Buffer_push_tail(out, t_94_B_y);
+        nile_Buffer_push_tail(out, t_94_C_x);
+        nile_Buffer_push_tail(out, t_94_C_y);
+        nile_Real_t t_96 = nile_Real_add(v.v_A_x, v_M_x);
+        nile_Real_t t_97 = nile_Real (2);
+        nile_Real_t t_98 = nile_Real_div(t_96, t_97);
+        nile_Real_t t_99 = nile_Real_add(v.v_A_y, v_M_y);
         nile_Real_t t_100 = nile_Real (2);
         nile_Real_t t_101 = nile_Real_div(t_99, t_100);
-        nile_Real_t t_102 = nile_Real_add(v.v_A_y, v_M_y);
-        nile_Real_t t_103 = nile_Real (2);
-        nile_Real_t t_104 = nile_Real_div(t_102, t_103);
-        nile_Real_t t_105_1 = t_101;
-        nile_Real_t t_105_2 = t_104;
-        nile_Real_t t_106_x = t_105_1;
-        nile_Real_t t_106_y = t_105_2;
-        nile_Real_t t_98_1_x = v.v_A_x;
-        nile_Real_t t_98_1_y = v.v_A_y;
-        nile_Real_t t_98_2_x = t_106_x;
-        nile_Real_t t_98_2_y = t_106_y;
-        nile_Real_t t_98_3_x = v_M_x;
-        nile_Real_t t_98_3_y = v_M_y;
-        nile_Real_t t_107_A_x = t_98_1_x;
-        nile_Real_t t_107_A_y = t_98_1_y;
-        nile_Real_t t_107_B_x = t_98_2_x;
-        nile_Real_t t_107_B_y = t_98_2_y;
-        nile_Real_t t_107_C_x = t_98_3_x;
-        nile_Real_t t_107_C_y = t_98_3_y;
+        nile_Real_t t_102_1 = t_98;
+        nile_Real_t t_102_2 = t_101;
+        nile_Real_t t_103_x = t_102_1;
+        nile_Real_t t_103_y = t_102_2;
+        nile_Real_t t_95_1_x = v.v_A_x;
+        nile_Real_t t_95_1_y = v.v_A_y;
+        nile_Real_t t_95_2_x = t_103_x;
+        nile_Real_t t_95_2_y = t_103_y;
+        nile_Real_t t_95_3_x = v_M_x;
+        nile_Real_t t_95_3_y = v_M_y;
+        nile_Real_t t_104_A_x = t_95_1_x;
+        nile_Real_t t_104_A_y = t_95_1_y;
+        nile_Real_t t_104_B_x = t_95_2_x;
+        nile_Real_t t_104_B_y = t_95_2_y;
+        nile_Real_t t_104_C_x = t_95_3_x;
+        nile_Real_t t_104_C_y = t_95_3_y;
         if (nile_Buffer_tailroom (out) < OUT_QUANTUM)
             out = nile_Process_append_output (p, out);
-        nile_Buffer_push_tail(out, t_107_A_x);
-        nile_Buffer_push_tail(out, t_107_A_y);
-        nile_Buffer_push_tail(out, t_107_B_x);
-        nile_Buffer_push_tail(out, t_107_B_y);
-        nile_Buffer_push_tail(out, t_107_C_x);
-        nile_Buffer_push_tail(out, t_107_C_y);
+        nile_Buffer_push_tail(out, t_104_A_x);
+        nile_Buffer_push_tail(out, t_104_A_y);
+        nile_Buffer_push_tail(out, t_104_B_x);
+        nile_Buffer_push_tail(out, t_104_B_y);
+        nile_Buffer_push_tail(out, t_104_C_x);
+        nile_Buffer_push_tail(out, t_104_C_y);
     }
     else {
-        nile_Real_t t_109 = nile_Real_add(v.v_A_x, v.v_C_x);
+        nile_Real_t t_106 = nile_Real_add(v.v_A_x, v.v_C_x);
+        nile_Real_t t_107 = nile_Real (2);
+        nile_Real_t t_108 = nile_Real_div(t_106, t_107);
+        nile_Real_t t_109 = nile_Real_add(v.v_A_y, v.v_C_y);
         nile_Real_t t_110 = nile_Real (2);
         nile_Real_t t_111 = nile_Real_div(t_109, t_110);
-        nile_Real_t t_112 = nile_Real_add(v.v_A_y, v.v_C_y);
-        nile_Real_t t_113 = nile_Real (2);
-        nile_Real_t t_114 = nile_Real_div(t_112, t_113);
-        nile_Real_t t_115_1 = t_111;
-        nile_Real_t t_115_2 = t_114;
-        nile_Real_t t_116_x = t_115_1;
-        nile_Real_t t_116_y = t_115_2;
-        nile_Real_t t_108_1_x = v.v_A_x;
-        nile_Real_t t_108_1_y = v.v_A_y;
-        nile_Real_t t_108_2_x = t_116_x;
-        nile_Real_t t_108_2_y = t_116_y;
-        nile_Real_t t_108_3_x = v.v_C_x;
-        nile_Real_t t_108_3_y = v.v_C_y;
-        nile_Real_t t_117_A_x = t_108_1_x;
-        nile_Real_t t_117_A_y = t_108_1_y;
-        nile_Real_t t_117_B_x = t_108_2_x;
-        nile_Real_t t_117_B_y = t_108_2_y;
-        nile_Real_t t_117_C_x = t_108_3_x;
-        nile_Real_t t_117_C_y = t_108_3_y;
+        nile_Real_t t_112_1 = t_108;
+        nile_Real_t t_112_2 = t_111;
+        nile_Real_t t_113_x = t_112_1;
+        nile_Real_t t_113_y = t_112_2;
+        nile_Real_t t_105_1_x = v.v_A_x;
+        nile_Real_t t_105_1_y = v.v_A_y;
+        nile_Real_t t_105_2_x = t_113_x;
+        nile_Real_t t_105_2_y = t_113_y;
+        nile_Real_t t_105_3_x = v.v_C_x;
+        nile_Real_t t_105_3_y = v.v_C_y;
+        nile_Real_t t_114_A_x = t_105_1_x;
+        nile_Real_t t_114_A_y = t_105_1_y;
+        nile_Real_t t_114_B_x = t_105_2_x;
+        nile_Real_t t_114_B_y = t_105_2_y;
+        nile_Real_t t_114_C_x = t_105_3_x;
+        nile_Real_t t_114_C_y = t_105_3_y;
         if (nile_Buffer_tailroom (out) < OUT_QUANTUM)
             out = nile_Process_append_output (p, out);
-        nile_Buffer_push_tail(out, t_117_A_x);
-        nile_Buffer_push_tail(out, t_117_A_y);
-        nile_Buffer_push_tail(out, t_117_B_x);
-        nile_Buffer_push_tail(out, t_117_B_y);
-        nile_Buffer_push_tail(out, t_117_C_x);
-        nile_Buffer_push_tail(out, t_117_C_y);
+        nile_Buffer_push_tail(out, t_114_A_x);
+        nile_Buffer_push_tail(out, t_114_A_y);
+        nile_Buffer_push_tail(out, t_114_B_x);
+        nile_Buffer_push_tail(out, t_114_B_y);
+        nile_Buffer_push_tail(out, t_114_C_x);
+        nile_Buffer_push_tail(out, t_114_C_y);
     }
     *vars = v;
     return out;
@@ -1231,7 +1215,7 @@ gezira_MiterJoin_prologue (nile_Process_t *p, nile_Buffer_t *out)
 static nile_Buffer_t *
 gezira_MiterJoin_epilogue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_MiterJoin_vars_t *vars = (gezira_MiterJoin_vars_t *) nile_Process_vars (p);
+    gezira_MiterJoin_vars_t *vars = nile_Process_vars (p);
     gezira_MiterJoin_vars_t v = *vars;
     ; /* no-op */
     return out;
@@ -1252,7 +1236,7 @@ gezira_MiterJoin (nile_Process_t *p,
     gezira_MiterJoin_vars_t v;
     p = nile_Process (p, IN_QUANTUM, sizeof (*vars), gezira_MiterJoin_prologue, gezira_MiterJoin_body, gezira_MiterJoin_epilogue);
     if (p) {
-        vars = (gezira_MiterJoin_vars_t *) nile_Process_vars (p);
+        vars = nile_Process_vars (p);
         v.v_o = nile_Real (v_o);
         v.v_l = nile_Real (v_l);
         v.v_P_x = nile_Real (v_P_x);
@@ -1291,7 +1275,7 @@ typedef struct {
 static nile_Buffer_t *
 gezira_RoundJoin_prologue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_RoundJoin_vars_t *vars = (gezira_RoundJoin_vars_t *) nile_Process_vars (p);
+    gezira_RoundJoin_vars_t *vars = nile_Process_vars (p);
     gezira_RoundJoin_vars_t v = *vars;
     nile_Real_t t_36_x = v.v_o;
     nile_Real_t t_36_y = v.v_o;
@@ -1424,7 +1408,7 @@ gezira_RoundJoin_prologue (nile_Process_t *p, nile_Buffer_t *out)
 static nile_Buffer_t *
 gezira_RoundJoin_epilogue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_RoundJoin_vars_t *vars = (gezira_RoundJoin_vars_t *) nile_Process_vars (p);
+    gezira_RoundJoin_vars_t *vars = nile_Process_vars (p);
     gezira_RoundJoin_vars_t v = *vars;
     ; /* no-op */
     return out;
@@ -1444,7 +1428,7 @@ gezira_RoundJoin (nile_Process_t *p,
     gezira_RoundJoin_vars_t v;
     p = nile_Process (p, IN_QUANTUM, sizeof (*vars), gezira_RoundJoin_prologue, gezira_RoundJoin_body, gezira_RoundJoin_epilogue);
     if (p) {
-        vars = (gezira_RoundJoin_vars_t *) nile_Process_vars (p);
+        vars = nile_Process_vars (p);
         v.v_o = nile_Real (v_o);
         v.v_P_x = nile_Real (v_P_x);
         v.v_P_y = nile_Real (v_P_y);
@@ -1487,7 +1471,7 @@ typedef struct {
 static nile_Buffer_t *
 gezira_JoinBeziers_prologue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_JoinBeziers_vars_t *vars = (gezira_JoinBeziers_vars_t *) nile_Process_vars (p);
+    gezira_JoinBeziers_vars_t *vars = nile_Process_vars (p);
     gezira_JoinBeziers_vars_t v = *vars;
     nile_Real_t t_42 = nile_Real_sub(v.v_Zi_B_y, v.v_Zi_C_y);
     nile_Real_t t_43 = nile_Real_sub(v.v_Zi_C_x, v.v_Zi_B_x);
@@ -1547,19 +1531,19 @@ gezira_JoinBeziers_prologue (nile_Process_t *p, nile_Buffer_t *out)
     nile_Real_t t_80_y = nile_Real_nz (t_79_y) ? t_76_y : t_78_y;
     v.v_v_x = t_80_x;
     v.v_v_y = t_80_y;
-    nile_Real_t t_81 = nile_Real (0);
+    nile_Real_t t_81 = nile_Real (1);
     nile_Real_t t_82 = nile_Real_lt(v.v_l, t_81);
     if (nile_Real_nz (t_82)) {
         ; /* no-op */
         nile_Process_t *t_83 = gezira_RoundJoin(p, nile_Real_tof (v.v_o), nile_Real_tof (v.v_Zi_C_x), nile_Real_tof (v.v_Zi_C_y), nile_Real_tof (v.v_u_x), nile_Real_tof (v.v_u_y), nile_Real_tof (v.v_v_x), nile_Real_tof (v.v_v_y));
-        nile_Process_t *t_84 = nile_Process_pipe ((nile_Process_t *) NILE_NULL);
+        nile_Process_t *t_84 = nile_Process_pipe (NILE_NULL);
         nile_Process_t *t_85 = nile_Process_pipe (t_83, t_84, NILE_NULL);
         return nile_Process_swap (p, t_85, out);
     }
     else {
         ; /* no-op */
         nile_Process_t *t_86 = gezira_MiterJoin(p, nile_Real_tof (v.v_o), nile_Real_tof (v.v_l), nile_Real_tof (v.v_Zi_C_x), nile_Real_tof (v.v_Zi_C_y), nile_Real_tof (v.v_u_x), nile_Real_tof (v.v_u_y), nile_Real_tof (v.v_v_x), nile_Real_tof (v.v_v_y));
-        nile_Process_t *t_87 = nile_Process_pipe ((nile_Process_t *) NILE_NULL);
+        nile_Process_t *t_87 = nile_Process_pipe (NILE_NULL);
         nile_Process_t *t_88 = nile_Process_pipe (t_86, t_87, NILE_NULL);
         return nile_Process_swap (p, t_88, out);
     }
@@ -1572,7 +1556,7 @@ gezira_JoinBeziers_prologue (nile_Process_t *p, nile_Buffer_t *out)
 static nile_Buffer_t *
 gezira_JoinBeziers_epilogue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_JoinBeziers_vars_t *vars = (gezira_JoinBeziers_vars_t *) nile_Process_vars (p);
+    gezira_JoinBeziers_vars_t *vars = nile_Process_vars (p);
     gezira_JoinBeziers_vars_t v = *vars;
     ; /* no-op */
     return out;
@@ -1599,7 +1583,7 @@ gezira_JoinBeziers (nile_Process_t *p,
     gezira_JoinBeziers_vars_t v;
     p = nile_Process (p, IN_QUANTUM, sizeof (*vars), gezira_JoinBeziers_prologue, gezira_JoinBeziers_body, gezira_JoinBeziers_epilogue);
     if (p) {
-        vars = (gezira_JoinBeziers_vars_t *) nile_Process_vars (p);
+        vars = nile_Process_vars (p);
         v.v_o = nile_Real (v_o);
         v.v_l = nile_Real (v_l);
         v.v_Zi_A_x = nile_Real (v_Zi_A_x);
@@ -1645,7 +1629,7 @@ typedef struct {
 static nile_Buffer_t *
 gezira_CapBezier_prologue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_CapBezier_vars_t *vars = (gezira_CapBezier_vars_t *) nile_Process_vars (p);
+    gezira_CapBezier_vars_t *vars = nile_Process_vars (p);
     gezira_CapBezier_vars_t v = *vars;
     v.v_C_x = v.v_Z_C_x;
     v.v_C_y = v.v_Z_C_y;
@@ -1691,7 +1675,7 @@ gezira_CapBezier_prologue (nile_Process_t *p, nile_Buffer_t *out)
         nile_Real_t t_47_x = nile_Real_neg(v.v_u_x);
         nile_Real_t t_47_y = nile_Real_neg(v.v_u_y);
         nile_Process_t *t_48 = gezira_RoundJoin(p, nile_Real_tof (v.v_o), nile_Real_tof (v.v_C_x), nile_Real_tof (v.v_C_y), nile_Real_tof (v.v_u_x), nile_Real_tof (v.v_u_y), nile_Real_tof (t_47_x), nile_Real_tof (t_47_y));
-        nile_Process_t *t_49 = nile_Process_pipe ((nile_Process_t *) NILE_NULL);
+        nile_Process_t *t_49 = nile_Process_pipe (NILE_NULL);
         nile_Process_t *t_50 = nile_Process_pipe (t_48, t_49, NILE_NULL);
         return nile_Process_swap (p, t_50, out);
     }
@@ -1716,118 +1700,116 @@ gezira_CapBezier_prologue (nile_Process_t *p, nile_Buffer_t *out)
         nile_Real_t t_58_y = nile_Real_sub(v.v_C_y, t_57_y);
         nile_Real_t v_G_x = t_58_x;
         nile_Real_t v_G_y = t_58_y;
-        nile_Real_t t_59 = nile_Real_mul(v.v_o, v.v_c);
-        nile_Real_t t_60_1 = t_59;
-        nile_Real_t t_60_2 = t_59;
-        nile_Real_t t_61_1 = nile_Real_mul(t_60_1, v.v_v_1);
-        nile_Real_t t_61_2 = nile_Real_mul(t_60_2, v.v_v_2);
-        nile_Real_t t_62_x = t_61_1;
-        nile_Real_t t_62_y = t_61_2;
-        nile_Real_t t_63_x = nile_Real_add(v_D_x, t_62_x);
-        nile_Real_t t_63_y = nile_Real_add(v_D_y, t_62_y);
-        nile_Real_t v_E_x = t_63_x;
-        nile_Real_t v_E_y = t_63_y;
-        nile_Real_t t_64 = nile_Real_mul(v.v_o, v.v_c);
-        nile_Real_t t_65_1 = t_64;
-        nile_Real_t t_65_2 = t_64;
-        nile_Real_t t_66_1 = nile_Real_mul(t_65_1, v.v_v_1);
-        nile_Real_t t_66_2 = nile_Real_mul(t_65_2, v.v_v_2);
-        nile_Real_t t_67_x = t_66_1;
-        nile_Real_t t_67_y = t_66_2;
-        nile_Real_t t_68_x = nile_Real_add(v_G_x, t_67_x);
-        nile_Real_t t_68_y = nile_Real_add(v_G_y, t_67_y);
-        nile_Real_t v_F_x = t_68_x;
-        nile_Real_t v_F_y = t_68_y;
-        nile_Real_t t_70 = nile_Real_add(v_D_x, v_E_x);
-        nile_Real_t t_71 = nile_Real (2);
-        nile_Real_t t_72 = nile_Real_div(t_70, t_71);
-        nile_Real_t t_73 = nile_Real_add(v_D_y, v_E_y);
-        nile_Real_t t_74 = nile_Real (2);
-        nile_Real_t t_75 = nile_Real_div(t_73, t_74);
-        nile_Real_t t_76_1 = t_72;
-        nile_Real_t t_76_2 = t_75;
-        nile_Real_t t_77_x = t_76_1;
-        nile_Real_t t_77_y = t_76_2;
-        nile_Real_t t_69_1_x = v_D_x;
-        nile_Real_t t_69_1_y = v_D_y;
-        nile_Real_t t_69_2_x = t_77_x;
-        nile_Real_t t_69_2_y = t_77_y;
-        nile_Real_t t_69_3_x = v_E_x;
-        nile_Real_t t_69_3_y = v_E_y;
-        nile_Real_t t_78_A_x = t_69_1_x;
-        nile_Real_t t_78_A_y = t_69_1_y;
-        nile_Real_t t_78_B_x = t_69_2_x;
-        nile_Real_t t_78_B_y = t_69_2_y;
-        nile_Real_t t_78_C_x = t_69_3_x;
-        nile_Real_t t_78_C_y = t_69_3_y;
+        nile_Real_t t_59_1 = v.v_c;
+        nile_Real_t t_59_2 = v.v_c;
+        nile_Real_t t_60_1 = nile_Real_mul(t_59_1, v.v_v_1);
+        nile_Real_t t_60_2 = nile_Real_mul(t_59_2, v.v_v_2);
+        nile_Real_t t_61_x = t_60_1;
+        nile_Real_t t_61_y = t_60_2;
+        nile_Real_t t_62_x = nile_Real_add(v_D_x, t_61_x);
+        nile_Real_t t_62_y = nile_Real_add(v_D_y, t_61_y);
+        nile_Real_t v_E_x = t_62_x;
+        nile_Real_t v_E_y = t_62_y;
+        nile_Real_t t_63_1 = v.v_c;
+        nile_Real_t t_63_2 = v.v_c;
+        nile_Real_t t_64_1 = nile_Real_mul(t_63_1, v.v_v_1);
+        nile_Real_t t_64_2 = nile_Real_mul(t_63_2, v.v_v_2);
+        nile_Real_t t_65_x = t_64_1;
+        nile_Real_t t_65_y = t_64_2;
+        nile_Real_t t_66_x = nile_Real_add(v_G_x, t_65_x);
+        nile_Real_t t_66_y = nile_Real_add(v_G_y, t_65_y);
+        nile_Real_t v_F_x = t_66_x;
+        nile_Real_t v_F_y = t_66_y;
+        nile_Real_t t_68 = nile_Real_add(v_D_x, v_E_x);
+        nile_Real_t t_69 = nile_Real (2);
+        nile_Real_t t_70 = nile_Real_div(t_68, t_69);
+        nile_Real_t t_71 = nile_Real_add(v_D_y, v_E_y);
+        nile_Real_t t_72 = nile_Real (2);
+        nile_Real_t t_73 = nile_Real_div(t_71, t_72);
+        nile_Real_t t_74_1 = t_70;
+        nile_Real_t t_74_2 = t_73;
+        nile_Real_t t_75_x = t_74_1;
+        nile_Real_t t_75_y = t_74_2;
+        nile_Real_t t_67_1_x = v_D_x;
+        nile_Real_t t_67_1_y = v_D_y;
+        nile_Real_t t_67_2_x = t_75_x;
+        nile_Real_t t_67_2_y = t_75_y;
+        nile_Real_t t_67_3_x = v_E_x;
+        nile_Real_t t_67_3_y = v_E_y;
+        nile_Real_t t_76_A_x = t_67_1_x;
+        nile_Real_t t_76_A_y = t_67_1_y;
+        nile_Real_t t_76_B_x = t_67_2_x;
+        nile_Real_t t_76_B_y = t_67_2_y;
+        nile_Real_t t_76_C_x = t_67_3_x;
+        nile_Real_t t_76_C_y = t_67_3_y;
         if (nile_Buffer_tailroom (out) < OUT_QUANTUM)
             out = nile_Process_append_output (p, out);
-        nile_Buffer_push_tail(out, t_78_A_x);
-        nile_Buffer_push_tail(out, t_78_A_y);
-        nile_Buffer_push_tail(out, t_78_B_x);
-        nile_Buffer_push_tail(out, t_78_B_y);
-        nile_Buffer_push_tail(out, t_78_C_x);
-        nile_Buffer_push_tail(out, t_78_C_y);
-        nile_Real_t t_80 = nile_Real_add(v_E_x, v_F_x);
-        nile_Real_t t_81 = nile_Real (2);
-        nile_Real_t t_82 = nile_Real_div(t_80, t_81);
-        nile_Real_t t_83 = nile_Real_add(v_E_y, v_F_y);
-        nile_Real_t t_84 = nile_Real (2);
-        nile_Real_t t_85 = nile_Real_div(t_83, t_84);
-        nile_Real_t t_86_1 = t_82;
-        nile_Real_t t_86_2 = t_85;
-        nile_Real_t t_87_x = t_86_1;
-        nile_Real_t t_87_y = t_86_2;
-        nile_Real_t t_79_1_x = v_E_x;
-        nile_Real_t t_79_1_y = v_E_y;
-        nile_Real_t t_79_2_x = t_87_x;
-        nile_Real_t t_79_2_y = t_87_y;
-        nile_Real_t t_79_3_x = v_F_x;
-        nile_Real_t t_79_3_y = v_F_y;
-        nile_Real_t t_88_A_x = t_79_1_x;
-        nile_Real_t t_88_A_y = t_79_1_y;
-        nile_Real_t t_88_B_x = t_79_2_x;
-        nile_Real_t t_88_B_y = t_79_2_y;
-        nile_Real_t t_88_C_x = t_79_3_x;
-        nile_Real_t t_88_C_y = t_79_3_y;
+        nile_Buffer_push_tail(out, t_76_A_x);
+        nile_Buffer_push_tail(out, t_76_A_y);
+        nile_Buffer_push_tail(out, t_76_B_x);
+        nile_Buffer_push_tail(out, t_76_B_y);
+        nile_Buffer_push_tail(out, t_76_C_x);
+        nile_Buffer_push_tail(out, t_76_C_y);
+        nile_Real_t t_78 = nile_Real_add(v_E_x, v_F_x);
+        nile_Real_t t_79 = nile_Real (2);
+        nile_Real_t t_80 = nile_Real_div(t_78, t_79);
+        nile_Real_t t_81 = nile_Real_add(v_E_y, v_F_y);
+        nile_Real_t t_82 = nile_Real (2);
+        nile_Real_t t_83 = nile_Real_div(t_81, t_82);
+        nile_Real_t t_84_1 = t_80;
+        nile_Real_t t_84_2 = t_83;
+        nile_Real_t t_85_x = t_84_1;
+        nile_Real_t t_85_y = t_84_2;
+        nile_Real_t t_77_1_x = v_E_x;
+        nile_Real_t t_77_1_y = v_E_y;
+        nile_Real_t t_77_2_x = t_85_x;
+        nile_Real_t t_77_2_y = t_85_y;
+        nile_Real_t t_77_3_x = v_F_x;
+        nile_Real_t t_77_3_y = v_F_y;
+        nile_Real_t t_86_A_x = t_77_1_x;
+        nile_Real_t t_86_A_y = t_77_1_y;
+        nile_Real_t t_86_B_x = t_77_2_x;
+        nile_Real_t t_86_B_y = t_77_2_y;
+        nile_Real_t t_86_C_x = t_77_3_x;
+        nile_Real_t t_86_C_y = t_77_3_y;
         if (nile_Buffer_tailroom (out) < OUT_QUANTUM)
             out = nile_Process_append_output (p, out);
-        nile_Buffer_push_tail(out, t_88_A_x);
-        nile_Buffer_push_tail(out, t_88_A_y);
-        nile_Buffer_push_tail(out, t_88_B_x);
-        nile_Buffer_push_tail(out, t_88_B_y);
-        nile_Buffer_push_tail(out, t_88_C_x);
-        nile_Buffer_push_tail(out, t_88_C_y);
-        nile_Real_t t_90 = nile_Real_add(v_F_x, v_G_x);
-        nile_Real_t t_91 = nile_Real (2);
-        nile_Real_t t_92 = nile_Real_div(t_90, t_91);
-        nile_Real_t t_93 = nile_Real_add(v_F_y, v_G_y);
-        nile_Real_t t_94 = nile_Real (2);
-        nile_Real_t t_95 = nile_Real_div(t_93, t_94);
-        nile_Real_t t_96_1 = t_92;
-        nile_Real_t t_96_2 = t_95;
-        nile_Real_t t_97_x = t_96_1;
-        nile_Real_t t_97_y = t_96_2;
-        nile_Real_t t_89_1_x = v_F_x;
-        nile_Real_t t_89_1_y = v_F_y;
-        nile_Real_t t_89_2_x = t_97_x;
-        nile_Real_t t_89_2_y = t_97_y;
-        nile_Real_t t_89_3_x = v_G_x;
-        nile_Real_t t_89_3_y = v_G_y;
-        nile_Real_t t_98_A_x = t_89_1_x;
-        nile_Real_t t_98_A_y = t_89_1_y;
-        nile_Real_t t_98_B_x = t_89_2_x;
-        nile_Real_t t_98_B_y = t_89_2_y;
-        nile_Real_t t_98_C_x = t_89_3_x;
-        nile_Real_t t_98_C_y = t_89_3_y;
+        nile_Buffer_push_tail(out, t_86_A_x);
+        nile_Buffer_push_tail(out, t_86_A_y);
+        nile_Buffer_push_tail(out, t_86_B_x);
+        nile_Buffer_push_tail(out, t_86_B_y);
+        nile_Buffer_push_tail(out, t_86_C_x);
+        nile_Buffer_push_tail(out, t_86_C_y);
+        nile_Real_t t_88 = nile_Real_add(v_F_x, v_G_x);
+        nile_Real_t t_89 = nile_Real (2);
+        nile_Real_t t_90 = nile_Real_div(t_88, t_89);
+        nile_Real_t t_91 = nile_Real_add(v_F_y, v_G_y);
+        nile_Real_t t_92 = nile_Real (2);
+        nile_Real_t t_93 = nile_Real_div(t_91, t_92);
+        nile_Real_t t_94_1 = t_90;
+        nile_Real_t t_94_2 = t_93;
+        nile_Real_t t_95_x = t_94_1;
+        nile_Real_t t_95_y = t_94_2;
+        nile_Real_t t_87_1_x = v_F_x;
+        nile_Real_t t_87_1_y = v_F_y;
+        nile_Real_t t_87_2_x = t_95_x;
+        nile_Real_t t_87_2_y = t_95_y;
+        nile_Real_t t_87_3_x = v_G_x;
+        nile_Real_t t_87_3_y = v_G_y;
+        nile_Real_t t_96_A_x = t_87_1_x;
+        nile_Real_t t_96_A_y = t_87_1_y;
+        nile_Real_t t_96_B_x = t_87_2_x;
+        nile_Real_t t_96_B_y = t_87_2_y;
+        nile_Real_t t_96_C_x = t_87_3_x;
+        nile_Real_t t_96_C_y = t_87_3_y;
         if (nile_Buffer_tailroom (out) < OUT_QUANTUM)
             out = nile_Process_append_output (p, out);
-        nile_Buffer_push_tail(out, t_98_A_x);
-        nile_Buffer_push_tail(out, t_98_A_y);
-        nile_Buffer_push_tail(out, t_98_B_x);
-        nile_Buffer_push_tail(out, t_98_B_y);
-        nile_Buffer_push_tail(out, t_98_C_x);
-        nile_Buffer_push_tail(out, t_98_C_y);
+        nile_Buffer_push_tail(out, t_96_A_x);
+        nile_Buffer_push_tail(out, t_96_A_y);
+        nile_Buffer_push_tail(out, t_96_B_x);
+        nile_Buffer_push_tail(out, t_96_B_y);
+        nile_Buffer_push_tail(out, t_96_C_x);
+        nile_Buffer_push_tail(out, t_96_C_y);
     }
     *vars = v;
     return out;
@@ -1838,7 +1820,7 @@ gezira_CapBezier_prologue (nile_Process_t *p, nile_Buffer_t *out)
 static nile_Buffer_t *
 gezira_CapBezier_epilogue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_CapBezier_vars_t *vars = (gezira_CapBezier_vars_t *) nile_Process_vars (p);
+    gezira_CapBezier_vars_t *vars = nile_Process_vars (p);
     gezira_CapBezier_vars_t v = *vars;
     ; /* no-op */
     return out;
@@ -1859,7 +1841,7 @@ gezira_CapBezier (nile_Process_t *p,
     gezira_CapBezier_vars_t v;
     p = nile_Process (p, IN_QUANTUM, sizeof (*vars), gezira_CapBezier_prologue, gezira_CapBezier_body, gezira_CapBezier_epilogue);
     if (p) {
-        vars = (gezira_CapBezier_vars_t *) nile_Process_vars (p);
+        vars = nile_Process_vars (p);
         v.v_o = nile_Real (v_o);
         v.v_c = nile_Real (v_c);
         v.v_Z_A_x = nile_Real (v_Z_A_x);
@@ -1900,7 +1882,7 @@ typedef struct {
 static nile_Buffer_t *
 gezira_OffsetAndJoin_prologue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_OffsetAndJoin_vars_t *vars = (gezira_OffsetAndJoin_vars_t *) nile_Process_vars (p);
+    gezira_OffsetAndJoin_vars_t *vars = nile_Process_vars (p);
     gezira_OffsetAndJoin_vars_t v = *vars;
     *vars = v;
     return out;
@@ -1911,7 +1893,7 @@ gezira_OffsetAndJoin_body (nile_Process_t *p,
                            nile_Buffer_t *in,
                            nile_Buffer_t *out)
 {
-    gezira_OffsetAndJoin_vars_t *vars = (gezira_OffsetAndJoin_vars_t *) nile_Process_vars (p);
+    gezira_OffsetAndJoin_vars_t *vars = nile_Process_vars (p);
     gezira_OffsetAndJoin_vars_t v = *vars;
     
     while (!nile_Buffer_is_empty (in) && !nile_Buffer_quota_hit (out)) {
@@ -1939,7 +1921,7 @@ gezira_OffsetAndJoin_body (nile_Process_t *p,
 static nile_Buffer_t *
 gezira_OffsetAndJoin_epilogue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_OffsetAndJoin_vars_t *vars = (gezira_OffsetAndJoin_vars_t *) nile_Process_vars (p);
+    gezira_OffsetAndJoin_vars_t *vars = nile_Process_vars (p);
     gezira_OffsetAndJoin_vars_t v = *vars;
     nile_Real_t t_6 = nile_Real_eq(v.v_Zi_C_x, v.v_Z1_A_x);
     nile_Real_t t_7 = nile_Real_eq(v.v_Zi_C_y, v.v_Z1_A_y);
@@ -1983,7 +1965,7 @@ gezira_OffsetAndJoin (nile_Process_t *p,
     gezira_OffsetAndJoin_vars_t v;
     p = nile_Process (p, IN_QUANTUM, sizeof (*vars), gezira_OffsetAndJoin_prologue, gezira_OffsetAndJoin_body, gezira_OffsetAndJoin_epilogue);
     if (p) {
-        vars = (gezira_OffsetAndJoin_vars_t *) nile_Process_vars (p);
+        vars = nile_Process_vars (p);
         v.v_o = nile_Real (v_o);
         v.v_l = nile_Real (v_l);
         v.v_c = nile_Real (v_c);
@@ -2019,7 +2001,7 @@ typedef struct {
 static nile_Buffer_t *
 gezira_StrokeOneSide_prologue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_StrokeOneSide_vars_t *vars = (gezira_StrokeOneSide_vars_t *) nile_Process_vars (p);
+    gezira_StrokeOneSide_vars_t *vars = nile_Process_vars (p);
     gezira_StrokeOneSide_vars_t v = *vars;
     *vars = v;
     return out;
@@ -2030,7 +2012,7 @@ gezira_StrokeOneSide_body (nile_Process_t *p,
                            nile_Buffer_t *in,
                            nile_Buffer_t *out)
 {
-    gezira_StrokeOneSide_vars_t *vars = (gezira_StrokeOneSide_vars_t *) nile_Process_vars (p);
+    gezira_StrokeOneSide_vars_t *vars = nile_Process_vars (p);
     gezira_StrokeOneSide_vars_t v = *vars;
     
     while (!nile_Buffer_is_empty (in) && !nile_Buffer_quota_hit (out)) {
@@ -2045,7 +2027,7 @@ gezira_StrokeOneSide_body (nile_Process_t *p,
         nile_Real_t t_1 = nile_Real (2);
         nile_Real_t t_2 = nile_Real_div(v.v_w, t_1);
         nile_Process_t *t_3 = gezira_OffsetAndJoin(p, nile_Real_tof (t_2), nile_Real_tof (v.v_l), nile_Real_tof (v.v_c), nile_Real_tof (v_Z1_A_x), nile_Real_tof (v_Z1_A_y), nile_Real_tof (v_Z1_B_x), nile_Real_tof (v_Z1_B_y), nile_Real_tof (v_Z1_C_x), nile_Real_tof (v_Z1_C_y), nile_Real_tof (v_Z1_A_x), nile_Real_tof (v_Z1_A_y), nile_Real_tof (v_Z1_B_x), nile_Real_tof (v_Z1_B_y), nile_Real_tof (v_Z1_C_x), nile_Real_tof (v_Z1_C_y));
-        nile_Process_t *t_4 = nile_Process_pipe ((nile_Process_t *) NILE_NULL);
+        nile_Process_t *t_4 = nile_Process_pipe (NILE_NULL);
         nile_Process_t *t_5 = nile_Process_pipe (t_3, t_4, NILE_NULL);
         return nile_Process_swap (p, t_5, out);
         v = v_;
@@ -2058,7 +2040,7 @@ gezira_StrokeOneSide_body (nile_Process_t *p,
 static nile_Buffer_t *
 gezira_StrokeOneSide_epilogue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_StrokeOneSide_vars_t *vars = (gezira_StrokeOneSide_vars_t *) nile_Process_vars (p);
+    gezira_StrokeOneSide_vars_t *vars = nile_Process_vars (p);
     gezira_StrokeOneSide_vars_t v = *vars;
     return out;
 }
@@ -2073,7 +2055,7 @@ gezira_StrokeOneSide (nile_Process_t *p,
     gezira_StrokeOneSide_vars_t v;
     p = nile_Process (p, IN_QUANTUM, sizeof (*vars), gezira_StrokeOneSide_prologue, gezira_StrokeOneSide_body, gezira_StrokeOneSide_epilogue);
     if (p) {
-        vars = (gezira_StrokeOneSide_vars_t *) nile_Process_vars (p);
+        vars = nile_Process_vars (p);
         v.v_w = nile_Real (v_w);
         v.v_l = nile_Real (v_l);
         v.v_c = nile_Real (v_c);
@@ -2094,7 +2076,7 @@ typedef struct {
 static nile_Buffer_t *
 gezira_ReverseBeziers_prologue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_ReverseBeziers_vars_t *vars = (gezira_ReverseBeziers_vars_t *) nile_Process_vars (p);
+    gezira_ReverseBeziers_vars_t *vars = nile_Process_vars (p);
     gezira_ReverseBeziers_vars_t v = *vars;
     *vars = v;
     return out;
@@ -2105,7 +2087,7 @@ gezira_ReverseBeziers_body (nile_Process_t *p,
                             nile_Buffer_t *in,
                             nile_Buffer_t *out)
 {
-    gezira_ReverseBeziers_vars_t *vars = (gezira_ReverseBeziers_vars_t *) nile_Process_vars (p);
+    gezira_ReverseBeziers_vars_t *vars = nile_Process_vars (p);
     gezira_ReverseBeziers_vars_t v = *vars;
     
     while (!nile_Buffer_is_empty (in) && !nile_Buffer_quota_hit (out)) {
@@ -2146,7 +2128,7 @@ gezira_ReverseBeziers_body (nile_Process_t *p,
 static nile_Buffer_t *
 gezira_ReverseBeziers_epilogue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_ReverseBeziers_vars_t *vars = (gezira_ReverseBeziers_vars_t *) nile_Process_vars (p);
+    gezira_ReverseBeziers_vars_t *vars = nile_Process_vars (p);
     gezira_ReverseBeziers_vars_t v = *vars;
     return out;
 }
@@ -2171,7 +2153,7 @@ typedef struct {
 static nile_Buffer_t *
 gezira_SanitizeBezierPath_prologue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_SanitizeBezierPath_vars_t *vars = (gezira_SanitizeBezierPath_vars_t *) nile_Process_vars (p);
+    gezira_SanitizeBezierPath_vars_t *vars = nile_Process_vars (p);
     gezira_SanitizeBezierPath_vars_t v = *vars;
     *vars = v;
     return out;
@@ -2182,7 +2164,7 @@ gezira_SanitizeBezierPath_body (nile_Process_t *p,
                                 nile_Buffer_t *in,
                                 nile_Buffer_t *out)
 {
-    gezira_SanitizeBezierPath_vars_t *vars = (gezira_SanitizeBezierPath_vars_t *) nile_Process_vars (p);
+    gezira_SanitizeBezierPath_vars_t *vars = nile_Process_vars (p);
     gezira_SanitizeBezierPath_vars_t v = *vars;
     
     while (!nile_Buffer_is_empty (in) && !nile_Buffer_quota_hit (out)) {
@@ -2352,94 +2334,86 @@ gezira_SanitizeBezierPath_body (nile_Process_t *p,
             nile_Buffer_push_head(in, t_90_A_x);
         }
         else {
-            nile_Real_t t_91_x = nile_Real_sub(v_A_x, v_B_x);
-            nile_Real_t t_91_y = nile_Real_sub(v_A_y, v_B_y);
-            nile_Real_t t_92_x = t_91_x;
-            nile_Real_t t_92_y = t_91_y;
-            nile_Real_t t_93 = nile_Real_mul(t_92_x, t_92_x);
-            nile_Real_t t_94 = nile_Real_mul(t_92_y, t_92_y);
-            nile_Real_t t_95 = nile_Real_add(t_93, t_94);
-            nile_Real_t t_96 = nile_Real_sqt(t_95);
-            nile_Real_t t_97 = nile_Real (0.0001);
-            nile_Real_t t_98 = nile_Real_gt(t_96, t_97);
-            nile_Real_t t_99_x = nile_Real_sub(v_B_x, v_C_x);
-            nile_Real_t t_99_y = nile_Real_sub(v_B_y, v_C_y);
-            nile_Real_t t_100_x = t_99_x;
-            nile_Real_t t_100_y = t_99_y;
-            nile_Real_t t_101 = nile_Real_mul(t_100_x, t_100_x);
-            nile_Real_t t_102 = nile_Real_mul(t_100_y, t_100_y);
-            nile_Real_t t_103 = nile_Real_add(t_101, t_102);
-            nile_Real_t t_104 = nile_Real_sqt(t_103);
-            nile_Real_t t_105 = nile_Real (0.0001);
-            nile_Real_t t_106 = nile_Real_gt(t_104, t_105);
-            nile_Real_t t_107 = nile_Real_and(t_98, t_106);
-            if (nile_Real_nz (t_107)) {
-                nile_Real_t t_108_1_x = v_A_x;
-                nile_Real_t t_108_1_y = v_A_y;
-                nile_Real_t t_108_2_x = v_B_x;
-                nile_Real_t t_108_2_y = v_B_y;
-                nile_Real_t t_108_3_x = v_C_x;
-                nile_Real_t t_108_3_y = v_C_y;
-                nile_Real_t t_109_A_x = t_108_1_x;
-                nile_Real_t t_109_A_y = t_108_1_y;
-                nile_Real_t t_109_B_x = t_108_2_x;
-                nile_Real_t t_109_B_y = t_108_2_y;
-                nile_Real_t t_109_C_x = t_108_3_x;
-                nile_Real_t t_109_C_y = t_108_3_y;
+            nile_Real_t t_91 = nile_Real (0);
+            nile_Real_t t_92_x = t_91;
+            nile_Real_t t_92_y = t_91;
+            nile_Real_t t_93 = nile_Real_neq(v_u_x, t_92_x);
+            nile_Real_t t_94 = nile_Real_neq(v_u_y, t_92_y);
+            nile_Real_t t_95 = nile_Real_or(t_93, t_94);
+            nile_Real_t t_96 = nile_Real (0);
+            nile_Real_t t_97_x = t_96;
+            nile_Real_t t_97_y = t_96;
+            nile_Real_t t_98 = nile_Real_neq(v_v_x, t_97_x);
+            nile_Real_t t_99 = nile_Real_neq(v_v_y, t_97_y);
+            nile_Real_t t_100 = nile_Real_or(t_98, t_99);
+            nile_Real_t t_101 = nile_Real_and(t_95, t_100);
+            if (nile_Real_nz (t_101)) {
+                nile_Real_t t_102_1_x = v_A_x;
+                nile_Real_t t_102_1_y = v_A_y;
+                nile_Real_t t_102_2_x = v_B_x;
+                nile_Real_t t_102_2_y = v_B_y;
+                nile_Real_t t_102_3_x = v_C_x;
+                nile_Real_t t_102_3_y = v_C_y;
+                nile_Real_t t_103_A_x = t_102_1_x;
+                nile_Real_t t_103_A_y = t_102_1_y;
+                nile_Real_t t_103_B_x = t_102_2_x;
+                nile_Real_t t_103_B_y = t_102_2_y;
+                nile_Real_t t_103_C_x = t_102_3_x;
+                nile_Real_t t_103_C_y = t_102_3_y;
                 if (nile_Buffer_tailroom (out) < OUT_QUANTUM)
                     out = nile_Process_append_output (p, out);
-                nile_Buffer_push_tail(out, t_109_A_x);
-                nile_Buffer_push_tail(out, t_109_A_y);
-                nile_Buffer_push_tail(out, t_109_B_x);
-                nile_Buffer_push_tail(out, t_109_B_y);
-                nile_Buffer_push_tail(out, t_109_C_x);
-                nile_Buffer_push_tail(out, t_109_C_y);
+                nile_Buffer_push_tail(out, t_103_A_x);
+                nile_Buffer_push_tail(out, t_103_A_y);
+                nile_Buffer_push_tail(out, t_103_B_x);
+                nile_Buffer_push_tail(out, t_103_B_y);
+                nile_Buffer_push_tail(out, t_103_C_x);
+                nile_Buffer_push_tail(out, t_103_C_y);
             }
             else {
-                nile_Real_t t_110 = nile_Real_add(v_A_x, v_C_x);
-                nile_Real_t t_111 = nile_Real (2);
-                nile_Real_t t_112 = nile_Real_div(t_110, t_111);
-                nile_Real_t t_113 = nile_Real_add(v_A_y, v_C_y);
-                nile_Real_t t_114 = nile_Real (2);
-                nile_Real_t t_115 = nile_Real_div(t_113, t_114);
-                nile_Real_t t_116_1 = t_112;
-                nile_Real_t t_116_2 = t_115;
-                nile_Real_t t_117_x = t_116_1;
-                nile_Real_t t_117_y = t_116_2;
-                nile_Real_t t_118 = nile_Real_neq(t_117_x, v_B_x);
-                nile_Real_t t_119 = nile_Real_neq(t_117_y, v_B_y);
-                nile_Real_t t_120 = nile_Real_or(t_118, t_119);
-                if (nile_Real_nz (t_120)) {
-                    nile_Real_t t_122 = nile_Real_add(v_A_x, v_C_x);
-                    nile_Real_t t_123 = nile_Real (2);
-                    nile_Real_t t_124 = nile_Real_div(t_122, t_123);
-                    nile_Real_t t_125 = nile_Real_add(v_A_y, v_C_y);
-                    nile_Real_t t_126 = nile_Real (2);
-                    nile_Real_t t_127 = nile_Real_div(t_125, t_126);
-                    nile_Real_t t_128_1 = t_124;
-                    nile_Real_t t_128_2 = t_127;
-                    nile_Real_t t_129_x = t_128_1;
-                    nile_Real_t t_129_y = t_128_2;
-                    nile_Real_t t_121_1_x = v_A_x;
-                    nile_Real_t t_121_1_y = v_A_y;
-                    nile_Real_t t_121_2_x = t_129_x;
-                    nile_Real_t t_121_2_y = t_129_y;
-                    nile_Real_t t_121_3_x = v_C_x;
-                    nile_Real_t t_121_3_y = v_C_y;
-                    nile_Real_t t_130_A_x = t_121_1_x;
-                    nile_Real_t t_130_A_y = t_121_1_y;
-                    nile_Real_t t_130_B_x = t_121_2_x;
-                    nile_Real_t t_130_B_y = t_121_2_y;
-                    nile_Real_t t_130_C_x = t_121_3_x;
-                    nile_Real_t t_130_C_y = t_121_3_y;
+                nile_Real_t t_104 = nile_Real_add(v_A_x, v_C_x);
+                nile_Real_t t_105 = nile_Real (2);
+                nile_Real_t t_106 = nile_Real_div(t_104, t_105);
+                nile_Real_t t_107 = nile_Real_add(v_A_y, v_C_y);
+                nile_Real_t t_108 = nile_Real (2);
+                nile_Real_t t_109 = nile_Real_div(t_107, t_108);
+                nile_Real_t t_110_1 = t_106;
+                nile_Real_t t_110_2 = t_109;
+                nile_Real_t t_111_x = t_110_1;
+                nile_Real_t t_111_y = t_110_2;
+                nile_Real_t t_112 = nile_Real_neq(t_111_x, v_B_x);
+                nile_Real_t t_113 = nile_Real_neq(t_111_y, v_B_y);
+                nile_Real_t t_114 = nile_Real_or(t_112, t_113);
+                if (nile_Real_nz (t_114)) {
+                    nile_Real_t t_116 = nile_Real_add(v_A_x, v_C_x);
+                    nile_Real_t t_117 = nile_Real (2);
+                    nile_Real_t t_118 = nile_Real_div(t_116, t_117);
+                    nile_Real_t t_119 = nile_Real_add(v_A_y, v_C_y);
+                    nile_Real_t t_120 = nile_Real (2);
+                    nile_Real_t t_121 = nile_Real_div(t_119, t_120);
+                    nile_Real_t t_122_1 = t_118;
+                    nile_Real_t t_122_2 = t_121;
+                    nile_Real_t t_123_x = t_122_1;
+                    nile_Real_t t_123_y = t_122_2;
+                    nile_Real_t t_115_1_x = v_A_x;
+                    nile_Real_t t_115_1_y = v_A_y;
+                    nile_Real_t t_115_2_x = t_123_x;
+                    nile_Real_t t_115_2_y = t_123_y;
+                    nile_Real_t t_115_3_x = v_C_x;
+                    nile_Real_t t_115_3_y = v_C_y;
+                    nile_Real_t t_124_A_x = t_115_1_x;
+                    nile_Real_t t_124_A_y = t_115_1_y;
+                    nile_Real_t t_124_B_x = t_115_2_x;
+                    nile_Real_t t_124_B_y = t_115_2_y;
+                    nile_Real_t t_124_C_x = t_115_3_x;
+                    nile_Real_t t_124_C_y = t_115_3_y;
                     if (nile_Buffer_headroom (in) < IN_QUANTUM)
                         in = nile_Process_prefix_input (p, in);
-                    nile_Buffer_push_head(in, t_130_C_y);
-                    nile_Buffer_push_head(in, t_130_C_x);
-                    nile_Buffer_push_head(in, t_130_B_y);
-                    nile_Buffer_push_head(in, t_130_B_x);
-                    nile_Buffer_push_head(in, t_130_A_y);
-                    nile_Buffer_push_head(in, t_130_A_x);
+                    nile_Buffer_push_head(in, t_124_C_y);
+                    nile_Buffer_push_head(in, t_124_C_x);
+                    nile_Buffer_push_head(in, t_124_B_y);
+                    nile_Buffer_push_head(in, t_124_B_x);
+                    nile_Buffer_push_head(in, t_124_A_y);
+                    nile_Buffer_push_head(in, t_124_A_x);
                 }
                 else {
                     ; /* no-op */
@@ -2456,7 +2430,7 @@ gezira_SanitizeBezierPath_body (nile_Process_t *p,
 static nile_Buffer_t *
 gezira_SanitizeBezierPath_epilogue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_SanitizeBezierPath_vars_t *vars = (gezira_SanitizeBezierPath_vars_t *) nile_Process_vars (p);
+    gezira_SanitizeBezierPath_vars_t *vars = nile_Process_vars (p);
     gezira_SanitizeBezierPath_vars_t v = *vars;
     return out;
 }
@@ -2484,7 +2458,7 @@ typedef struct {
 static nile_Buffer_t *
 gezira_StrokeBezierPath_prologue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_StrokeBezierPath_vars_t *vars = (gezira_StrokeBezierPath_vars_t *) nile_Process_vars (p);
+    gezira_StrokeBezierPath_vars_t *vars = nile_Process_vars (p);
     gezira_StrokeBezierPath_vars_t v = *vars;
     ; /* no-op */
     nile_Process_t *t_1 = gezira_StrokeOneSide(p, nile_Real_tof (v.v_w), nile_Real_tof (v.v_l), nile_Real_tof (v.v_c));
@@ -2507,7 +2481,7 @@ gezira_StrokeBezierPath_prologue (nile_Process_t *p, nile_Buffer_t *out)
 static nile_Buffer_t *
 gezira_StrokeBezierPath_epilogue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_StrokeBezierPath_vars_t *vars = (gezira_StrokeBezierPath_vars_t *) nile_Process_vars (p);
+    gezira_StrokeBezierPath_vars_t *vars = nile_Process_vars (p);
     gezira_StrokeBezierPath_vars_t v = *vars;
     ; /* no-op */
     return out;
@@ -2523,7 +2497,7 @@ gezira_StrokeBezierPath (nile_Process_t *p,
     gezira_StrokeBezierPath_vars_t v;
     p = nile_Process (p, IN_QUANTUM, sizeof (*vars), gezira_StrokeBezierPath_prologue, gezira_StrokeBezierPath_body, gezira_StrokeBezierPath_epilogue);
     if (p) {
-        vars = (gezira_StrokeBezierPath_vars_t *) nile_Process_vars (p);
+        vars = nile_Process_vars (p);
         v.v_w = nile_Real (v_w);
         v.v_l = nile_Real (v_l);
         v.v_c = nile_Real (v_c);
@@ -2544,7 +2518,7 @@ typedef struct {
 static nile_Buffer_t *
 gezira_DecomposeBeziers_prologue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_DecomposeBeziers_vars_t *vars = (gezira_DecomposeBeziers_vars_t *) nile_Process_vars (p);
+    gezira_DecomposeBeziers_vars_t *vars = nile_Process_vars (p);
     gezira_DecomposeBeziers_vars_t v = *vars;
     *vars = v;
     return out;
@@ -2555,7 +2529,7 @@ gezira_DecomposeBeziers_body (nile_Process_t *p,
                               nile_Buffer_t *in,
                               nile_Buffer_t *out)
 {
-    gezira_DecomposeBeziers_vars_t *vars = (gezira_DecomposeBeziers_vars_t *) nile_Process_vars (p);
+    gezira_DecomposeBeziers_vars_t *vars = nile_Process_vars (p);
     gezira_DecomposeBeziers_vars_t v = *vars;
     
     while (!nile_Buffer_is_empty (in) && !nile_Buffer_quota_hit (out)) {
@@ -2791,7 +2765,7 @@ gezira_DecomposeBeziers_body (nile_Process_t *p,
 static nile_Buffer_t *
 gezira_DecomposeBeziers_epilogue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_DecomposeBeziers_vars_t *vars = (gezira_DecomposeBeziers_vars_t *) nile_Process_vars (p);
+    gezira_DecomposeBeziers_vars_t *vars = nile_Process_vars (p);
     gezira_DecomposeBeziers_vars_t v = *vars;
     return out;
 }
@@ -2820,7 +2794,7 @@ typedef struct {
 static nile_Buffer_t *
 gezira_CombineEdgeSamples_prologue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_CombineEdgeSamples_vars_t *vars = (gezira_CombineEdgeSamples_vars_t *) nile_Process_vars (p);
+    gezira_CombineEdgeSamples_vars_t *vars = nile_Process_vars (p);
     gezira_CombineEdgeSamples_vars_t v = *vars;
     nile_Real_t t_5 = nile_Real (0);
     v.v_x = t_5;
@@ -2839,7 +2813,7 @@ gezira_CombineEdgeSamples_body (nile_Process_t *p,
                                 nile_Buffer_t *in,
                                 nile_Buffer_t *out)
 {
-    gezira_CombineEdgeSamples_vars_t *vars = (gezira_CombineEdgeSamples_vars_t *) nile_Process_vars (p);
+    gezira_CombineEdgeSamples_vars_t *vars = nile_Process_vars (p);
     gezira_CombineEdgeSamples_vars_t v = *vars;
     
     while (!nile_Buffer_is_empty (in) && !nile_Buffer_quota_hit (out)) {
@@ -2858,83 +2832,68 @@ gezira_CombineEdgeSamples_body (nile_Process_t *p,
                 v_.v_H = t_12;
             }
             else {
-                nile_Real_t t_14 = nile_Real (0);
-                nile_Real_t t_15 = nile_Real_lt(v.v_A, t_14);
-                nile_Real_t t_16 = nile_Real_neg(v.v_A);
-                nile_Real_t t_17 = nile_Real_nz (t_15) ? t_16 : v.v_A;
-                nile_Real_t t_18 = nile_Real (1);
-                nile_Real_t t_19 = nile_Real_lt(t_17, t_18);
-                nile_Real_t t_20 = nile_Real_nz (t_19) ? t_17 : t_18;
-                nile_Real_t t_21 = nile_Real (1);
-                nile_Real_t t_13_1 = v.v_x;
-                nile_Real_t t_13_2 = v.v_y;
-                nile_Real_t t_13_3 = t_20;
-                nile_Real_t t_13_4 = t_21;
-                nile_Real_t t_22_x = t_13_1;
-                nile_Real_t t_22_y = t_13_2;
-                nile_Real_t t_22_c = t_13_3;
-                nile_Real_t t_22_l = t_13_4;
+                nile_Real_t t_13 = nile_Real (0);
+                nile_Real_t t_14 = nile_Real_lt(v.v_H, t_13);
+                nile_Real_t t_15 = nile_Real_neg(v.v_H);
+                nile_Real_t t_16 = nile_Real_nz (t_14) ? t_15 : v.v_H;
+                nile_Real_t t_17 = nile_Real (0.5);
+                nile_Real_t t_18 = nile_Real_gt(t_16, t_17);
+                nile_Real_t t_19 = nile_Real_sub(v_.v_x, v.v_x);
+                nile_Real_t t_20 = nile_Real (1);
+                nile_Real_t t_21 = nile_Real_sub(t_19, t_20);
+                nile_Real_t t_22 = nile_Real (0);
+                nile_Real_t t_23 = nile_Real_nz (t_18) ? t_21 : t_22;
+                nile_Real_t v_l = t_23;
+                nile_Real_t t_25 = nile_Real (0);
+                nile_Real_t t_26 = nile_Real_lt(v.v_A, t_25);
+                nile_Real_t t_27 = nile_Real_neg(v.v_A);
+                nile_Real_t t_28 = nile_Real_nz (t_26) ? t_27 : v.v_A;
+                nile_Real_t t_29 = nile_Real (1);
+                nile_Real_t t_30 = nile_Real_lt(t_28, t_29);
+                nile_Real_t t_31 = nile_Real_nz (t_30) ? t_28 : t_29;
+                nile_Real_t t_24_1 = v.v_x;
+                nile_Real_t t_24_2 = v.v_y;
+                nile_Real_t t_24_3 = t_31;
+                nile_Real_t t_24_4 = v_l;
+                nile_Real_t t_32_x = t_24_1;
+                nile_Real_t t_32_y = t_24_2;
+                nile_Real_t t_32_c = t_24_3;
+                nile_Real_t t_32_l = t_24_4;
                 if (nile_Buffer_tailroom (out) < OUT_QUANTUM)
                     out = nile_Process_append_output (p, out);
-                nile_Buffer_push_tail(out, t_22_x);
-                nile_Buffer_push_tail(out, t_22_y);
-                nile_Buffer_push_tail(out, t_22_c);
-                nile_Buffer_push_tail(out, t_22_l);
-                nile_Real_t t_24 = nile_Real (1);
-                nile_Real_t t_25 = nile_Real_add(v.v_x, t_24);
-                nile_Real_t t_26 = nile_Real (0);
-                nile_Real_t t_27 = nile_Real_lt(v.v_H, t_26);
-                nile_Real_t t_28 = nile_Real_neg(v.v_H);
-                nile_Real_t t_29 = nile_Real_nz (t_27) ? t_28 : v.v_H;
-                nile_Real_t t_30 = nile_Real (1);
-                nile_Real_t t_31 = nile_Real_lt(t_29, t_30);
-                nile_Real_t t_32 = nile_Real_nz (t_31) ? t_29 : t_30;
-                nile_Real_t t_33 = nile_Real_sub(v_.v_x, v.v_x);
-                nile_Real_t t_34 = nile_Real (1);
-                nile_Real_t t_35 = nile_Real_sub(t_33, t_34);
-                nile_Real_t t_23_1 = t_25;
-                nile_Real_t t_23_2 = v.v_y;
-                nile_Real_t t_23_3 = t_32;
-                nile_Real_t t_23_4 = t_35;
-                nile_Real_t t_36_x = t_23_1;
-                nile_Real_t t_36_y = t_23_2;
-                nile_Real_t t_36_c = t_23_3;
-                nile_Real_t t_36_l = t_23_4;
-                if (nile_Buffer_tailroom (out) < OUT_QUANTUM)
-                    out = nile_Process_append_output (p, out);
-                nile_Buffer_push_tail(out, t_36_x);
-                nile_Buffer_push_tail(out, t_36_y);
-                nile_Buffer_push_tail(out, t_36_c);
-                nile_Buffer_push_tail(out, t_36_l);
-                nile_Real_t t_37 = nile_Real_add(v.v_H, v_a);
-                v_.v_A = t_37;
-                nile_Real_t t_38 = nile_Real_add(v.v_H, v_h);
-                v_.v_H = t_38;
+                nile_Buffer_push_tail(out, t_32_x);
+                nile_Buffer_push_tail(out, t_32_y);
+                nile_Buffer_push_tail(out, t_32_c);
+                nile_Buffer_push_tail(out, t_32_l);
+                nile_Real_t t_33 = nile_Real_add(v.v_H, v_a);
+                v_.v_A = t_33;
+                nile_Real_t t_34 = nile_Real_add(v.v_H, v_h);
+                v_.v_H = t_34;
             }
         }
         else {
-            nile_Real_t t_40 = nile_Real (0);
-            nile_Real_t t_41 = nile_Real_lt(v.v_A, t_40);
-            nile_Real_t t_42 = nile_Real_neg(v.v_A);
-            nile_Real_t t_43 = nile_Real_nz (t_41) ? t_42 : v.v_A;
-            nile_Real_t t_44 = nile_Real (1);
-            nile_Real_t t_45 = nile_Real_lt(t_43, t_44);
-            nile_Real_t t_46 = nile_Real_nz (t_45) ? t_43 : t_44;
-            nile_Real_t t_47 = nile_Real (1);
-            nile_Real_t t_39_1 = v.v_x;
-            nile_Real_t t_39_2 = v.v_y;
-            nile_Real_t t_39_3 = t_46;
-            nile_Real_t t_39_4 = t_47;
-            nile_Real_t t_48_x = t_39_1;
-            nile_Real_t t_48_y = t_39_2;
-            nile_Real_t t_48_c = t_39_3;
-            nile_Real_t t_48_l = t_39_4;
+            nile_Real_t t_36 = nile_Real (0);
+            nile_Real_t t_37 = nile_Real_lt(v.v_A, t_36);
+            nile_Real_t t_38 = nile_Real_neg(v.v_A);
+            nile_Real_t t_39 = nile_Real_nz (t_37) ? t_38 : v.v_A;
+            nile_Real_t t_40 = nile_Real (1);
+            nile_Real_t t_41 = nile_Real_lt(t_39, t_40);
+            nile_Real_t t_42 = nile_Real_nz (t_41) ? t_39 : t_40;
+            nile_Real_t t_43 = nile_Real (0);
+            nile_Real_t t_35_1 = v.v_x;
+            nile_Real_t t_35_2 = v.v_y;
+            nile_Real_t t_35_3 = t_42;
+            nile_Real_t t_35_4 = t_43;
+            nile_Real_t t_44_x = t_35_1;
+            nile_Real_t t_44_y = t_35_2;
+            nile_Real_t t_44_c = t_35_3;
+            nile_Real_t t_44_l = t_35_4;
             if (nile_Buffer_tailroom (out) < OUT_QUANTUM)
                 out = nile_Process_append_output (p, out);
-            nile_Buffer_push_tail(out, t_48_x);
-            nile_Buffer_push_tail(out, t_48_y);
-            nile_Buffer_push_tail(out, t_48_c);
-            nile_Buffer_push_tail(out, t_48_l);
+            nile_Buffer_push_tail(out, t_44_x);
+            nile_Buffer_push_tail(out, t_44_y);
+            nile_Buffer_push_tail(out, t_44_c);
+            nile_Buffer_push_tail(out, t_44_l);
             v_.v_A = v_a;
             v_.v_H = v_h;
         }
@@ -2948,30 +2907,30 @@ gezira_CombineEdgeSamples_body (nile_Process_t *p,
 static nile_Buffer_t *
 gezira_CombineEdgeSamples_epilogue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_CombineEdgeSamples_vars_t *vars = (gezira_CombineEdgeSamples_vars_t *) nile_Process_vars (p);
+    gezira_CombineEdgeSamples_vars_t *vars = nile_Process_vars (p);
     gezira_CombineEdgeSamples_vars_t v = *vars;
-    nile_Real_t t_50 = nile_Real (0);
-    nile_Real_t t_51 = nile_Real_lt(v.v_A, t_50);
-    nile_Real_t t_52 = nile_Real_neg(v.v_A);
-    nile_Real_t t_53 = nile_Real_nz (t_51) ? t_52 : v.v_A;
-    nile_Real_t t_54 = nile_Real (1);
-    nile_Real_t t_55 = nile_Real_lt(t_53, t_54);
-    nile_Real_t t_56 = nile_Real_nz (t_55) ? t_53 : t_54;
-    nile_Real_t t_57 = nile_Real (1);
-    nile_Real_t t_49_1 = v.v_x;
-    nile_Real_t t_49_2 = v.v_y;
-    nile_Real_t t_49_3 = t_56;
-    nile_Real_t t_49_4 = t_57;
-    nile_Real_t t_58_x = t_49_1;
-    nile_Real_t t_58_y = t_49_2;
-    nile_Real_t t_58_c = t_49_3;
-    nile_Real_t t_58_l = t_49_4;
+    nile_Real_t t_46 = nile_Real (0);
+    nile_Real_t t_47 = nile_Real_lt(v.v_A, t_46);
+    nile_Real_t t_48 = nile_Real_neg(v.v_A);
+    nile_Real_t t_49 = nile_Real_nz (t_47) ? t_48 : v.v_A;
+    nile_Real_t t_50 = nile_Real (1);
+    nile_Real_t t_51 = nile_Real_lt(t_49, t_50);
+    nile_Real_t t_52 = nile_Real_nz (t_51) ? t_49 : t_50;
+    nile_Real_t t_53 = nile_Real (0);
+    nile_Real_t t_45_1 = v.v_x;
+    nile_Real_t t_45_2 = v.v_y;
+    nile_Real_t t_45_3 = t_52;
+    nile_Real_t t_45_4 = t_53;
+    nile_Real_t t_54_x = t_45_1;
+    nile_Real_t t_54_y = t_45_2;
+    nile_Real_t t_54_c = t_45_3;
+    nile_Real_t t_54_l = t_45_4;
     if (nile_Buffer_tailroom (out) < OUT_QUANTUM)
         out = nile_Process_append_output (p, out);
-    nile_Buffer_push_tail(out, t_58_x);
-    nile_Buffer_push_tail(out, t_58_y);
-    nile_Buffer_push_tail(out, t_58_c);
-    nile_Buffer_push_tail(out, t_58_l);
+    nile_Buffer_push_tail(out, t_54_x);
+    nile_Buffer_push_tail(out, t_54_y);
+    nile_Buffer_push_tail(out, t_54_c);
+    nile_Buffer_push_tail(out, t_54_l);
     return out;
 }
 
@@ -2995,7 +2954,7 @@ typedef struct {
 static nile_Buffer_t *
 gezira_Rasterize_prologue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_Rasterize_vars_t *vars = (gezira_Rasterize_vars_t *) nile_Process_vars (p);
+    gezira_Rasterize_vars_t *vars = nile_Process_vars (p);
     gezira_Rasterize_vars_t v = *vars;
     ; /* no-op */
     nile_Real_t t_1 = nile_Real (0);
@@ -3017,7 +2976,7 @@ gezira_Rasterize_prologue (nile_Process_t *p, nile_Buffer_t *out)
 static nile_Buffer_t *
 gezira_Rasterize_epilogue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_Rasterize_vars_t *vars = (gezira_Rasterize_vars_t *) nile_Process_vars (p);
+    gezira_Rasterize_vars_t *vars = nile_Process_vars (p);
     gezira_Rasterize_vars_t v = *vars;
     ; /* no-op */
     return out;
@@ -3034,7 +2993,7 @@ gezira_Rasterize (nile_Process_t *p)
 #undef IN_QUANTUM
 #undef OUT_QUANTUM
 
-#define IN_QUANTUM 2
+#define IN_QUANTUM 1
 #define OUT_QUANTUM 4
 
 typedef struct {
@@ -3043,27 +3002,27 @@ typedef struct {
     nile_Real_t v_max_x;
     nile_Real_t v_max_y;
     nile_Real_t v_l;
+    nile_Real_t v_x;
 } gezira_RectangleSpans_vars_t;
-
 
 static nile_Buffer_t *
 gezira_RectangleSpans_prologue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_RectangleSpans_vars_t *vars = (gezira_RectangleSpans_vars_t *) nile_Process_vars (p);
+    gezira_RectangleSpans_vars_t *vars = nile_Process_vars (p);
     gezira_RectangleSpans_vars_t v = *vars;
-    nile_Real_t t_2 = nile_Real_sub(v.v_max_x, v.v_min_x);
-    v.v_l = t_2;
-    nile_Real_t t_3 = nile_Real (0.5);
-    nile_Real_t t_4_x = t_3;
-    nile_Real_t t_4_y = t_3;
-    nile_Real_t t_5_x = nile_Real_add(v.v_min_x, t_4_x);
-    nile_Real_t t_5_y = nile_Real_add(v.v_min_y, t_4_y);
+    nile_Real_t t_6 = nile_Real_sub(v.v_max_x, v.v_min_x);
+    nile_Real_t t_7 = nile_Real (1);
+    nile_Real_t t_8 = nile_Real_sub(t_6, t_7);
+    v.v_l = t_8;
+    nile_Real_t t_9 = nile_Real (0.5);
+    nile_Real_t t_10 = nile_Real_add(v.v_min_x, t_9);
+    v.v_x = t_10;
+    nile_Real_t t_11 = nile_Real (0.5);
+    nile_Real_t t_12 = nile_Real_add(v.v_min_y, t_11);
 
     nile_Buffer_t *in = nile_Process_prefix_input (p, 0);
-    if (in) {
-        nile_Buffer_push_head(in, t_5_y);
-        nile_Buffer_push_head(in, t_5_x);
-    }
+    if (in)
+        nile_Buffer_push_head(in, t_12);
 
     *vars = v;
     return out;
@@ -3074,42 +3033,34 @@ gezira_RectangleSpans_body (nile_Process_t *p,
                             nile_Buffer_t *in,
                             nile_Buffer_t *out)
 {
-    gezira_RectangleSpans_vars_t *vars = (gezira_RectangleSpans_vars_t *) nile_Process_vars (p);
+    gezira_RectangleSpans_vars_t *vars = nile_Process_vars (p);
     gezira_RectangleSpans_vars_t v = *vars;
     
     while (!nile_Buffer_is_empty (in) && !nile_Buffer_quota_hit (out)) {
         gezira_RectangleSpans_vars_t v_ = v;
-        nile_Real_t v_x = nile_Buffer_pop_head(in);
         nile_Real_t v_y = nile_Buffer_pop_head(in);
-        nile_Real_t t_6 = nile_Real_lt(v_x, v.v_max_x);
-        nile_Real_t t_7 = nile_Real_lt(v_y, v.v_max_y);
-        nile_Real_t t_8 = nile_Real_and(t_6, t_7);
-        if (nile_Real_nz (t_8)) {
-            nile_Real_t t_10 = nile_Real (1);
-            nile_Real_t t_9_1 = v_x;
-            nile_Real_t t_9_2 = v_y;
-            nile_Real_t t_9_3 = t_10;
-            nile_Real_t t_9_4 = v.v_l;
-            nile_Real_t t_11_x = t_9_1;
-            nile_Real_t t_11_y = t_9_2;
-            nile_Real_t t_11_c = t_9_3;
-            nile_Real_t t_11_l = t_9_4;
+        nile_Real_t t_13 = nile_Real_lt(v_y, v.v_max_y);
+        if (nile_Real_nz (t_13)) {
+            nile_Real_t t_15 = nile_Real (1);
+            nile_Real_t t_14_1 = v.v_x;
+            nile_Real_t t_14_2 = v_y;
+            nile_Real_t t_14_3 = t_15;
+            nile_Real_t t_14_4 = v.v_l;
+            nile_Real_t t_16_x = t_14_1;
+            nile_Real_t t_16_y = t_14_2;
+            nile_Real_t t_16_c = t_14_3;
+            nile_Real_t t_16_l = t_14_4;
             if (nile_Buffer_tailroom (out) < OUT_QUANTUM)
                 out = nile_Process_append_output (p, out);
-            nile_Buffer_push_tail(out, t_11_x);
-            nile_Buffer_push_tail(out, t_11_y);
-            nile_Buffer_push_tail(out, t_11_c);
-            nile_Buffer_push_tail(out, t_11_l);
-            nile_Real_t t_13 = nile_Real (1);
-            nile_Real_t t_14 = nile_Real_add(v_y, t_13);
-            nile_Real_t t_12_1 = v_x;
-            nile_Real_t t_12_2 = t_14;
-            nile_Real_t t_15_x = t_12_1;
-            nile_Real_t t_15_y = t_12_2;
+            nile_Buffer_push_tail(out, t_16_x);
+            nile_Buffer_push_tail(out, t_16_y);
+            nile_Buffer_push_tail(out, t_16_c);
+            nile_Buffer_push_tail(out, t_16_l);
+            nile_Real_t t_17 = nile_Real (1);
+            nile_Real_t t_18 = nile_Real_add(v_y, t_17);
             if (nile_Buffer_headroom (in) < IN_QUANTUM)
                 in = nile_Process_prefix_input (p, in);
-            nile_Buffer_push_head(in, t_15_y);
-            nile_Buffer_push_head(in, t_15_x);
+            nile_Buffer_push_head(in, t_18);
         }
         else {
             ; /* no-op */
@@ -3124,7 +3075,7 @@ gezira_RectangleSpans_body (nile_Process_t *p,
 static nile_Buffer_t *
 gezira_RectangleSpans_epilogue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_RectangleSpans_vars_t *vars = (gezira_RectangleSpans_vars_t *) nile_Process_vars (p);
+    gezira_RectangleSpans_vars_t *vars = nile_Process_vars (p);
     gezira_RectangleSpans_vars_t v = *vars;
     return out;
 }
@@ -3140,7 +3091,7 @@ gezira_RectangleSpans (nile_Process_t *p,
     gezira_RectangleSpans_vars_t v;
     p = nile_Process (p, IN_QUANTUM, sizeof (*vars), gezira_RectangleSpans_prologue, gezira_RectangleSpans_body, gezira_RectangleSpans_epilogue);
     if (p) {
-        vars = (gezira_RectangleSpans_vars_t *) nile_Process_vars (p);
+        vars = nile_Process_vars (p);
         v.v_min_x = nile_Real (v_min_x);
         v.v_min_y = nile_Real (v_min_y);
         v.v_max_x = nile_Real (v_max_x);
@@ -3168,7 +3119,7 @@ typedef struct {
 static nile_Buffer_t *
 gezira_TransformPoints_prologue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_TransformPoints_vars_t *vars = (gezira_TransformPoints_vars_t *) nile_Process_vars (p);
+    gezira_TransformPoints_vars_t *vars = nile_Process_vars (p);
     gezira_TransformPoints_vars_t v = *vars;
     *vars = v;
     return out;
@@ -3179,7 +3130,7 @@ gezira_TransformPoints_body (nile_Process_t *p,
                              nile_Buffer_t *in,
                              nile_Buffer_t *out)
 {
-    gezira_TransformPoints_vars_t *vars = (gezira_TransformPoints_vars_t *) nile_Process_vars (p);
+    gezira_TransformPoints_vars_t *vars = nile_Process_vars (p);
     gezira_TransformPoints_vars_t v = *vars;
     
     while (!nile_Buffer_is_empty (in) && !nile_Buffer_quota_hit (out)) {
@@ -3212,7 +3163,7 @@ gezira_TransformPoints_body (nile_Process_t *p,
 static nile_Buffer_t *
 gezira_TransformPoints_epilogue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_TransformPoints_vars_t *vars = (gezira_TransformPoints_vars_t *) nile_Process_vars (p);
+    gezira_TransformPoints_vars_t *vars = nile_Process_vars (p);
     gezira_TransformPoints_vars_t v = *vars;
     return out;
 }
@@ -3230,7 +3181,7 @@ gezira_TransformPoints (nile_Process_t *p,
     gezira_TransformPoints_vars_t v;
     p = nile_Process (p, IN_QUANTUM, sizeof (*vars), gezira_TransformPoints_prologue, gezira_TransformPoints_body, gezira_TransformPoints_epilogue);
     if (p) {
-        vars = (gezira_TransformPoints_vars_t *) nile_Process_vars (p);
+        vars = nile_Process_vars (p);
         v.v_M_a = nile_Real (v_M_a);
         v.v_M_b = nile_Real (v_M_b);
         v.v_M_c = nile_Real (v_M_c);
@@ -3256,7 +3207,7 @@ typedef struct {
 static nile_Buffer_t *
 gezira_PadTexture_prologue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_PadTexture_vars_t *vars = (gezira_PadTexture_vars_t *) nile_Process_vars (p);
+    gezira_PadTexture_vars_t *vars = nile_Process_vars (p);
     gezira_PadTexture_vars_t v = *vars;
     *vars = v;
     return out;
@@ -3267,7 +3218,7 @@ gezira_PadTexture_body (nile_Process_t *p,
                         nile_Buffer_t *in,
                         nile_Buffer_t *out)
 {
-    gezira_PadTexture_vars_t *vars = (gezira_PadTexture_vars_t *) nile_Process_vars (p);
+    gezira_PadTexture_vars_t *vars = nile_Process_vars (p);
     gezira_PadTexture_vars_t v = *vars;
     
     while (!nile_Buffer_is_empty (in) && !nile_Buffer_quota_hit (out)) {
@@ -3307,7 +3258,7 @@ gezira_PadTexture_body (nile_Process_t *p,
 static nile_Buffer_t *
 gezira_PadTexture_epilogue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_PadTexture_vars_t *vars = (gezira_PadTexture_vars_t *) nile_Process_vars (p);
+    gezira_PadTexture_vars_t *vars = nile_Process_vars (p);
     gezira_PadTexture_vars_t v = *vars;
     return out;
 }
@@ -3321,7 +3272,7 @@ gezira_PadTexture (nile_Process_t *p,
     gezira_PadTexture_vars_t v;
     p = nile_Process (p, IN_QUANTUM, sizeof (*vars), gezira_PadTexture_prologue, gezira_PadTexture_body, gezira_PadTexture_epilogue);
     if (p) {
-        vars = (gezira_PadTexture_vars_t *) nile_Process_vars (p);
+        vars = nile_Process_vars (p);
         v.v_D_x = nile_Real (v_D_x);
         v.v_D_y = nile_Real (v_D_y);
         *vars = v;
@@ -3343,7 +3294,7 @@ typedef struct {
 static nile_Buffer_t *
 gezira_RepeatTexture_prologue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_RepeatTexture_vars_t *vars = (gezira_RepeatTexture_vars_t *) nile_Process_vars (p);
+    gezira_RepeatTexture_vars_t *vars = nile_Process_vars (p);
     gezira_RepeatTexture_vars_t v = *vars;
     *vars = v;
     return out;
@@ -3354,7 +3305,7 @@ gezira_RepeatTexture_body (nile_Process_t *p,
                            nile_Buffer_t *in,
                            nile_Buffer_t *out)
 {
-    gezira_RepeatTexture_vars_t *vars = (gezira_RepeatTexture_vars_t *) nile_Process_vars (p);
+    gezira_RepeatTexture_vars_t *vars = nile_Process_vars (p);
     gezira_RepeatTexture_vars_t v = *vars;
     
     while (!nile_Buffer_is_empty (in) && !nile_Buffer_quota_hit (out)) {
@@ -3385,7 +3336,7 @@ gezira_RepeatTexture_body (nile_Process_t *p,
 static nile_Buffer_t *
 gezira_RepeatTexture_epilogue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_RepeatTexture_vars_t *vars = (gezira_RepeatTexture_vars_t *) nile_Process_vars (p);
+    gezira_RepeatTexture_vars_t *vars = nile_Process_vars (p);
     gezira_RepeatTexture_vars_t v = *vars;
     return out;
 }
@@ -3399,7 +3350,7 @@ gezira_RepeatTexture (nile_Process_t *p,
     gezira_RepeatTexture_vars_t v;
     p = nile_Process (p, IN_QUANTUM, sizeof (*vars), gezira_RepeatTexture_prologue, gezira_RepeatTexture_body, gezira_RepeatTexture_epilogue);
     if (p) {
-        vars = (gezira_RepeatTexture_vars_t *) nile_Process_vars (p);
+        vars = nile_Process_vars (p);
         v.v_D_x = nile_Real (v_D_x);
         v.v_D_y = nile_Real (v_D_y);
         *vars = v;
@@ -3421,7 +3372,7 @@ typedef struct {
 static nile_Buffer_t *
 gezira_ReflectTexture_prologue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_ReflectTexture_vars_t *vars = (gezira_ReflectTexture_vars_t *) nile_Process_vars (p);
+    gezira_ReflectTexture_vars_t *vars = nile_Process_vars (p);
     gezira_ReflectTexture_vars_t v = *vars;
     *vars = v;
     return out;
@@ -3432,7 +3383,7 @@ gezira_ReflectTexture_body (nile_Process_t *p,
                             nile_Buffer_t *in,
                             nile_Buffer_t *out)
 {
-    gezira_ReflectTexture_vars_t *vars = (gezira_ReflectTexture_vars_t *) nile_Process_vars (p);
+    gezira_ReflectTexture_vars_t *vars = nile_Process_vars (p);
     gezira_ReflectTexture_vars_t v = *vars;
     
     while (!nile_Buffer_is_empty (in) && !nile_Buffer_quota_hit (out)) {
@@ -3516,7 +3467,7 @@ gezira_ReflectTexture_body (nile_Process_t *p,
 static nile_Buffer_t *
 gezira_ReflectTexture_epilogue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_ReflectTexture_vars_t *vars = (gezira_ReflectTexture_vars_t *) nile_Process_vars (p);
+    gezira_ReflectTexture_vars_t *vars = nile_Process_vars (p);
     gezira_ReflectTexture_vars_t v = *vars;
     return out;
 }
@@ -3530,7 +3481,7 @@ gezira_ReflectTexture (nile_Process_t *p,
     gezira_ReflectTexture_vars_t v;
     p = nile_Process (p, IN_QUANTUM, sizeof (*vars), gezira_ReflectTexture_prologue, gezira_ReflectTexture_body, gezira_ReflectTexture_epilogue);
     if (p) {
-        vars = (gezira_ReflectTexture_vars_t *) nile_Process_vars (p);
+        vars = nile_Process_vars (p);
         v.v_D_x = nile_Real (v_D_x);
         v.v_D_y = nile_Real (v_D_y);
         *vars = v;
@@ -3558,7 +3509,7 @@ typedef struct {
 static nile_Buffer_t *
 gezira_UniformColor_prologue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_UniformColor_vars_t *vars = (gezira_UniformColor_vars_t *) nile_Process_vars (p);
+    gezira_UniformColor_vars_t *vars = nile_Process_vars (p);
     gezira_UniformColor_vars_t v = *vars;
     nile_Real_t t_6 = nile_Real_mul(v.v_C_a, v.v_C_r);
     nile_Real_t t_7 = nile_Real_mul(v.v_C_a, v.v_C_g);
@@ -3580,7 +3531,7 @@ gezira_UniformColor_body (nile_Process_t *p,
                           nile_Buffer_t *in,
                           nile_Buffer_t *out)
 {
-    gezira_UniformColor_vars_t *vars = (gezira_UniformColor_vars_t *) nile_Process_vars (p);
+    gezira_UniformColor_vars_t *vars = nile_Process_vars (p);
     gezira_UniformColor_vars_t v = *vars;
     
     while (!nile_Buffer_is_empty (in) && !nile_Buffer_quota_hit (out)) {
@@ -3609,7 +3560,7 @@ gezira_UniformColor_body (nile_Process_t *p,
 static nile_Buffer_t *
 gezira_UniformColor_epilogue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_UniformColor_vars_t *vars = (gezira_UniformColor_vars_t *) nile_Process_vars (p);
+    gezira_UniformColor_vars_t *vars = nile_Process_vars (p);
     gezira_UniformColor_vars_t v = *vars;
     return out;
 }
@@ -3625,7 +3576,7 @@ gezira_UniformColor (nile_Process_t *p,
     gezira_UniformColor_vars_t v;
     p = nile_Process (p, IN_QUANTUM, sizeof (*vars), gezira_UniformColor_prologue, gezira_UniformColor_body, gezira_UniformColor_epilogue);
     if (p) {
-        vars = (gezira_UniformColor_vars_t *) nile_Process_vars (p);
+        vars = nile_Process_vars (p);
         v.v_C_a = nile_Real (v_C_a);
         v.v_C_r = nile_Real (v_C_r);
         v.v_C_g = nile_Real (v_C_g);
@@ -3650,7 +3601,7 @@ typedef struct {
 static nile_Buffer_t *
 gezira_CompositeTextures_prologue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_CompositeTextures_vars_t *vars = (gezira_CompositeTextures_vars_t *) nile_Process_vars (p);
+    gezira_CompositeTextures_vars_t *vars = nile_Process_vars (p);
     gezira_CompositeTextures_vars_t v = *vars;
     ; /* no-op */
     nile_Real_t t_1 = nile_Real (4);
@@ -3667,7 +3618,7 @@ gezira_CompositeTextures_prologue (nile_Process_t *p, nile_Buffer_t *out)
 static nile_Buffer_t *
 gezira_CompositeTextures_epilogue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_CompositeTextures_vars_t *vars = (gezira_CompositeTextures_vars_t *) nile_Process_vars (p);
+    gezira_CompositeTextures_vars_t *vars = nile_Process_vars (p);
     gezira_CompositeTextures_vars_t v = *vars;
     ; /* no-op */
     return out;
@@ -3683,7 +3634,7 @@ gezira_CompositeTextures (nile_Process_t *p,
     gezira_CompositeTextures_vars_t v;
     p = nile_Process (p, IN_QUANTUM, sizeof (*vars), gezira_CompositeTextures_prologue, gezira_CompositeTextures_body, gezira_CompositeTextures_epilogue);
     if (p) {
-        vars = (gezira_CompositeTextures_vars_t *) nile_Process_vars (p);
+        vars = nile_Process_vars (p);
         v.v_t1 = v_t1;
         v.v_t2 = v_t2;
         v.v_c = v_c;
@@ -3704,7 +3655,7 @@ typedef struct {
 static nile_Buffer_t *
 gezira_ExpandSpans_prologue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_ExpandSpans_vars_t *vars = (gezira_ExpandSpans_vars_t *) nile_Process_vars (p);
+    gezira_ExpandSpans_vars_t *vars = nile_Process_vars (p);
     gezira_ExpandSpans_vars_t v = *vars;
     *vars = v;
     return out;
@@ -3715,7 +3666,7 @@ gezira_ExpandSpans_body (nile_Process_t *p,
                          nile_Buffer_t *in,
                          nile_Buffer_t *out)
 {
-    gezira_ExpandSpans_vars_t *vars = (gezira_ExpandSpans_vars_t *) nile_Process_vars (p);
+    gezira_ExpandSpans_vars_t *vars = nile_Process_vars (p);
     gezira_ExpandSpans_vars_t v = *vars;
     
     while (!nile_Buffer_is_empty (in) && !nile_Buffer_quota_hit (out)) {
@@ -3724,46 +3675,49 @@ gezira_ExpandSpans_body (nile_Process_t *p,
         nile_Real_t v_y = nile_Buffer_pop_head(in);
         nile_Real_t v_c = nile_Buffer_pop_head(in);
         nile_Real_t v_l = nile_Buffer_pop_head(in);
-        nile_Real_t t_1 = nile_Real (0);
-        nile_Real_t t_2 = nile_Real_gt(v_c, t_1);
-        nile_Real_t t_3 = nile_Real (0);
-        nile_Real_t t_4 = nile_Real_gt(v_l, t_3);
-        nile_Real_t t_5 = nile_Real_and(t_2, t_4);
-        if (nile_Real_nz (t_5)) {
-            nile_Real_t t_7 = nile_Real (1);
-            nile_Real_t t_8 = nile_Real_sub(t_7, v_c);
-            nile_Real_t t_6_1 = v_x;
-            nile_Real_t t_6_2 = v_y;
-            nile_Real_t t_6_3 = v_c;
-            nile_Real_t t_6_4 = t_8;
-            nile_Real_t t_9_x = t_6_1;
-            nile_Real_t t_9_y = t_6_2;
-            nile_Real_t t_9_c = t_6_3;
-            nile_Real_t t_9_ic = t_6_4;
+        if (nile_Real_nz (v_c)) {
+            nile_Real_t t_2 = nile_Real (1);
+            nile_Real_t t_3 = nile_Real_sub(t_2, v_c);
+            nile_Real_t t_1_1 = v_x;
+            nile_Real_t t_1_2 = v_y;
+            nile_Real_t t_1_3 = v_c;
+            nile_Real_t t_1_4 = t_3;
+            nile_Real_t t_4_x = t_1_1;
+            nile_Real_t t_4_y = t_1_2;
+            nile_Real_t t_4_c = t_1_3;
+            nile_Real_t t_4_ic = t_1_4;
             if (nile_Buffer_tailroom (out) < OUT_QUANTUM)
                 out = nile_Process_append_output (p, out);
-            nile_Buffer_push_tail(out, t_9_x);
-            nile_Buffer_push_tail(out, t_9_y);
-            nile_Buffer_push_tail(out, t_9_c);
-            nile_Buffer_push_tail(out, t_9_ic);
+            nile_Buffer_push_tail(out, t_4_x);
+            nile_Buffer_push_tail(out, t_4_y);
+            nile_Buffer_push_tail(out, t_4_c);
+            nile_Buffer_push_tail(out, t_4_ic);
+        }
+        else {
+            ; /* no-op */
+        }
+        nile_Real_t t_5 = nile_Real (0);
+        nile_Real_t t_6 = nile_Real_gt(v_l, t_5);
+        if (nile_Real_nz (t_6)) {
+            nile_Real_t t_8 = nile_Real (1);
+            nile_Real_t t_9 = nile_Real_add(v_x, t_8);
+            nile_Real_t t_10 = nile_Real (1);
             nile_Real_t t_11 = nile_Real (1);
-            nile_Real_t t_12 = nile_Real_add(v_x, t_11);
-            nile_Real_t t_13 = nile_Real (1);
-            nile_Real_t t_14 = nile_Real_sub(v_l, t_13);
-            nile_Real_t t_10_1 = t_12;
-            nile_Real_t t_10_2 = v_y;
-            nile_Real_t t_10_3 = v_c;
-            nile_Real_t t_10_4 = t_14;
-            nile_Real_t t_15_x = t_10_1;
-            nile_Real_t t_15_y = t_10_2;
-            nile_Real_t t_15_c = t_10_3;
-            nile_Real_t t_15_l = t_10_4;
+            nile_Real_t t_12 = nile_Real_sub(v_l, t_11);
+            nile_Real_t t_7_1 = t_9;
+            nile_Real_t t_7_2 = v_y;
+            nile_Real_t t_7_3 = t_10;
+            nile_Real_t t_7_4 = t_12;
+            nile_Real_t t_13_x = t_7_1;
+            nile_Real_t t_13_y = t_7_2;
+            nile_Real_t t_13_c = t_7_3;
+            nile_Real_t t_13_l = t_7_4;
             if (nile_Buffer_headroom (in) < IN_QUANTUM)
                 in = nile_Process_prefix_input (p, in);
-            nile_Buffer_push_head(in, t_15_l);
-            nile_Buffer_push_head(in, t_15_c);
-            nile_Buffer_push_head(in, t_15_y);
-            nile_Buffer_push_head(in, t_15_x);
+            nile_Buffer_push_head(in, t_13_l);
+            nile_Buffer_push_head(in, t_13_c);
+            nile_Buffer_push_head(in, t_13_y);
+            nile_Buffer_push_head(in, t_13_x);
         }
         else {
             ; /* no-op */
@@ -3778,7 +3732,7 @@ gezira_ExpandSpans_body (nile_Process_t *p,
 static nile_Buffer_t *
 gezira_ExpandSpans_epilogue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_ExpandSpans_vars_t *vars = (gezira_ExpandSpans_vars_t *) nile_Process_vars (p);
+    gezira_ExpandSpans_vars_t *vars = nile_Process_vars (p);
     gezira_ExpandSpans_vars_t v = *vars;
     return out;
 }
@@ -3803,7 +3757,7 @@ typedef struct {
 static nile_Buffer_t *
 gezira_ExtractSamplePoints_prologue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_ExtractSamplePoints_vars_t *vars = (gezira_ExtractSamplePoints_vars_t *) nile_Process_vars (p);
+    gezira_ExtractSamplePoints_vars_t *vars = nile_Process_vars (p);
     gezira_ExtractSamplePoints_vars_t v = *vars;
     *vars = v;
     return out;
@@ -3814,7 +3768,7 @@ gezira_ExtractSamplePoints_body (nile_Process_t *p,
                                  nile_Buffer_t *in,
                                  nile_Buffer_t *out)
 {
-    gezira_ExtractSamplePoints_vars_t *vars = (gezira_ExtractSamplePoints_vars_t *) nile_Process_vars (p);
+    gezira_ExtractSamplePoints_vars_t *vars = nile_Process_vars (p);
     gezira_ExtractSamplePoints_vars_t v = *vars;
     
     while (!nile_Buffer_is_empty (in) && !nile_Buffer_quota_hit (out)) {
@@ -3843,7 +3797,7 @@ gezira_ExtractSamplePoints_body (nile_Process_t *p,
 static nile_Buffer_t *
 gezira_ExtractSamplePoints_epilogue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_ExtractSamplePoints_vars_t *vars = (gezira_ExtractSamplePoints_vars_t *) nile_Process_vars (p);
+    gezira_ExtractSamplePoints_vars_t *vars = nile_Process_vars (p);
     gezira_ExtractSamplePoints_vars_t v = *vars;
     return out;
 }
@@ -3869,12 +3823,12 @@ typedef struct {
 static nile_Buffer_t *
 gezira_ApplyTexture_prologue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_ApplyTexture_vars_t *vars = (gezira_ApplyTexture_vars_t *) nile_Process_vars (p);
+    gezira_ApplyTexture_vars_t *vars = nile_Process_vars (p);
     gezira_ApplyTexture_vars_t v = *vars;
     ; /* no-op */
     nile_Process_t *t_1 = nile_Process_pipe (gezira_ExtractSamplePoints(p), v.v_t, NILE_NULL);
     nile_Real_t t_2 = nile_Real (4);
-    nile_Process_t *t_3 = nile_Process_pipe ((nile_Process_t *) NILE_NULL);
+    nile_Process_t *t_3 = nile_Process_pipe (NILE_NULL);
     nile_Real_t t_4 = nile_Real (4);
     nile_Process_t *t_5 = nile_DupZip(p, 4, t_1, nile_Real_toi (t_2), t_3, nile_Real_toi (t_4));
     nile_Process_t *t_6 = nile_Process_pipe (gezira_ExpandSpans(p), t_5, NILE_NULL);
@@ -3888,7 +3842,7 @@ gezira_ApplyTexture_prologue (nile_Process_t *p, nile_Buffer_t *out)
 static nile_Buffer_t *
 gezira_ApplyTexture_epilogue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_ApplyTexture_vars_t *vars = (gezira_ApplyTexture_vars_t *) nile_Process_vars (p);
+    gezira_ApplyTexture_vars_t *vars = nile_Process_vars (p);
     gezira_ApplyTexture_vars_t v = *vars;
     ; /* no-op */
     return out;
@@ -3902,7 +3856,7 @@ gezira_ApplyTexture (nile_Process_t *p,
     gezira_ApplyTexture_vars_t v;
     p = nile_Process (p, IN_QUANTUM, sizeof (*vars), gezira_ApplyTexture_prologue, gezira_ApplyTexture_body, gezira_ApplyTexture_epilogue);
     if (p) {
-        vars = (gezira_ApplyTexture_vars_t *) nile_Process_vars (p);
+        vars = nile_Process_vars (p);
         v.v_t = v_t;
         *vars = v;
     }
@@ -3927,7 +3881,7 @@ typedef struct {
 static nile_Buffer_t *
 gezira_SumWeightedColors_prologue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_SumWeightedColors_vars_t *vars = (gezira_SumWeightedColors_vars_t *) nile_Process_vars (p);
+    gezira_SumWeightedColors_vars_t *vars = nile_Process_vars (p);
     gezira_SumWeightedColors_vars_t v = *vars;
     nile_Real_t t_4 = nile_Real (0);
     nile_Real_t t_5_a = t_4;
@@ -3949,7 +3903,7 @@ gezira_SumWeightedColors_body (nile_Process_t *p,
                                nile_Buffer_t *in,
                                nile_Buffer_t *out)
 {
-    gezira_SumWeightedColors_vars_t *vars = (gezira_SumWeightedColors_vars_t *) nile_Process_vars (p);
+    gezira_SumWeightedColors_vars_t *vars = nile_Process_vars (p);
     gezira_SumWeightedColors_vars_t v = *vars;
     
     while (!nile_Buffer_is_empty (in) && !nile_Buffer_quota_hit (out)) {
@@ -4064,7 +4018,7 @@ gezira_SumWeightedColors_body (nile_Process_t *p,
 static nile_Buffer_t *
 gezira_SumWeightedColors_epilogue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_SumWeightedColors_vars_t *vars = (gezira_SumWeightedColors_vars_t *) nile_Process_vars (p);
+    gezira_SumWeightedColors_vars_t *vars = nile_Process_vars (p);
     gezira_SumWeightedColors_vars_t v = *vars;
     return out;
 }
@@ -4077,7 +4031,7 @@ gezira_SumWeightedColors (nile_Process_t *p,
     gezira_SumWeightedColors_vars_t v;
     p = nile_Process (p, IN_QUANTUM, sizeof (*vars), gezira_SumWeightedColors_prologue, gezira_SumWeightedColors_body, gezira_SumWeightedColors_epilogue);
     if (p) {
-        vars = (gezira_SumWeightedColors_vars_t *) nile_Process_vars (p);
+        vars = nile_Process_vars (p);
         v.v_n = nile_Real (v_n);
         *vars = v;
     }
@@ -4096,7 +4050,7 @@ typedef struct {
 static nile_Buffer_t *
 gezira_BilinearFilterPoints_prologue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_BilinearFilterPoints_vars_t *vars = (gezira_BilinearFilterPoints_vars_t *) nile_Process_vars (p);
+    gezira_BilinearFilterPoints_vars_t *vars = nile_Process_vars (p);
     gezira_BilinearFilterPoints_vars_t v = *vars;
     *vars = v;
     return out;
@@ -4107,7 +4061,7 @@ gezira_BilinearFilterPoints_body (nile_Process_t *p,
                                   nile_Buffer_t *in,
                                   nile_Buffer_t *out)
 {
-    gezira_BilinearFilterPoints_vars_t *vars = (gezira_BilinearFilterPoints_vars_t *) nile_Process_vars (p);
+    gezira_BilinearFilterPoints_vars_t *vars = nile_Process_vars (p);
     gezira_BilinearFilterPoints_vars_t v = *vars;
     
     while (!nile_Buffer_is_empty (in) && !nile_Buffer_quota_hit (out)) {
@@ -4180,7 +4134,7 @@ gezira_BilinearFilterPoints_body (nile_Process_t *p,
 static nile_Buffer_t *
 gezira_BilinearFilterPoints_epilogue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_BilinearFilterPoints_vars_t *vars = (gezira_BilinearFilterPoints_vars_t *) nile_Process_vars (p);
+    gezira_BilinearFilterPoints_vars_t *vars = nile_Process_vars (p);
     gezira_BilinearFilterPoints_vars_t v = *vars;
     return out;
 }
@@ -4205,7 +4159,7 @@ typedef struct {
 static nile_Buffer_t *
 gezira_BilinearFilterWeights_prologue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_BilinearFilterWeights_vars_t *vars = (gezira_BilinearFilterWeights_vars_t *) nile_Process_vars (p);
+    gezira_BilinearFilterWeights_vars_t *vars = nile_Process_vars (p);
     gezira_BilinearFilterWeights_vars_t v = *vars;
     *vars = v;
     return out;
@@ -4216,7 +4170,7 @@ gezira_BilinearFilterWeights_body (nile_Process_t *p,
                                    nile_Buffer_t *in,
                                    nile_Buffer_t *out)
 {
-    gezira_BilinearFilterWeights_vars_t *vars = (gezira_BilinearFilterWeights_vars_t *) nile_Process_vars (p);
+    gezira_BilinearFilterWeights_vars_t *vars = nile_Process_vars (p);
     gezira_BilinearFilterWeights_vars_t v = *vars;
     
     while (!nile_Buffer_is_empty (in) && !nile_Buffer_quota_hit (out)) {
@@ -4275,7 +4229,7 @@ gezira_BilinearFilterWeights_body (nile_Process_t *p,
 static nile_Buffer_t *
 gezira_BilinearFilterWeights_epilogue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_BilinearFilterWeights_vars_t *vars = (gezira_BilinearFilterWeights_vars_t *) nile_Process_vars (p);
+    gezira_BilinearFilterWeights_vars_t *vars = nile_Process_vars (p);
     gezira_BilinearFilterWeights_vars_t v = *vars;
     return out;
 }
@@ -4301,7 +4255,7 @@ typedef struct {
 static nile_Buffer_t *
 gezira_BilinearFilter_prologue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_BilinearFilter_vars_t *vars = (gezira_BilinearFilter_vars_t *) nile_Process_vars (p);
+    gezira_BilinearFilter_vars_t *vars = nile_Process_vars (p);
     gezira_BilinearFilter_vars_t v = *vars;
     ; /* no-op */
     nile_Process_t *t_1 = nile_Process_pipe (gezira_BilinearFilterPoints(p), v.v_t, NILE_NULL);
@@ -4322,7 +4276,7 @@ gezira_BilinearFilter_prologue (nile_Process_t *p, nile_Buffer_t *out)
 static nile_Buffer_t *
 gezira_BilinearFilter_epilogue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_BilinearFilter_vars_t *vars = (gezira_BilinearFilter_vars_t *) nile_Process_vars (p);
+    gezira_BilinearFilter_vars_t *vars = nile_Process_vars (p);
     gezira_BilinearFilter_vars_t v = *vars;
     ; /* no-op */
     return out;
@@ -4336,7 +4290,7 @@ gezira_BilinearFilter (nile_Process_t *p,
     gezira_BilinearFilter_vars_t v;
     p = nile_Process (p, IN_QUANTUM, sizeof (*vars), gezira_BilinearFilter_prologue, gezira_BilinearFilter_body, gezira_BilinearFilter_epilogue);
     if (p) {
-        vars = (gezira_BilinearFilter_vars_t *) nile_Process_vars (p);
+        vars = nile_Process_vars (p);
         v.v_t = v_t;
         *vars = v;
     }
@@ -4355,7 +4309,7 @@ typedef struct {
 static nile_Buffer_t *
 gezira_BicubicFilterPoints_prologue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_BicubicFilterPoints_vars_t *vars = (gezira_BicubicFilterPoints_vars_t *) nile_Process_vars (p);
+    gezira_BicubicFilterPoints_vars_t *vars = nile_Process_vars (p);
     gezira_BicubicFilterPoints_vars_t v = *vars;
     *vars = v;
     return out;
@@ -4366,7 +4320,7 @@ gezira_BicubicFilterPoints_body (nile_Process_t *p,
                                  nile_Buffer_t *in,
                                  nile_Buffer_t *out)
 {
-    gezira_BicubicFilterPoints_vars_t *vars = (gezira_BicubicFilterPoints_vars_t *) nile_Process_vars (p);
+    gezira_BicubicFilterPoints_vars_t *vars = nile_Process_vars (p);
     gezira_BicubicFilterPoints_vars_t v = *vars;
     
     while (!nile_Buffer_is_empty (in) && !nile_Buffer_quota_hit (out)) {
@@ -4575,7 +4529,7 @@ gezira_BicubicFilterPoints_body (nile_Process_t *p,
 static nile_Buffer_t *
 gezira_BicubicFilterPoints_epilogue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_BicubicFilterPoints_vars_t *vars = (gezira_BicubicFilterPoints_vars_t *) nile_Process_vars (p);
+    gezira_BicubicFilterPoints_vars_t *vars = nile_Process_vars (p);
     gezira_BicubicFilterPoints_vars_t v = *vars;
     return out;
 }
@@ -4600,7 +4554,7 @@ typedef struct {
 static nile_Buffer_t *
 gezira_BicubicFilterDeltas_prologue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_BicubicFilterDeltas_vars_t *vars = (gezira_BicubicFilterDeltas_vars_t *) nile_Process_vars (p);
+    gezira_BicubicFilterDeltas_vars_t *vars = nile_Process_vars (p);
     gezira_BicubicFilterDeltas_vars_t v = *vars;
     *vars = v;
     return out;
@@ -4611,7 +4565,7 @@ gezira_BicubicFilterDeltas_body (nile_Process_t *p,
                                  nile_Buffer_t *in,
                                  nile_Buffer_t *out)
 {
-    gezira_BicubicFilterDeltas_vars_t *vars = (gezira_BicubicFilterDeltas_vars_t *) nile_Process_vars (p);
+    gezira_BicubicFilterDeltas_vars_t *vars = nile_Process_vars (p);
     gezira_BicubicFilterDeltas_vars_t v = *vars;
     
     while (!nile_Buffer_is_empty (in) && !nile_Buffer_quota_hit (out)) {
@@ -4852,7 +4806,7 @@ gezira_BicubicFilterDeltas_body (nile_Process_t *p,
 static nile_Buffer_t *
 gezira_BicubicFilterDeltas_epilogue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_BicubicFilterDeltas_vars_t *vars = (gezira_BicubicFilterDeltas_vars_t *) nile_Process_vars (p);
+    gezira_BicubicFilterDeltas_vars_t *vars = nile_Process_vars (p);
     gezira_BicubicFilterDeltas_vars_t v = *vars;
     return out;
 }
@@ -4877,7 +4831,7 @@ typedef struct {
 static nile_Buffer_t *
 gezira_BicubicFilterWeights_prologue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_BicubicFilterWeights_vars_t *vars = (gezira_BicubicFilterWeights_vars_t *) nile_Process_vars (p);
+    gezira_BicubicFilterWeights_vars_t *vars = nile_Process_vars (p);
     gezira_BicubicFilterWeights_vars_t v = *vars;
     *vars = v;
     return out;
@@ -4888,7 +4842,7 @@ gezira_BicubicFilterWeights_body (nile_Process_t *p,
                                   nile_Buffer_t *in,
                                   nile_Buffer_t *out)
 {
-    gezira_BicubicFilterWeights_vars_t *vars = (gezira_BicubicFilterWeights_vars_t *) nile_Process_vars (p);
+    gezira_BicubicFilterWeights_vars_t *vars = nile_Process_vars (p);
     gezira_BicubicFilterWeights_vars_t v = *vars;
     
     while (!nile_Buffer_is_empty (in) && !nile_Buffer_quota_hit (out)) {
@@ -4996,7 +4950,7 @@ gezira_BicubicFilterWeights_body (nile_Process_t *p,
 static nile_Buffer_t *
 gezira_BicubicFilterWeights_epilogue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_BicubicFilterWeights_vars_t *vars = (gezira_BicubicFilterWeights_vars_t *) nile_Process_vars (p);
+    gezira_BicubicFilterWeights_vars_t *vars = nile_Process_vars (p);
     gezira_BicubicFilterWeights_vars_t v = *vars;
     return out;
 }
@@ -5022,7 +4976,7 @@ typedef struct {
 static nile_Buffer_t *
 gezira_BicubicFilter_prologue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_BicubicFilter_vars_t *vars = (gezira_BicubicFilter_vars_t *) nile_Process_vars (p);
+    gezira_BicubicFilter_vars_t *vars = nile_Process_vars (p);
     gezira_BicubicFilter_vars_t v = *vars;
     ; /* no-op */
     nile_Process_t *t_1 = nile_Process_pipe (gezira_BicubicFilterPoints(p), v.v_t, NILE_NULL);
@@ -5043,7 +4997,7 @@ gezira_BicubicFilter_prologue (nile_Process_t *p, nile_Buffer_t *out)
 static nile_Buffer_t *
 gezira_BicubicFilter_epilogue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_BicubicFilter_vars_t *vars = (gezira_BicubicFilter_vars_t *) nile_Process_vars (p);
+    gezira_BicubicFilter_vars_t *vars = nile_Process_vars (p);
     gezira_BicubicFilter_vars_t v = *vars;
     ; /* no-op */
     return out;
@@ -5057,7 +5011,7 @@ gezira_BicubicFilter (nile_Process_t *p,
     gezira_BicubicFilter_vars_t v;
     p = nile_Process (p, IN_QUANTUM, sizeof (*vars), gezira_BicubicFilter_prologue, gezira_BicubicFilter_body, gezira_BicubicFilter_epilogue);
     if (p) {
-        vars = (gezira_BicubicFilter_vars_t *) nile_Process_vars (p);
+        vars = nile_Process_vars (p);
         v.v_t = v_t;
         *vars = v;
     }
@@ -5076,7 +5030,7 @@ typedef struct {
 static nile_Buffer_t *
 gezira_GaussianBlur5x1Points_prologue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_GaussianBlur5x1Points_vars_t *vars = (gezira_GaussianBlur5x1Points_vars_t *) nile_Process_vars (p);
+    gezira_GaussianBlur5x1Points_vars_t *vars = nile_Process_vars (p);
     gezira_GaussianBlur5x1Points_vars_t v = *vars;
     *vars = v;
     return out;
@@ -5087,7 +5041,7 @@ gezira_GaussianBlur5x1Points_body (nile_Process_t *p,
                                    nile_Buffer_t *in,
                                    nile_Buffer_t *out)
 {
-    gezira_GaussianBlur5x1Points_vars_t *vars = (gezira_GaussianBlur5x1Points_vars_t *) nile_Process_vars (p);
+    gezira_GaussianBlur5x1Points_vars_t *vars = nile_Process_vars (p);
     gezira_GaussianBlur5x1Points_vars_t v = *vars;
     
     while (!nile_Buffer_is_empty (in) && !nile_Buffer_quota_hit (out)) {
@@ -5152,7 +5106,7 @@ gezira_GaussianBlur5x1Points_body (nile_Process_t *p,
 static nile_Buffer_t *
 gezira_GaussianBlur5x1Points_epilogue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_GaussianBlur5x1Points_vars_t *vars = (gezira_GaussianBlur5x1Points_vars_t *) nile_Process_vars (p);
+    gezira_GaussianBlur5x1Points_vars_t *vars = nile_Process_vars (p);
     gezira_GaussianBlur5x1Points_vars_t v = *vars;
     return out;
 }
@@ -5177,7 +5131,7 @@ typedef struct {
 static nile_Buffer_t *
 gezira_GaussianBlur1x5Points_prologue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_GaussianBlur1x5Points_vars_t *vars = (gezira_GaussianBlur1x5Points_vars_t *) nile_Process_vars (p);
+    gezira_GaussianBlur1x5Points_vars_t *vars = nile_Process_vars (p);
     gezira_GaussianBlur1x5Points_vars_t v = *vars;
     *vars = v;
     return out;
@@ -5188,7 +5142,7 @@ gezira_GaussianBlur1x5Points_body (nile_Process_t *p,
                                    nile_Buffer_t *in,
                                    nile_Buffer_t *out)
 {
-    gezira_GaussianBlur1x5Points_vars_t *vars = (gezira_GaussianBlur1x5Points_vars_t *) nile_Process_vars (p);
+    gezira_GaussianBlur1x5Points_vars_t *vars = nile_Process_vars (p);
     gezira_GaussianBlur1x5Points_vars_t v = *vars;
     
     while (!nile_Buffer_is_empty (in) && !nile_Buffer_quota_hit (out)) {
@@ -5253,7 +5207,7 @@ gezira_GaussianBlur1x5Points_body (nile_Process_t *p,
 static nile_Buffer_t *
 gezira_GaussianBlur1x5Points_epilogue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_GaussianBlur1x5Points_vars_t *vars = (gezira_GaussianBlur1x5Points_vars_t *) nile_Process_vars (p);
+    gezira_GaussianBlur1x5Points_vars_t *vars = nile_Process_vars (p);
     gezira_GaussianBlur1x5Points_vars_t v = *vars;
     return out;
 }
@@ -5281,7 +5235,7 @@ typedef struct {
 static nile_Buffer_t *
 gezira_GaussianBlur5x1Weights_prologue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_GaussianBlur5x1Weights_vars_t *vars = (gezira_GaussianBlur5x1Weights_vars_t *) nile_Process_vars (p);
+    gezira_GaussianBlur5x1Weights_vars_t *vars = nile_Process_vars (p);
     gezira_GaussianBlur5x1Weights_vars_t v = *vars;
     nile_Real_t t_7 = nile_Real (16);
     nile_Real_t t_8 = nile_Real_mul(t_7, v.v_f);
@@ -5300,7 +5254,7 @@ gezira_GaussianBlur5x1Weights_body (nile_Process_t *p,
                                     nile_Buffer_t *in,
                                     nile_Buffer_t *out)
 {
-    gezira_GaussianBlur5x1Weights_vars_t *vars = (gezira_GaussianBlur5x1Weights_vars_t *) nile_Process_vars (p);
+    gezira_GaussianBlur5x1Weights_vars_t *vars = nile_Process_vars (p);
     gezira_GaussianBlur5x1Weights_vars_t v = *vars;
     
     while (!nile_Buffer_is_empty (in) && !nile_Buffer_quota_hit (out)) {
@@ -5349,7 +5303,7 @@ gezira_GaussianBlur5x1Weights_body (nile_Process_t *p,
 static nile_Buffer_t *
 gezira_GaussianBlur5x1Weights_epilogue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_GaussianBlur5x1Weights_vars_t *vars = (gezira_GaussianBlur5x1Weights_vars_t *) nile_Process_vars (p);
+    gezira_GaussianBlur5x1Weights_vars_t *vars = nile_Process_vars (p);
     gezira_GaussianBlur5x1Weights_vars_t v = *vars;
     return out;
 }
@@ -5362,7 +5316,7 @@ gezira_GaussianBlur5x1Weights (nile_Process_t *p,
     gezira_GaussianBlur5x1Weights_vars_t v;
     p = nile_Process (p, IN_QUANTUM, sizeof (*vars), gezira_GaussianBlur5x1Weights_prologue, gezira_GaussianBlur5x1Weights_body, gezira_GaussianBlur5x1Weights_epilogue);
     if (p) {
-        vars = (gezira_GaussianBlur5x1Weights_vars_t *) nile_Process_vars (p);
+        vars = nile_Process_vars (p);
         v.v_f = nile_Real (v_f);
         *vars = v;
     }
@@ -5383,7 +5337,7 @@ typedef struct {
 static nile_Buffer_t *
 gezira_GaussianBlur5x1_prologue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_GaussianBlur5x1_vars_t *vars = (gezira_GaussianBlur5x1_vars_t *) nile_Process_vars (p);
+    gezira_GaussianBlur5x1_vars_t *vars = nile_Process_vars (p);
     gezira_GaussianBlur5x1_vars_t v = *vars;
     ; /* no-op */
     nile_Process_t *t_1 = nile_Process_pipe (gezira_GaussianBlur5x1Points(p), v.v_t, NILE_NULL);
@@ -5404,7 +5358,7 @@ gezira_GaussianBlur5x1_prologue (nile_Process_t *p, nile_Buffer_t *out)
 static nile_Buffer_t *
 gezira_GaussianBlur5x1_epilogue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_GaussianBlur5x1_vars_t *vars = (gezira_GaussianBlur5x1_vars_t *) nile_Process_vars (p);
+    gezira_GaussianBlur5x1_vars_t *vars = nile_Process_vars (p);
     gezira_GaussianBlur5x1_vars_t v = *vars;
     ; /* no-op */
     return out;
@@ -5419,7 +5373,7 @@ gezira_GaussianBlur5x1 (nile_Process_t *p,
     gezira_GaussianBlur5x1_vars_t v;
     p = nile_Process (p, IN_QUANTUM, sizeof (*vars), gezira_GaussianBlur5x1_prologue, gezira_GaussianBlur5x1_body, gezira_GaussianBlur5x1_epilogue);
     if (p) {
-        vars = (gezira_GaussianBlur5x1_vars_t *) nile_Process_vars (p);
+        vars = nile_Process_vars (p);
         v.v_f = nile_Real (v_f);
         v.v_t = v_t;
         *vars = v;
@@ -5441,7 +5395,7 @@ typedef struct {
 static nile_Buffer_t *
 gezira_GaussianBlur1x5_prologue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_GaussianBlur1x5_vars_t *vars = (gezira_GaussianBlur1x5_vars_t *) nile_Process_vars (p);
+    gezira_GaussianBlur1x5_vars_t *vars = nile_Process_vars (p);
     gezira_GaussianBlur1x5_vars_t v = *vars;
     ; /* no-op */
     nile_Process_t *t_1 = nile_Process_pipe (gezira_GaussianBlur1x5Points(p), v.v_t, NILE_NULL);
@@ -5462,7 +5416,7 @@ gezira_GaussianBlur1x5_prologue (nile_Process_t *p, nile_Buffer_t *out)
 static nile_Buffer_t *
 gezira_GaussianBlur1x5_epilogue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_GaussianBlur1x5_vars_t *vars = (gezira_GaussianBlur1x5_vars_t *) nile_Process_vars (p);
+    gezira_GaussianBlur1x5_vars_t *vars = nile_Process_vars (p);
     gezira_GaussianBlur1x5_vars_t v = *vars;
     ; /* no-op */
     return out;
@@ -5477,7 +5431,7 @@ gezira_GaussianBlur1x5 (nile_Process_t *p,
     gezira_GaussianBlur1x5_vars_t v;
     p = nile_Process (p, IN_QUANTUM, sizeof (*vars), gezira_GaussianBlur1x5_prologue, gezira_GaussianBlur1x5_body, gezira_GaussianBlur1x5_epilogue);
     if (p) {
-        vars = (gezira_GaussianBlur1x5_vars_t *) nile_Process_vars (p);
+        vars = nile_Process_vars (p);
         v.v_f = nile_Real (v_f);
         v.v_t = v_t;
         *vars = v;
@@ -5497,7 +5451,7 @@ typedef struct {
 static nile_Buffer_t *
 gezira_GaussianBlur11x1Points_prologue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_GaussianBlur11x1Points_vars_t *vars = (gezira_GaussianBlur11x1Points_vars_t *) nile_Process_vars (p);
+    gezira_GaussianBlur11x1Points_vars_t *vars = nile_Process_vars (p);
     gezira_GaussianBlur11x1Points_vars_t v = *vars;
     *vars = v;
     return out;
@@ -5508,7 +5462,7 @@ gezira_GaussianBlur11x1Points_body (nile_Process_t *p,
                                     nile_Buffer_t *in,
                                     nile_Buffer_t *out)
 {
-    gezira_GaussianBlur11x1Points_vars_t *vars = (gezira_GaussianBlur11x1Points_vars_t *) nile_Process_vars (p);
+    gezira_GaussianBlur11x1Points_vars_t *vars = nile_Process_vars (p);
     gezira_GaussianBlur11x1Points_vars_t v = *vars;
     
     while (!nile_Buffer_is_empty (in) && !nile_Buffer_quota_hit (out)) {
@@ -5633,7 +5587,7 @@ gezira_GaussianBlur11x1Points_body (nile_Process_t *p,
 static nile_Buffer_t *
 gezira_GaussianBlur11x1Points_epilogue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_GaussianBlur11x1Points_vars_t *vars = (gezira_GaussianBlur11x1Points_vars_t *) nile_Process_vars (p);
+    gezira_GaussianBlur11x1Points_vars_t *vars = nile_Process_vars (p);
     gezira_GaussianBlur11x1Points_vars_t v = *vars;
     return out;
 }
@@ -5658,7 +5612,7 @@ typedef struct {
 static nile_Buffer_t *
 gezira_GaussianBlur1x11Points_prologue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_GaussianBlur1x11Points_vars_t *vars = (gezira_GaussianBlur1x11Points_vars_t *) nile_Process_vars (p);
+    gezira_GaussianBlur1x11Points_vars_t *vars = nile_Process_vars (p);
     gezira_GaussianBlur1x11Points_vars_t v = *vars;
     *vars = v;
     return out;
@@ -5669,7 +5623,7 @@ gezira_GaussianBlur1x11Points_body (nile_Process_t *p,
                                     nile_Buffer_t *in,
                                     nile_Buffer_t *out)
 {
-    gezira_GaussianBlur1x11Points_vars_t *vars = (gezira_GaussianBlur1x11Points_vars_t *) nile_Process_vars (p);
+    gezira_GaussianBlur1x11Points_vars_t *vars = nile_Process_vars (p);
     gezira_GaussianBlur1x11Points_vars_t v = *vars;
     
     while (!nile_Buffer_is_empty (in) && !nile_Buffer_quota_hit (out)) {
@@ -5794,7 +5748,7 @@ gezira_GaussianBlur1x11Points_body (nile_Process_t *p,
 static nile_Buffer_t *
 gezira_GaussianBlur1x11Points_epilogue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_GaussianBlur1x11Points_vars_t *vars = (gezira_GaussianBlur1x11Points_vars_t *) nile_Process_vars (p);
+    gezira_GaussianBlur1x11Points_vars_t *vars = nile_Process_vars (p);
     gezira_GaussianBlur1x11Points_vars_t v = *vars;
     return out;
 }
@@ -5822,7 +5776,7 @@ typedef struct {
 static nile_Buffer_t *
 gezira_GaussianBlur11x1Weights_prologue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_GaussianBlur11x1Weights_vars_t *vars = (gezira_GaussianBlur11x1Weights_vars_t *) nile_Process_vars (p);
+    gezira_GaussianBlur11x1Weights_vars_t *vars = nile_Process_vars (p);
     gezira_GaussianBlur11x1Weights_vars_t v = *vars;
     nile_Real_t t_7 = nile_Real (1024);
     nile_Real_t t_8 = nile_Real_mul(t_7, v.v_f);
@@ -5841,7 +5795,7 @@ gezira_GaussianBlur11x1Weights_body (nile_Process_t *p,
                                      nile_Buffer_t *in,
                                      nile_Buffer_t *out)
 {
-    gezira_GaussianBlur11x1Weights_vars_t *vars = (gezira_GaussianBlur11x1Weights_vars_t *) nile_Process_vars (p);
+    gezira_GaussianBlur11x1Weights_vars_t *vars = nile_Process_vars (p);
     gezira_GaussianBlur11x1Weights_vars_t v = *vars;
     
     while (!nile_Buffer_is_empty (in) && !nile_Buffer_quota_hit (out)) {
@@ -5926,7 +5880,7 @@ gezira_GaussianBlur11x1Weights_body (nile_Process_t *p,
 static nile_Buffer_t *
 gezira_GaussianBlur11x1Weights_epilogue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_GaussianBlur11x1Weights_vars_t *vars = (gezira_GaussianBlur11x1Weights_vars_t *) nile_Process_vars (p);
+    gezira_GaussianBlur11x1Weights_vars_t *vars = nile_Process_vars (p);
     gezira_GaussianBlur11x1Weights_vars_t v = *vars;
     return out;
 }
@@ -5939,7 +5893,7 @@ gezira_GaussianBlur11x1Weights (nile_Process_t *p,
     gezira_GaussianBlur11x1Weights_vars_t v;
     p = nile_Process (p, IN_QUANTUM, sizeof (*vars), gezira_GaussianBlur11x1Weights_prologue, gezira_GaussianBlur11x1Weights_body, gezira_GaussianBlur11x1Weights_epilogue);
     if (p) {
-        vars = (gezira_GaussianBlur11x1Weights_vars_t *) nile_Process_vars (p);
+        vars = nile_Process_vars (p);
         v.v_f = nile_Real (v_f);
         *vars = v;
     }
@@ -5960,7 +5914,7 @@ typedef struct {
 static nile_Buffer_t *
 gezira_GaussianBlur11x1_prologue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_GaussianBlur11x1_vars_t *vars = (gezira_GaussianBlur11x1_vars_t *) nile_Process_vars (p);
+    gezira_GaussianBlur11x1_vars_t *vars = nile_Process_vars (p);
     gezira_GaussianBlur11x1_vars_t v = *vars;
     ; /* no-op */
     nile_Process_t *t_1 = nile_Process_pipe (gezira_GaussianBlur11x1Points(p), v.v_t, NILE_NULL);
@@ -5981,7 +5935,7 @@ gezira_GaussianBlur11x1_prologue (nile_Process_t *p, nile_Buffer_t *out)
 static nile_Buffer_t *
 gezira_GaussianBlur11x1_epilogue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_GaussianBlur11x1_vars_t *vars = (gezira_GaussianBlur11x1_vars_t *) nile_Process_vars (p);
+    gezira_GaussianBlur11x1_vars_t *vars = nile_Process_vars (p);
     gezira_GaussianBlur11x1_vars_t v = *vars;
     ; /* no-op */
     return out;
@@ -5996,7 +5950,7 @@ gezira_GaussianBlur11x1 (nile_Process_t *p,
     gezira_GaussianBlur11x1_vars_t v;
     p = nile_Process (p, IN_QUANTUM, sizeof (*vars), gezira_GaussianBlur11x1_prologue, gezira_GaussianBlur11x1_body, gezira_GaussianBlur11x1_epilogue);
     if (p) {
-        vars = (gezira_GaussianBlur11x1_vars_t *) nile_Process_vars (p);
+        vars = nile_Process_vars (p);
         v.v_f = nile_Real (v_f);
         v.v_t = v_t;
         *vars = v;
@@ -6018,7 +5972,7 @@ typedef struct {
 static nile_Buffer_t *
 gezira_GaussianBlur1x11_prologue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_GaussianBlur1x11_vars_t *vars = (gezira_GaussianBlur1x11_vars_t *) nile_Process_vars (p);
+    gezira_GaussianBlur1x11_vars_t *vars = nile_Process_vars (p);
     gezira_GaussianBlur1x11_vars_t v = *vars;
     ; /* no-op */
     nile_Process_t *t_1 = nile_Process_pipe (gezira_GaussianBlur1x11Points(p), v.v_t, NILE_NULL);
@@ -6039,7 +5993,7 @@ gezira_GaussianBlur1x11_prologue (nile_Process_t *p, nile_Buffer_t *out)
 static nile_Buffer_t *
 gezira_GaussianBlur1x11_epilogue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_GaussianBlur1x11_vars_t *vars = (gezira_GaussianBlur1x11_vars_t *) nile_Process_vars (p);
+    gezira_GaussianBlur1x11_vars_t *vars = nile_Process_vars (p);
     gezira_GaussianBlur1x11_vars_t v = *vars;
     ; /* no-op */
     return out;
@@ -6054,7 +6008,7 @@ gezira_GaussianBlur1x11 (nile_Process_t *p,
     gezira_GaussianBlur1x11_vars_t v;
     p = nile_Process (p, IN_QUANTUM, sizeof (*vars), gezira_GaussianBlur1x11_prologue, gezira_GaussianBlur1x11_body, gezira_GaussianBlur1x11_epilogue);
     if (p) {
-        vars = (gezira_GaussianBlur1x11_vars_t *) nile_Process_vars (p);
+        vars = nile_Process_vars (p);
         v.v_f = nile_Real (v_f);
         v.v_t = v_t;
         *vars = v;
@@ -6074,7 +6028,7 @@ typedef struct {
 static nile_Buffer_t *
 gezira_GaussianBlur21x1Points_prologue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_GaussianBlur21x1Points_vars_t *vars = (gezira_GaussianBlur21x1Points_vars_t *) nile_Process_vars (p);
+    gezira_GaussianBlur21x1Points_vars_t *vars = nile_Process_vars (p);
     gezira_GaussianBlur21x1Points_vars_t v = *vars;
     *vars = v;
     return out;
@@ -6085,7 +6039,7 @@ gezira_GaussianBlur21x1Points_body (nile_Process_t *p,
                                     nile_Buffer_t *in,
                                     nile_Buffer_t *out)
 {
-    gezira_GaussianBlur21x1Points_vars_t *vars = (gezira_GaussianBlur21x1Points_vars_t *) nile_Process_vars (p);
+    gezira_GaussianBlur21x1Points_vars_t *vars = nile_Process_vars (p);
     gezira_GaussianBlur21x1Points_vars_t v = *vars;
     
     while (!nile_Buffer_is_empty (in) && !nile_Buffer_quota_hit (out)) {
@@ -6310,7 +6264,7 @@ gezira_GaussianBlur21x1Points_body (nile_Process_t *p,
 static nile_Buffer_t *
 gezira_GaussianBlur21x1Points_epilogue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_GaussianBlur21x1Points_vars_t *vars = (gezira_GaussianBlur21x1Points_vars_t *) nile_Process_vars (p);
+    gezira_GaussianBlur21x1Points_vars_t *vars = nile_Process_vars (p);
     gezira_GaussianBlur21x1Points_vars_t v = *vars;
     return out;
 }
@@ -6335,7 +6289,7 @@ typedef struct {
 static nile_Buffer_t *
 gezira_GaussianBlur1x21Points_prologue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_GaussianBlur1x21Points_vars_t *vars = (gezira_GaussianBlur1x21Points_vars_t *) nile_Process_vars (p);
+    gezira_GaussianBlur1x21Points_vars_t *vars = nile_Process_vars (p);
     gezira_GaussianBlur1x21Points_vars_t v = *vars;
     *vars = v;
     return out;
@@ -6346,7 +6300,7 @@ gezira_GaussianBlur1x21Points_body (nile_Process_t *p,
                                     nile_Buffer_t *in,
                                     nile_Buffer_t *out)
 {
-    gezira_GaussianBlur1x21Points_vars_t *vars = (gezira_GaussianBlur1x21Points_vars_t *) nile_Process_vars (p);
+    gezira_GaussianBlur1x21Points_vars_t *vars = nile_Process_vars (p);
     gezira_GaussianBlur1x21Points_vars_t v = *vars;
     
     while (!nile_Buffer_is_empty (in) && !nile_Buffer_quota_hit (out)) {
@@ -6571,7 +6525,7 @@ gezira_GaussianBlur1x21Points_body (nile_Process_t *p,
 static nile_Buffer_t *
 gezira_GaussianBlur1x21Points_epilogue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_GaussianBlur1x21Points_vars_t *vars = (gezira_GaussianBlur1x21Points_vars_t *) nile_Process_vars (p);
+    gezira_GaussianBlur1x21Points_vars_t *vars = nile_Process_vars (p);
     gezira_GaussianBlur1x21Points_vars_t v = *vars;
     return out;
 }
@@ -6599,7 +6553,7 @@ typedef struct {
 static nile_Buffer_t *
 gezira_GaussianBlur21x1Weights_prologue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_GaussianBlur21x1Weights_vars_t *vars = (gezira_GaussianBlur21x1Weights_vars_t *) nile_Process_vars (p);
+    gezira_GaussianBlur21x1Weights_vars_t *vars = nile_Process_vars (p);
     gezira_GaussianBlur21x1Weights_vars_t v = *vars;
     nile_Real_t t_7 = nile_Real (1048576);
     nile_Real_t t_8 = nile_Real_mul(t_7, v.v_f);
@@ -6618,7 +6572,7 @@ gezira_GaussianBlur21x1Weights_body (nile_Process_t *p,
                                      nile_Buffer_t *in,
                                      nile_Buffer_t *out)
 {
-    gezira_GaussianBlur21x1Weights_vars_t *vars = (gezira_GaussianBlur21x1Weights_vars_t *) nile_Process_vars (p);
+    gezira_GaussianBlur21x1Weights_vars_t *vars = nile_Process_vars (p);
     gezira_GaussianBlur21x1Weights_vars_t v = *vars;
     
     while (!nile_Buffer_is_empty (in) && !nile_Buffer_quota_hit (out)) {
@@ -6763,7 +6717,7 @@ gezira_GaussianBlur21x1Weights_body (nile_Process_t *p,
 static nile_Buffer_t *
 gezira_GaussianBlur21x1Weights_epilogue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_GaussianBlur21x1Weights_vars_t *vars = (gezira_GaussianBlur21x1Weights_vars_t *) nile_Process_vars (p);
+    gezira_GaussianBlur21x1Weights_vars_t *vars = nile_Process_vars (p);
     gezira_GaussianBlur21x1Weights_vars_t v = *vars;
     return out;
 }
@@ -6776,7 +6730,7 @@ gezira_GaussianBlur21x1Weights (nile_Process_t *p,
     gezira_GaussianBlur21x1Weights_vars_t v;
     p = nile_Process (p, IN_QUANTUM, sizeof (*vars), gezira_GaussianBlur21x1Weights_prologue, gezira_GaussianBlur21x1Weights_body, gezira_GaussianBlur21x1Weights_epilogue);
     if (p) {
-        vars = (gezira_GaussianBlur21x1Weights_vars_t *) nile_Process_vars (p);
+        vars = nile_Process_vars (p);
         v.v_f = nile_Real (v_f);
         *vars = v;
     }
@@ -6797,7 +6751,7 @@ typedef struct {
 static nile_Buffer_t *
 gezira_GaussianBlur21x1_prologue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_GaussianBlur21x1_vars_t *vars = (gezira_GaussianBlur21x1_vars_t *) nile_Process_vars (p);
+    gezira_GaussianBlur21x1_vars_t *vars = nile_Process_vars (p);
     gezira_GaussianBlur21x1_vars_t v = *vars;
     ; /* no-op */
     nile_Process_t *t_1 = nile_Process_pipe (gezira_GaussianBlur21x1Points(p), v.v_t, NILE_NULL);
@@ -6818,7 +6772,7 @@ gezira_GaussianBlur21x1_prologue (nile_Process_t *p, nile_Buffer_t *out)
 static nile_Buffer_t *
 gezira_GaussianBlur21x1_epilogue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_GaussianBlur21x1_vars_t *vars = (gezira_GaussianBlur21x1_vars_t *) nile_Process_vars (p);
+    gezira_GaussianBlur21x1_vars_t *vars = nile_Process_vars (p);
     gezira_GaussianBlur21x1_vars_t v = *vars;
     ; /* no-op */
     return out;
@@ -6833,7 +6787,7 @@ gezira_GaussianBlur21x1 (nile_Process_t *p,
     gezira_GaussianBlur21x1_vars_t v;
     p = nile_Process (p, IN_QUANTUM, sizeof (*vars), gezira_GaussianBlur21x1_prologue, gezira_GaussianBlur21x1_body, gezira_GaussianBlur21x1_epilogue);
     if (p) {
-        vars = (gezira_GaussianBlur21x1_vars_t *) nile_Process_vars (p);
+        vars = nile_Process_vars (p);
         v.v_f = nile_Real (v_f);
         v.v_t = v_t;
         *vars = v;
@@ -6855,7 +6809,7 @@ typedef struct {
 static nile_Buffer_t *
 gezira_GaussianBlur1x21_prologue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_GaussianBlur1x21_vars_t *vars = (gezira_GaussianBlur1x21_vars_t *) nile_Process_vars (p);
+    gezira_GaussianBlur1x21_vars_t *vars = nile_Process_vars (p);
     gezira_GaussianBlur1x21_vars_t v = *vars;
     ; /* no-op */
     nile_Process_t *t_1 = nile_Process_pipe (gezira_GaussianBlur1x21Points(p), v.v_t, NILE_NULL);
@@ -6876,7 +6830,7 @@ gezira_GaussianBlur1x21_prologue (nile_Process_t *p, nile_Buffer_t *out)
 static nile_Buffer_t *
 gezira_GaussianBlur1x21_epilogue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_GaussianBlur1x21_vars_t *vars = (gezira_GaussianBlur1x21_vars_t *) nile_Process_vars (p);
+    gezira_GaussianBlur1x21_vars_t *vars = nile_Process_vars (p);
     gezira_GaussianBlur1x21_vars_t v = *vars;
     ; /* no-op */
     return out;
@@ -6891,7 +6845,7 @@ gezira_GaussianBlur1x21 (nile_Process_t *p,
     gezira_GaussianBlur1x21_vars_t v;
     p = nile_Process (p, IN_QUANTUM, sizeof (*vars), gezira_GaussianBlur1x21_prologue, gezira_GaussianBlur1x21_body, gezira_GaussianBlur1x21_epilogue);
     if (p) {
-        vars = (gezira_GaussianBlur1x21_vars_t *) nile_Process_vars (p);
+        vars = nile_Process_vars (p);
         v.v_f = nile_Real (v_f);
         v.v_t = v_t;
         *vars = v;
@@ -6906,47 +6860,16 @@ gezira_GaussianBlur1x21 (nile_Process_t *p,
 #define OUT_QUANTUM 1
 
 typedef struct {
-    nile_Real_t v_S_x;
-    nile_Real_t v_S_y;
-    nile_Real_t v_E_x;
-    nile_Real_t v_E_y;
-    nile_Real_t v_v_x;
-    nile_Real_t v_v_y;
-    nile_Real_t v_d_x;
-    nile_Real_t v_d_y;
     nile_Real_t v_s00;
+    nile_Real_t v_dsdx;
+    nile_Real_t v_dsdy;
 } gezira_LinearGradient_vars_t;
 
 static nile_Buffer_t *
 gezira_LinearGradient_prologue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_LinearGradient_vars_t *vars = (gezira_LinearGradient_vars_t *) nile_Process_vars (p);
+    gezira_LinearGradient_vars_t *vars = nile_Process_vars (p);
     gezira_LinearGradient_vars_t v = *vars;
-    nile_Real_t t_14_x = nile_Real_sub(v.v_E_x, v.v_S_x);
-    nile_Real_t t_14_y = nile_Real_sub(v.v_E_y, v.v_S_y);
-    v.v_v_x = t_14_x;
-    v.v_v_y = t_14_y;
-    nile_Real_t t_15_x = v.v_v_x;
-    nile_Real_t t_15_y = v.v_v_y;
-    nile_Real_t t_16_x = v.v_v_x;
-    nile_Real_t t_16_y = v.v_v_y;
-    nile_Real_t t_17 = nile_Real_mul(t_15_x, t_16_x);
-    nile_Real_t t_18 = nile_Real_mul(t_15_y, t_16_y);
-    nile_Real_t t_19 = nile_Real_add(t_17, t_18);
-    nile_Real_t t_20_x = t_19;
-    nile_Real_t t_20_y = t_19;
-    nile_Real_t t_21_x = nile_Real_div(v.v_v_x, t_20_x);
-    nile_Real_t t_21_y = nile_Real_div(v.v_v_y, t_20_y);
-    v.v_d_x = t_21_x;
-    v.v_d_y = t_21_y;
-    nile_Real_t t_22_x = v.v_S_x;
-    nile_Real_t t_22_y = v.v_S_y;
-    nile_Real_t t_23_x = v.v_d_x;
-    nile_Real_t t_23_y = v.v_d_y;
-    nile_Real_t t_24 = nile_Real_mul(t_22_x, t_23_x);
-    nile_Real_t t_25 = nile_Real_mul(t_22_y, t_23_y);
-    nile_Real_t t_26 = nile_Real_add(t_24, t_25);
-    v.v_s00 = t_26;
     *vars = v;
     return out;
 }
@@ -6956,24 +6879,20 @@ gezira_LinearGradient_body (nile_Process_t *p,
                             nile_Buffer_t *in,
                             nile_Buffer_t *out)
 {
-    gezira_LinearGradient_vars_t *vars = (gezira_LinearGradient_vars_t *) nile_Process_vars (p);
+    gezira_LinearGradient_vars_t *vars = nile_Process_vars (p);
     gezira_LinearGradient_vars_t v = *vars;
     
     while (!nile_Buffer_is_empty (in) && !nile_Buffer_quota_hit (out)) {
         gezira_LinearGradient_vars_t v_ = v;
-        nile_Real_t v_P_x = nile_Buffer_pop_head(in);
-        nile_Real_t v_P_y = nile_Buffer_pop_head(in);
-        nile_Real_t t_27_x = v_P_x;
-        nile_Real_t t_27_y = v_P_y;
-        nile_Real_t t_28_x = v.v_d_x;
-        nile_Real_t t_28_y = v.v_d_y;
-        nile_Real_t t_29 = nile_Real_mul(t_27_x, t_28_x);
-        nile_Real_t t_30 = nile_Real_mul(t_27_y, t_28_y);
-        nile_Real_t t_31 = nile_Real_add(t_29, t_30);
-        nile_Real_t t_32 = nile_Real_sub(t_31, v.v_s00);
+        nile_Real_t v_x = nile_Buffer_pop_head(in);
+        nile_Real_t v_y = nile_Buffer_pop_head(in);
+        nile_Real_t t_1 = nile_Real_mul(v_x, v.v_dsdx);
+        nile_Real_t t_2 = nile_Real_add(v.v_s00, t_1);
+        nile_Real_t t_3 = nile_Real_mul(v_y, v.v_dsdy);
+        nile_Real_t t_4 = nile_Real_add(t_2, t_3);
         if (nile_Buffer_tailroom (out) < OUT_QUANTUM)
             out = nile_Process_append_output (p, out);
-        nile_Buffer_push_tail(out, t_32);
+        nile_Buffer_push_tail(out, t_4);
         v = v_;
     }
     
@@ -6984,27 +6903,25 @@ gezira_LinearGradient_body (nile_Process_t *p,
 static nile_Buffer_t *
 gezira_LinearGradient_epilogue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_LinearGradient_vars_t *vars = (gezira_LinearGradient_vars_t *) nile_Process_vars (p);
+    gezira_LinearGradient_vars_t *vars = nile_Process_vars (p);
     gezira_LinearGradient_vars_t v = *vars;
     return out;
 }
 
 nile_Process_t *
 gezira_LinearGradient (nile_Process_t *p, 
-                       float v_S_x, 
-                       float v_S_y, 
-                       float v_E_x, 
-                       float v_E_y)
+                       float v_s00, 
+                       float v_dsdx, 
+                       float v_dsdy)
 {
     gezira_LinearGradient_vars_t *vars;
     gezira_LinearGradient_vars_t v;
     p = nile_Process (p, IN_QUANTUM, sizeof (*vars), gezira_LinearGradient_prologue, gezira_LinearGradient_body, gezira_LinearGradient_epilogue);
     if (p) {
-        vars = (gezira_LinearGradient_vars_t *) nile_Process_vars (p);
-        v.v_S_x = nile_Real (v_S_x);
-        v.v_S_y = nile_Real (v_S_y);
-        v.v_E_x = nile_Real (v_E_x);
-        v.v_E_y = nile_Real (v_E_y);
+        vars = nile_Process_vars (p);
+        v.v_s00 = nile_Real (v_s00);
+        v.v_dsdx = nile_Real (v_dsdx);
+        v.v_dsdy = nile_Real (v_dsdy);
         *vars = v;
     }
     return p;
@@ -7025,7 +6942,7 @@ typedef struct {
 static nile_Buffer_t *
 gezira_RadialGradient_prologue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_RadialGradient_vars_t *vars = (gezira_RadialGradient_vars_t *) nile_Process_vars (p);
+    gezira_RadialGradient_vars_t *vars = nile_Process_vars (p);
     gezira_RadialGradient_vars_t v = *vars;
     *vars = v;
     return out;
@@ -7036,7 +6953,7 @@ gezira_RadialGradient_body (nile_Process_t *p,
                             nile_Buffer_t *in,
                             nile_Buffer_t *out)
 {
-    gezira_RadialGradient_vars_t *vars = (gezira_RadialGradient_vars_t *) nile_Process_vars (p);
+    gezira_RadialGradient_vars_t *vars = nile_Process_vars (p);
     gezira_RadialGradient_vars_t v = *vars;
     
     while (!nile_Buffer_is_empty (in) && !nile_Buffer_quota_hit (out)) {
@@ -7065,7 +6982,7 @@ gezira_RadialGradient_body (nile_Process_t *p,
 static nile_Buffer_t *
 gezira_RadialGradient_epilogue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_RadialGradient_vars_t *vars = (gezira_RadialGradient_vars_t *) nile_Process_vars (p);
+    gezira_RadialGradient_vars_t *vars = nile_Process_vars (p);
     gezira_RadialGradient_vars_t v = *vars;
     return out;
 }
@@ -7080,7 +6997,7 @@ gezira_RadialGradient (nile_Process_t *p,
     gezira_RadialGradient_vars_t v;
     p = nile_Process (p, IN_QUANTUM, sizeof (*vars), gezira_RadialGradient_prologue, gezira_RadialGradient_body, gezira_RadialGradient_epilogue);
     if (p) {
-        vars = (gezira_RadialGradient_vars_t *) nile_Process_vars (p);
+        vars = nile_Process_vars (p);
         v.v_C_x = nile_Real (v_C_x);
         v.v_C_y = nile_Real (v_C_y);
         v.v_r = nile_Real (v_r);
@@ -7101,7 +7018,7 @@ typedef struct {
 static nile_Buffer_t *
 gezira_PadGradient_prologue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_PadGradient_vars_t *vars = (gezira_PadGradient_vars_t *) nile_Process_vars (p);
+    gezira_PadGradient_vars_t *vars = nile_Process_vars (p);
     gezira_PadGradient_vars_t v = *vars;
     *vars = v;
     return out;
@@ -7112,7 +7029,7 @@ gezira_PadGradient_body (nile_Process_t *p,
                          nile_Buffer_t *in,
                          nile_Buffer_t *out)
 {
-    gezira_PadGradient_vars_t *vars = (gezira_PadGradient_vars_t *) nile_Process_vars (p);
+    gezira_PadGradient_vars_t *vars = nile_Process_vars (p);
     gezira_PadGradient_vars_t v = *vars;
     
     while (!nile_Buffer_is_empty (in) && !nile_Buffer_quota_hit (out)) {
@@ -7137,7 +7054,7 @@ gezira_PadGradient_body (nile_Process_t *p,
 static nile_Buffer_t *
 gezira_PadGradient_epilogue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_PadGradient_vars_t *vars = (gezira_PadGradient_vars_t *) nile_Process_vars (p);
+    gezira_PadGradient_vars_t *vars = nile_Process_vars (p);
     gezira_PadGradient_vars_t v = *vars;
     return out;
 }
@@ -7162,7 +7079,7 @@ typedef struct {
 static nile_Buffer_t *
 gezira_RepeatGradient_prologue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_RepeatGradient_vars_t *vars = (gezira_RepeatGradient_vars_t *) nile_Process_vars (p);
+    gezira_RepeatGradient_vars_t *vars = nile_Process_vars (p);
     gezira_RepeatGradient_vars_t v = *vars;
     *vars = v;
     return out;
@@ -7173,7 +7090,7 @@ gezira_RepeatGradient_body (nile_Process_t *p,
                             nile_Buffer_t *in,
                             nile_Buffer_t *out)
 {
-    gezira_RepeatGradient_vars_t *vars = (gezira_RepeatGradient_vars_t *) nile_Process_vars (p);
+    gezira_RepeatGradient_vars_t *vars = nile_Process_vars (p);
     gezira_RepeatGradient_vars_t v = *vars;
     
     while (!nile_Buffer_is_empty (in) && !nile_Buffer_quota_hit (out)) {
@@ -7194,7 +7111,7 @@ gezira_RepeatGradient_body (nile_Process_t *p,
 static nile_Buffer_t *
 gezira_RepeatGradient_epilogue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_RepeatGradient_vars_t *vars = (gezira_RepeatGradient_vars_t *) nile_Process_vars (p);
+    gezira_RepeatGradient_vars_t *vars = nile_Process_vars (p);
     gezira_RepeatGradient_vars_t v = *vars;
     return out;
 }
@@ -7219,7 +7136,7 @@ typedef struct {
 static nile_Buffer_t *
 gezira_ReflectGradient_prologue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_ReflectGradient_vars_t *vars = (gezira_ReflectGradient_vars_t *) nile_Process_vars (p);
+    gezira_ReflectGradient_vars_t *vars = nile_Process_vars (p);
     gezira_ReflectGradient_vars_t v = *vars;
     *vars = v;
     return out;
@@ -7230,7 +7147,7 @@ gezira_ReflectGradient_body (nile_Process_t *p,
                              nile_Buffer_t *in,
                              nile_Buffer_t *out)
 {
-    gezira_ReflectGradient_vars_t *vars = (gezira_ReflectGradient_vars_t *) nile_Process_vars (p);
+    gezira_ReflectGradient_vars_t *vars = nile_Process_vars (p);
     gezira_ReflectGradient_vars_t v = *vars;
     
     while (!nile_Buffer_is_empty (in) && !nile_Buffer_quota_hit (out)) {
@@ -7270,7 +7187,7 @@ gezira_ReflectGradient_body (nile_Process_t *p,
 static nile_Buffer_t *
 gezira_ReflectGradient_epilogue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_ReflectGradient_vars_t *vars = (gezira_ReflectGradient_vars_t *) nile_Process_vars (p);
+    gezira_ReflectGradient_vars_t *vars = nile_Process_vars (p);
     gezira_ReflectGradient_vars_t v = *vars;
     return out;
 }
@@ -7295,7 +7212,7 @@ typedef struct {
 static nile_Buffer_t *
 gezira_ColorSpansBegin_prologue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_ColorSpansBegin_vars_t *vars = (gezira_ColorSpansBegin_vars_t *) nile_Process_vars (p);
+    gezira_ColorSpansBegin_vars_t *vars = nile_Process_vars (p);
     gezira_ColorSpansBegin_vars_t v = *vars;
     *vars = v;
     return out;
@@ -7306,7 +7223,7 @@ gezira_ColorSpansBegin_body (nile_Process_t *p,
                              nile_Buffer_t *in,
                              nile_Buffer_t *out)
 {
-    gezira_ColorSpansBegin_vars_t *vars = (gezira_ColorSpansBegin_vars_t *) nile_Process_vars (p);
+    gezira_ColorSpansBegin_vars_t *vars = nile_Process_vars (p);
     gezira_ColorSpansBegin_vars_t v = *vars;
     
     while (!nile_Buffer_is_empty (in) && !nile_Buffer_quota_hit (out)) {
@@ -7337,7 +7254,7 @@ gezira_ColorSpansBegin_body (nile_Process_t *p,
 static nile_Buffer_t *
 gezira_ColorSpansBegin_epilogue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_ColorSpansBegin_vars_t *vars = (gezira_ColorSpansBegin_vars_t *) nile_Process_vars (p);
+    gezira_ColorSpansBegin_vars_t *vars = nile_Process_vars (p);
     gezira_ColorSpansBegin_vars_t v = *vars;
     return out;
 }
@@ -7375,7 +7292,7 @@ typedef struct {
 static nile_Buffer_t *
 gezira_ColorSpan_prologue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_ColorSpan_vars_t *vars = (gezira_ColorSpan_vars_t *) nile_Process_vars (p);
+    gezira_ColorSpan_vars_t *vars = nile_Process_vars (p);
     gezira_ColorSpan_vars_t v = *vars;
     nile_Real_t t_4_a = nile_Real_sub(v.v_S2_a, v.v_S1_a);
     nile_Real_t t_4_r = nile_Real_sub(v.v_S2_r, v.v_S1_r);
@@ -7402,7 +7319,7 @@ gezira_ColorSpan_body (nile_Process_t *p,
                        nile_Buffer_t *in,
                        nile_Buffer_t *out)
 {
-    gezira_ColorSpan_vars_t *vars = (gezira_ColorSpan_vars_t *) nile_Process_vars (p);
+    gezira_ColorSpan_vars_t *vars = nile_Process_vars (p);
     gezira_ColorSpan_vars_t v = *vars;
     
     while (!nile_Buffer_is_empty (in) && !nile_Buffer_quota_hit (out)) {
@@ -7466,7 +7383,7 @@ gezira_ColorSpan_body (nile_Process_t *p,
 static nile_Buffer_t *
 gezira_ColorSpan_epilogue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_ColorSpan_vars_t *vars = (gezira_ColorSpan_vars_t *) nile_Process_vars (p);
+    gezira_ColorSpan_vars_t *vars = nile_Process_vars (p);
     gezira_ColorSpan_vars_t v = *vars;
     return out;
 }
@@ -7487,7 +7404,7 @@ gezira_ColorSpan (nile_Process_t *p,
     gezira_ColorSpan_vars_t v;
     p = nile_Process (p, IN_QUANTUM, sizeof (*vars), gezira_ColorSpan_prologue, gezira_ColorSpan_body, gezira_ColorSpan_epilogue);
     if (p) {
-        vars = (gezira_ColorSpan_vars_t *) nile_Process_vars (p);
+        vars = nile_Process_vars (p);
         v.v_S1_a = nile_Real (v_S1_a);
         v.v_S1_r = nile_Real (v_S1_r);
         v.v_S1_g = nile_Real (v_S1_g);
@@ -7514,7 +7431,7 @@ typedef struct {
 static nile_Buffer_t *
 gezira_ColorSpansEnd_prologue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_ColorSpansEnd_vars_t *vars = (gezira_ColorSpansEnd_vars_t *) nile_Process_vars (p);
+    gezira_ColorSpansEnd_vars_t *vars = nile_Process_vars (p);
     gezira_ColorSpansEnd_vars_t v = *vars;
     *vars = v;
     return out;
@@ -7525,7 +7442,7 @@ gezira_ColorSpansEnd_body (nile_Process_t *p,
                            nile_Buffer_t *in,
                            nile_Buffer_t *out)
 {
-    gezira_ColorSpansEnd_vars_t *vars = (gezira_ColorSpansEnd_vars_t *) nile_Process_vars (p);
+    gezira_ColorSpansEnd_vars_t *vars = nile_Process_vars (p);
     gezira_ColorSpansEnd_vars_t v = *vars;
     
     while (!nile_Buffer_is_empty (in) && !nile_Buffer_quota_hit (out)) {
@@ -7563,7 +7480,7 @@ gezira_ColorSpansEnd_body (nile_Process_t *p,
 static nile_Buffer_t *
 gezira_ColorSpansEnd_epilogue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_ColorSpansEnd_vars_t *vars = (gezira_ColorSpansEnd_vars_t *) nile_Process_vars (p);
+    gezira_ColorSpansEnd_vars_t *vars = nile_Process_vars (p);
     gezira_ColorSpansEnd_vars_t v = *vars;
     return out;
 }
@@ -7589,7 +7506,7 @@ typedef struct {
 static nile_Buffer_t *
 gezira_ApplyColorSpans_prologue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_ApplyColorSpans_vars_t *vars = (gezira_ApplyColorSpans_vars_t *) nile_Process_vars (p);
+    gezira_ApplyColorSpans_vars_t *vars = nile_Process_vars (p);
     gezira_ApplyColorSpans_vars_t v = *vars;
     ; /* no-op */
     nile_Process_t *t_1 = nile_Process_pipe (v.v_spans, gezira_ColorSpansEnd(p), NILE_NULL);
@@ -7604,7 +7521,7 @@ gezira_ApplyColorSpans_prologue (nile_Process_t *p, nile_Buffer_t *out)
 static nile_Buffer_t *
 gezira_ApplyColorSpans_epilogue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_ApplyColorSpans_vars_t *vars = (gezira_ApplyColorSpans_vars_t *) nile_Process_vars (p);
+    gezira_ApplyColorSpans_vars_t *vars = nile_Process_vars (p);
     gezira_ApplyColorSpans_vars_t v = *vars;
     ; /* no-op */
     return out;
@@ -7618,7 +7535,7 @@ gezira_ApplyColorSpans (nile_Process_t *p,
     gezira_ApplyColorSpans_vars_t v;
     p = nile_Process (p, IN_QUANTUM, sizeof (*vars), gezira_ApplyColorSpans_prologue, gezira_ApplyColorSpans_body, gezira_ApplyColorSpans_epilogue);
     if (p) {
-        vars = (gezira_ApplyColorSpans_vars_t *) nile_Process_vars (p);
+        vars = nile_Process_vars (p);
         v.v_spans = v_spans;
         *vars = v;
     }
@@ -7637,7 +7554,7 @@ typedef struct {
 static nile_Buffer_t *
 gezira_CompositeClear_prologue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_CompositeClear_vars_t *vars = (gezira_CompositeClear_vars_t *) nile_Process_vars (p);
+    gezira_CompositeClear_vars_t *vars = nile_Process_vars (p);
     gezira_CompositeClear_vars_t v = *vars;
     *vars = v;
     return out;
@@ -7648,7 +7565,7 @@ gezira_CompositeClear_body (nile_Process_t *p,
                             nile_Buffer_t *in,
                             nile_Buffer_t *out)
 {
-    gezira_CompositeClear_vars_t *vars = (gezira_CompositeClear_vars_t *) nile_Process_vars (p);
+    gezira_CompositeClear_vars_t *vars = nile_Process_vars (p);
     gezira_CompositeClear_vars_t v = *vars;
     
     while (!nile_Buffer_is_empty (in) && !nile_Buffer_quota_hit (out)) {
@@ -7682,7 +7599,7 @@ gezira_CompositeClear_body (nile_Process_t *p,
 static nile_Buffer_t *
 gezira_CompositeClear_epilogue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_CompositeClear_vars_t *vars = (gezira_CompositeClear_vars_t *) nile_Process_vars (p);
+    gezira_CompositeClear_vars_t *vars = nile_Process_vars (p);
     gezira_CompositeClear_vars_t v = *vars;
     return out;
 }
@@ -7707,7 +7624,7 @@ typedef struct {
 static nile_Buffer_t *
 gezira_CompositeSrc_prologue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_CompositeSrc_vars_t *vars = (gezira_CompositeSrc_vars_t *) nile_Process_vars (p);
+    gezira_CompositeSrc_vars_t *vars = nile_Process_vars (p);
     gezira_CompositeSrc_vars_t v = *vars;
     *vars = v;
     return out;
@@ -7718,7 +7635,7 @@ gezira_CompositeSrc_body (nile_Process_t *p,
                           nile_Buffer_t *in,
                           nile_Buffer_t *out)
 {
-    gezira_CompositeSrc_vars_t *vars = (gezira_CompositeSrc_vars_t *) nile_Process_vars (p);
+    gezira_CompositeSrc_vars_t *vars = nile_Process_vars (p);
     gezira_CompositeSrc_vars_t v = *vars;
     
     while (!nile_Buffer_is_empty (in) && !nile_Buffer_quota_hit (out)) {
@@ -7747,7 +7664,7 @@ gezira_CompositeSrc_body (nile_Process_t *p,
 static nile_Buffer_t *
 gezira_CompositeSrc_epilogue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_CompositeSrc_vars_t *vars = (gezira_CompositeSrc_vars_t *) nile_Process_vars (p);
+    gezira_CompositeSrc_vars_t *vars = nile_Process_vars (p);
     gezira_CompositeSrc_vars_t v = *vars;
     return out;
 }
@@ -7772,7 +7689,7 @@ typedef struct {
 static nile_Buffer_t *
 gezira_CompositeDst_prologue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_CompositeDst_vars_t *vars = (gezira_CompositeDst_vars_t *) nile_Process_vars (p);
+    gezira_CompositeDst_vars_t *vars = nile_Process_vars (p);
     gezira_CompositeDst_vars_t v = *vars;
     *vars = v;
     return out;
@@ -7783,7 +7700,7 @@ gezira_CompositeDst_body (nile_Process_t *p,
                           nile_Buffer_t *in,
                           nile_Buffer_t *out)
 {
-    gezira_CompositeDst_vars_t *vars = (gezira_CompositeDst_vars_t *) nile_Process_vars (p);
+    gezira_CompositeDst_vars_t *vars = nile_Process_vars (p);
     gezira_CompositeDst_vars_t v = *vars;
     
     while (!nile_Buffer_is_empty (in) && !nile_Buffer_quota_hit (out)) {
@@ -7812,7 +7729,7 @@ gezira_CompositeDst_body (nile_Process_t *p,
 static nile_Buffer_t *
 gezira_CompositeDst_epilogue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_CompositeDst_vars_t *vars = (gezira_CompositeDst_vars_t *) nile_Process_vars (p);
+    gezira_CompositeDst_vars_t *vars = nile_Process_vars (p);
     gezira_CompositeDst_vars_t v = *vars;
     return out;
 }
@@ -7837,7 +7754,7 @@ typedef struct {
 static nile_Buffer_t *
 gezira_CompositeOver_prologue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_CompositeOver_vars_t *vars = (gezira_CompositeOver_vars_t *) nile_Process_vars (p);
+    gezira_CompositeOver_vars_t *vars = nile_Process_vars (p);
     gezira_CompositeOver_vars_t v = *vars;
     *vars = v;
     return out;
@@ -7848,7 +7765,7 @@ gezira_CompositeOver_body (nile_Process_t *p,
                            nile_Buffer_t *in,
                            nile_Buffer_t *out)
 {
-    gezira_CompositeOver_vars_t *vars = (gezira_CompositeOver_vars_t *) nile_Process_vars (p);
+    gezira_CompositeOver_vars_t *vars = nile_Process_vars (p);
     gezira_CompositeOver_vars_t v = *vars;
     
     while (!nile_Buffer_is_empty (in) && !nile_Buffer_quota_hit (out)) {
@@ -7891,7 +7808,7 @@ gezira_CompositeOver_body (nile_Process_t *p,
 static nile_Buffer_t *
 gezira_CompositeOver_epilogue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_CompositeOver_vars_t *vars = (gezira_CompositeOver_vars_t *) nile_Process_vars (p);
+    gezira_CompositeOver_vars_t *vars = nile_Process_vars (p);
     gezira_CompositeOver_vars_t v = *vars;
     return out;
 }
@@ -7916,7 +7833,7 @@ typedef struct {
 static nile_Buffer_t *
 gezira_CompositeDstOver_prologue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_CompositeDstOver_vars_t *vars = (gezira_CompositeDstOver_vars_t *) nile_Process_vars (p);
+    gezira_CompositeDstOver_vars_t *vars = nile_Process_vars (p);
     gezira_CompositeDstOver_vars_t v = *vars;
     *vars = v;
     return out;
@@ -7927,7 +7844,7 @@ gezira_CompositeDstOver_body (nile_Process_t *p,
                               nile_Buffer_t *in,
                               nile_Buffer_t *out)
 {
-    gezira_CompositeDstOver_vars_t *vars = (gezira_CompositeDstOver_vars_t *) nile_Process_vars (p);
+    gezira_CompositeDstOver_vars_t *vars = nile_Process_vars (p);
     gezira_CompositeDstOver_vars_t v = *vars;
     
     while (!nile_Buffer_is_empty (in) && !nile_Buffer_quota_hit (out)) {
@@ -7970,7 +7887,7 @@ gezira_CompositeDstOver_body (nile_Process_t *p,
 static nile_Buffer_t *
 gezira_CompositeDstOver_epilogue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_CompositeDstOver_vars_t *vars = (gezira_CompositeDstOver_vars_t *) nile_Process_vars (p);
+    gezira_CompositeDstOver_vars_t *vars = nile_Process_vars (p);
     gezira_CompositeDstOver_vars_t v = *vars;
     return out;
 }
@@ -7995,7 +7912,7 @@ typedef struct {
 static nile_Buffer_t *
 gezira_CompositeSrcIn_prologue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_CompositeSrcIn_vars_t *vars = (gezira_CompositeSrcIn_vars_t *) nile_Process_vars (p);
+    gezira_CompositeSrcIn_vars_t *vars = nile_Process_vars (p);
     gezira_CompositeSrcIn_vars_t v = *vars;
     *vars = v;
     return out;
@@ -8006,7 +7923,7 @@ gezira_CompositeSrcIn_body (nile_Process_t *p,
                             nile_Buffer_t *in,
                             nile_Buffer_t *out)
 {
-    gezira_CompositeSrcIn_vars_t *vars = (gezira_CompositeSrcIn_vars_t *) nile_Process_vars (p);
+    gezira_CompositeSrcIn_vars_t *vars = nile_Process_vars (p);
     gezira_CompositeSrcIn_vars_t v = *vars;
     
     while (!nile_Buffer_is_empty (in) && !nile_Buffer_quota_hit (out)) {
@@ -8043,7 +7960,7 @@ gezira_CompositeSrcIn_body (nile_Process_t *p,
 static nile_Buffer_t *
 gezira_CompositeSrcIn_epilogue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_CompositeSrcIn_vars_t *vars = (gezira_CompositeSrcIn_vars_t *) nile_Process_vars (p);
+    gezira_CompositeSrcIn_vars_t *vars = nile_Process_vars (p);
     gezira_CompositeSrcIn_vars_t v = *vars;
     return out;
 }
@@ -8068,7 +7985,7 @@ typedef struct {
 static nile_Buffer_t *
 gezira_CompositeDstIn_prologue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_CompositeDstIn_vars_t *vars = (gezira_CompositeDstIn_vars_t *) nile_Process_vars (p);
+    gezira_CompositeDstIn_vars_t *vars = nile_Process_vars (p);
     gezira_CompositeDstIn_vars_t v = *vars;
     *vars = v;
     return out;
@@ -8079,7 +7996,7 @@ gezira_CompositeDstIn_body (nile_Process_t *p,
                             nile_Buffer_t *in,
                             nile_Buffer_t *out)
 {
-    gezira_CompositeDstIn_vars_t *vars = (gezira_CompositeDstIn_vars_t *) nile_Process_vars (p);
+    gezira_CompositeDstIn_vars_t *vars = nile_Process_vars (p);
     gezira_CompositeDstIn_vars_t v = *vars;
     
     while (!nile_Buffer_is_empty (in) && !nile_Buffer_quota_hit (out)) {
@@ -8116,7 +8033,7 @@ gezira_CompositeDstIn_body (nile_Process_t *p,
 static nile_Buffer_t *
 gezira_CompositeDstIn_epilogue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_CompositeDstIn_vars_t *vars = (gezira_CompositeDstIn_vars_t *) nile_Process_vars (p);
+    gezira_CompositeDstIn_vars_t *vars = nile_Process_vars (p);
     gezira_CompositeDstIn_vars_t v = *vars;
     return out;
 }
@@ -8141,7 +8058,7 @@ typedef struct {
 static nile_Buffer_t *
 gezira_CompositeSrcOut_prologue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_CompositeSrcOut_vars_t *vars = (gezira_CompositeSrcOut_vars_t *) nile_Process_vars (p);
+    gezira_CompositeSrcOut_vars_t *vars = nile_Process_vars (p);
     gezira_CompositeSrcOut_vars_t v = *vars;
     *vars = v;
     return out;
@@ -8152,7 +8069,7 @@ gezira_CompositeSrcOut_body (nile_Process_t *p,
                              nile_Buffer_t *in,
                              nile_Buffer_t *out)
 {
-    gezira_CompositeSrcOut_vars_t *vars = (gezira_CompositeSrcOut_vars_t *) nile_Process_vars (p);
+    gezira_CompositeSrcOut_vars_t *vars = nile_Process_vars (p);
     gezira_CompositeSrcOut_vars_t v = *vars;
     
     while (!nile_Buffer_is_empty (in) && !nile_Buffer_quota_hit (out)) {
@@ -8191,7 +8108,7 @@ gezira_CompositeSrcOut_body (nile_Process_t *p,
 static nile_Buffer_t *
 gezira_CompositeSrcOut_epilogue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_CompositeSrcOut_vars_t *vars = (gezira_CompositeSrcOut_vars_t *) nile_Process_vars (p);
+    gezira_CompositeSrcOut_vars_t *vars = nile_Process_vars (p);
     gezira_CompositeSrcOut_vars_t v = *vars;
     return out;
 }
@@ -8216,7 +8133,7 @@ typedef struct {
 static nile_Buffer_t *
 gezira_CompositeDstOut_prologue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_CompositeDstOut_vars_t *vars = (gezira_CompositeDstOut_vars_t *) nile_Process_vars (p);
+    gezira_CompositeDstOut_vars_t *vars = nile_Process_vars (p);
     gezira_CompositeDstOut_vars_t v = *vars;
     *vars = v;
     return out;
@@ -8227,7 +8144,7 @@ gezira_CompositeDstOut_body (nile_Process_t *p,
                              nile_Buffer_t *in,
                              nile_Buffer_t *out)
 {
-    gezira_CompositeDstOut_vars_t *vars = (gezira_CompositeDstOut_vars_t *) nile_Process_vars (p);
+    gezira_CompositeDstOut_vars_t *vars = nile_Process_vars (p);
     gezira_CompositeDstOut_vars_t v = *vars;
     
     while (!nile_Buffer_is_empty (in) && !nile_Buffer_quota_hit (out)) {
@@ -8266,7 +8183,7 @@ gezira_CompositeDstOut_body (nile_Process_t *p,
 static nile_Buffer_t *
 gezira_CompositeDstOut_epilogue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_CompositeDstOut_vars_t *vars = (gezira_CompositeDstOut_vars_t *) nile_Process_vars (p);
+    gezira_CompositeDstOut_vars_t *vars = nile_Process_vars (p);
     gezira_CompositeDstOut_vars_t v = *vars;
     return out;
 }
@@ -8291,7 +8208,7 @@ typedef struct {
 static nile_Buffer_t *
 gezira_CompositeSrcAtop_prologue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_CompositeSrcAtop_vars_t *vars = (gezira_CompositeSrcAtop_vars_t *) nile_Process_vars (p);
+    gezira_CompositeSrcAtop_vars_t *vars = nile_Process_vars (p);
     gezira_CompositeSrcAtop_vars_t v = *vars;
     *vars = v;
     return out;
@@ -8302,7 +8219,7 @@ gezira_CompositeSrcAtop_body (nile_Process_t *p,
                               nile_Buffer_t *in,
                               nile_Buffer_t *out)
 {
-    gezira_CompositeSrcAtop_vars_t *vars = (gezira_CompositeSrcAtop_vars_t *) nile_Process_vars (p);
+    gezira_CompositeSrcAtop_vars_t *vars = nile_Process_vars (p);
     gezira_CompositeSrcAtop_vars_t v = *vars;
     
     while (!nile_Buffer_is_empty (in) && !nile_Buffer_quota_hit (out)) {
@@ -8353,7 +8270,7 @@ gezira_CompositeSrcAtop_body (nile_Process_t *p,
 static nile_Buffer_t *
 gezira_CompositeSrcAtop_epilogue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_CompositeSrcAtop_vars_t *vars = (gezira_CompositeSrcAtop_vars_t *) nile_Process_vars (p);
+    gezira_CompositeSrcAtop_vars_t *vars = nile_Process_vars (p);
     gezira_CompositeSrcAtop_vars_t v = *vars;
     return out;
 }
@@ -8378,7 +8295,7 @@ typedef struct {
 static nile_Buffer_t *
 gezira_CompositeDstAtop_prologue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_CompositeDstAtop_vars_t *vars = (gezira_CompositeDstAtop_vars_t *) nile_Process_vars (p);
+    gezira_CompositeDstAtop_vars_t *vars = nile_Process_vars (p);
     gezira_CompositeDstAtop_vars_t v = *vars;
     *vars = v;
     return out;
@@ -8389,7 +8306,7 @@ gezira_CompositeDstAtop_body (nile_Process_t *p,
                               nile_Buffer_t *in,
                               nile_Buffer_t *out)
 {
-    gezira_CompositeDstAtop_vars_t *vars = (gezira_CompositeDstAtop_vars_t *) nile_Process_vars (p);
+    gezira_CompositeDstAtop_vars_t *vars = nile_Process_vars (p);
     gezira_CompositeDstAtop_vars_t v = *vars;
     
     while (!nile_Buffer_is_empty (in) && !nile_Buffer_quota_hit (out)) {
@@ -8440,7 +8357,7 @@ gezira_CompositeDstAtop_body (nile_Process_t *p,
 static nile_Buffer_t *
 gezira_CompositeDstAtop_epilogue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_CompositeDstAtop_vars_t *vars = (gezira_CompositeDstAtop_vars_t *) nile_Process_vars (p);
+    gezira_CompositeDstAtop_vars_t *vars = nile_Process_vars (p);
     gezira_CompositeDstAtop_vars_t v = *vars;
     return out;
 }
@@ -8465,7 +8382,7 @@ typedef struct {
 static nile_Buffer_t *
 gezira_CompositeXor_prologue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_CompositeXor_vars_t *vars = (gezira_CompositeXor_vars_t *) nile_Process_vars (p);
+    gezira_CompositeXor_vars_t *vars = nile_Process_vars (p);
     gezira_CompositeXor_vars_t v = *vars;
     *vars = v;
     return out;
@@ -8476,7 +8393,7 @@ gezira_CompositeXor_body (nile_Process_t *p,
                           nile_Buffer_t *in,
                           nile_Buffer_t *out)
 {
-    gezira_CompositeXor_vars_t *vars = (gezira_CompositeXor_vars_t *) nile_Process_vars (p);
+    gezira_CompositeXor_vars_t *vars = nile_Process_vars (p);
     gezira_CompositeXor_vars_t v = *vars;
     
     while (!nile_Buffer_is_empty (in) && !nile_Buffer_quota_hit (out)) {
@@ -8529,7 +8446,7 @@ gezira_CompositeXor_body (nile_Process_t *p,
 static nile_Buffer_t *
 gezira_CompositeXor_epilogue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_CompositeXor_vars_t *vars = (gezira_CompositeXor_vars_t *) nile_Process_vars (p);
+    gezira_CompositeXor_vars_t *vars = nile_Process_vars (p);
     gezira_CompositeXor_vars_t v = *vars;
     return out;
 }
@@ -8554,7 +8471,7 @@ typedef struct {
 static nile_Buffer_t *
 gezira_CompositePlus_prologue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_CompositePlus_vars_t *vars = (gezira_CompositePlus_vars_t *) nile_Process_vars (p);
+    gezira_CompositePlus_vars_t *vars = nile_Process_vars (p);
     gezira_CompositePlus_vars_t v = *vars;
     *vars = v;
     return out;
@@ -8565,7 +8482,7 @@ gezira_CompositePlus_body (nile_Process_t *p,
                            nile_Buffer_t *in,
                            nile_Buffer_t *out)
 {
-    gezira_CompositePlus_vars_t *vars = (gezira_CompositePlus_vars_t *) nile_Process_vars (p);
+    gezira_CompositePlus_vars_t *vars = nile_Process_vars (p);
     gezira_CompositePlus_vars_t v = *vars;
     
     while (!nile_Buffer_is_empty (in) && !nile_Buffer_quota_hit (out)) {
@@ -8619,7 +8536,7 @@ gezira_CompositePlus_body (nile_Process_t *p,
 static nile_Buffer_t *
 gezira_CompositePlus_epilogue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_CompositePlus_vars_t *vars = (gezira_CompositePlus_vars_t *) nile_Process_vars (p);
+    gezira_CompositePlus_vars_t *vars = nile_Process_vars (p);
     gezira_CompositePlus_vars_t v = *vars;
     return out;
 }
@@ -8644,7 +8561,7 @@ typedef struct {
 static nile_Buffer_t *
 gezira_CompositeMultiply_prologue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_CompositeMultiply_vars_t *vars = (gezira_CompositeMultiply_vars_t *) nile_Process_vars (p);
+    gezira_CompositeMultiply_vars_t *vars = nile_Process_vars (p);
     gezira_CompositeMultiply_vars_t v = *vars;
     *vars = v;
     return out;
@@ -8655,7 +8572,7 @@ gezira_CompositeMultiply_body (nile_Process_t *p,
                                nile_Buffer_t *in,
                                nile_Buffer_t *out)
 {
-    gezira_CompositeMultiply_vars_t *vars = (gezira_CompositeMultiply_vars_t *) nile_Process_vars (p);
+    gezira_CompositeMultiply_vars_t *vars = nile_Process_vars (p);
     gezira_CompositeMultiply_vars_t v = *vars;
     
     while (!nile_Buffer_is_empty (in) && !nile_Buffer_quota_hit (out)) {
@@ -8716,7 +8633,7 @@ gezira_CompositeMultiply_body (nile_Process_t *p,
 static nile_Buffer_t *
 gezira_CompositeMultiply_epilogue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_CompositeMultiply_vars_t *vars = (gezira_CompositeMultiply_vars_t *) nile_Process_vars (p);
+    gezira_CompositeMultiply_vars_t *vars = nile_Process_vars (p);
     gezira_CompositeMultiply_vars_t v = *vars;
     return out;
 }
@@ -8741,7 +8658,7 @@ typedef struct {
 static nile_Buffer_t *
 gezira_CompositeScreen_prologue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_CompositeScreen_vars_t *vars = (gezira_CompositeScreen_vars_t *) nile_Process_vars (p);
+    gezira_CompositeScreen_vars_t *vars = nile_Process_vars (p);
     gezira_CompositeScreen_vars_t v = *vars;
     *vars = v;
     return out;
@@ -8752,7 +8669,7 @@ gezira_CompositeScreen_body (nile_Process_t *p,
                              nile_Buffer_t *in,
                              nile_Buffer_t *out)
 {
-    gezira_CompositeScreen_vars_t *vars = (gezira_CompositeScreen_vars_t *) nile_Process_vars (p);
+    gezira_CompositeScreen_vars_t *vars = nile_Process_vars (p);
     gezira_CompositeScreen_vars_t v = *vars;
     
     while (!nile_Buffer_is_empty (in) && !nile_Buffer_quota_hit (out)) {
@@ -8793,7 +8710,7 @@ gezira_CompositeScreen_body (nile_Process_t *p,
 static nile_Buffer_t *
 gezira_CompositeScreen_epilogue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_CompositeScreen_vars_t *vars = (gezira_CompositeScreen_vars_t *) nile_Process_vars (p);
+    gezira_CompositeScreen_vars_t *vars = nile_Process_vars (p);
     gezira_CompositeScreen_vars_t v = *vars;
     return out;
 }
@@ -8818,7 +8735,7 @@ typedef struct {
 static nile_Buffer_t *
 gezira_CompositeOverlay_prologue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_CompositeOverlay_vars_t *vars = (gezira_CompositeOverlay_vars_t *) nile_Process_vars (p);
+    gezira_CompositeOverlay_vars_t *vars = nile_Process_vars (p);
     gezira_CompositeOverlay_vars_t v = *vars;
     *vars = v;
     return out;
@@ -8829,7 +8746,7 @@ gezira_CompositeOverlay_body (nile_Process_t *p,
                               nile_Buffer_t *in,
                               nile_Buffer_t *out)
 {
-    gezira_CompositeOverlay_vars_t *vars = (gezira_CompositeOverlay_vars_t *) nile_Process_vars (p);
+    gezira_CompositeOverlay_vars_t *vars = nile_Process_vars (p);
     gezira_CompositeOverlay_vars_t v = *vars;
     
     while (!nile_Buffer_is_empty (in) && !nile_Buffer_quota_hit (out)) {
@@ -8994,7 +8911,7 @@ gezira_CompositeOverlay_body (nile_Process_t *p,
 static nile_Buffer_t *
 gezira_CompositeOverlay_epilogue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_CompositeOverlay_vars_t *vars = (gezira_CompositeOverlay_vars_t *) nile_Process_vars (p);
+    gezira_CompositeOverlay_vars_t *vars = nile_Process_vars (p);
     gezira_CompositeOverlay_vars_t v = *vars;
     return out;
 }
@@ -9019,7 +8936,7 @@ typedef struct {
 static nile_Buffer_t *
 gezira_CompositeDarken_prologue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_CompositeDarken_vars_t *vars = (gezira_CompositeDarken_vars_t *) nile_Process_vars (p);
+    gezira_CompositeDarken_vars_t *vars = nile_Process_vars (p);
     gezira_CompositeDarken_vars_t v = *vars;
     *vars = v;
     return out;
@@ -9030,7 +8947,7 @@ gezira_CompositeDarken_body (nile_Process_t *p,
                              nile_Buffer_t *in,
                              nile_Buffer_t *out)
 {
-    gezira_CompositeDarken_vars_t *vars = (gezira_CompositeDarken_vars_t *) nile_Process_vars (p);
+    gezira_CompositeDarken_vars_t *vars = nile_Process_vars (p);
     gezira_CompositeDarken_vars_t v = *vars;
     
     while (!nile_Buffer_is_empty (in) && !nile_Buffer_quota_hit (out)) {
@@ -9119,7 +9036,7 @@ gezira_CompositeDarken_body (nile_Process_t *p,
 static nile_Buffer_t *
 gezira_CompositeDarken_epilogue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_CompositeDarken_vars_t *vars = (gezira_CompositeDarken_vars_t *) nile_Process_vars (p);
+    gezira_CompositeDarken_vars_t *vars = nile_Process_vars (p);
     gezira_CompositeDarken_vars_t v = *vars;
     return out;
 }
@@ -9144,7 +9061,7 @@ typedef struct {
 static nile_Buffer_t *
 gezira_CompositeLighten_prologue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_CompositeLighten_vars_t *vars = (gezira_CompositeLighten_vars_t *) nile_Process_vars (p);
+    gezira_CompositeLighten_vars_t *vars = nile_Process_vars (p);
     gezira_CompositeLighten_vars_t v = *vars;
     *vars = v;
     return out;
@@ -9155,7 +9072,7 @@ gezira_CompositeLighten_body (nile_Process_t *p,
                               nile_Buffer_t *in,
                               nile_Buffer_t *out)
 {
-    gezira_CompositeLighten_vars_t *vars = (gezira_CompositeLighten_vars_t *) nile_Process_vars (p);
+    gezira_CompositeLighten_vars_t *vars = nile_Process_vars (p);
     gezira_CompositeLighten_vars_t v = *vars;
     
     while (!nile_Buffer_is_empty (in) && !nile_Buffer_quota_hit (out)) {
@@ -9244,7 +9161,7 @@ gezira_CompositeLighten_body (nile_Process_t *p,
 static nile_Buffer_t *
 gezira_CompositeLighten_epilogue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_CompositeLighten_vars_t *vars = (gezira_CompositeLighten_vars_t *) nile_Process_vars (p);
+    gezira_CompositeLighten_vars_t *vars = nile_Process_vars (p);
     gezira_CompositeLighten_vars_t v = *vars;
     return out;
 }
@@ -9269,7 +9186,7 @@ typedef struct {
 static nile_Buffer_t *
 gezira_CompositeColorDodge_prologue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_CompositeColorDodge_vars_t *vars = (gezira_CompositeColorDodge_vars_t *) nile_Process_vars (p);
+    gezira_CompositeColorDodge_vars_t *vars = nile_Process_vars (p);
     gezira_CompositeColorDodge_vars_t v = *vars;
     *vars = v;
     return out;
@@ -9280,7 +9197,7 @@ gezira_CompositeColorDodge_body (nile_Process_t *p,
                                  nile_Buffer_t *in,
                                  nile_Buffer_t *out)
 {
-    gezira_CompositeColorDodge_vars_t *vars = (gezira_CompositeColorDodge_vars_t *) nile_Process_vars (p);
+    gezira_CompositeColorDodge_vars_t *vars = nile_Process_vars (p);
     gezira_CompositeColorDodge_vars_t v = *vars;
     
     while (!nile_Buffer_is_empty (in) && !nile_Buffer_quota_hit (out)) {
@@ -9461,7 +9378,7 @@ gezira_CompositeColorDodge_body (nile_Process_t *p,
 static nile_Buffer_t *
 gezira_CompositeColorDodge_epilogue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_CompositeColorDodge_vars_t *vars = (gezira_CompositeColorDodge_vars_t *) nile_Process_vars (p);
+    gezira_CompositeColorDodge_vars_t *vars = nile_Process_vars (p);
     gezira_CompositeColorDodge_vars_t v = *vars;
     return out;
 }
@@ -9486,7 +9403,7 @@ typedef struct {
 static nile_Buffer_t *
 gezira_CompositeColorBurn_prologue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_CompositeColorBurn_vars_t *vars = (gezira_CompositeColorBurn_vars_t *) nile_Process_vars (p);
+    gezira_CompositeColorBurn_vars_t *vars = nile_Process_vars (p);
     gezira_CompositeColorBurn_vars_t v = *vars;
     *vars = v;
     return out;
@@ -9497,7 +9414,7 @@ gezira_CompositeColorBurn_body (nile_Process_t *p,
                                 nile_Buffer_t *in,
                                 nile_Buffer_t *out)
 {
-    gezira_CompositeColorBurn_vars_t *vars = (gezira_CompositeColorBurn_vars_t *) nile_Process_vars (p);
+    gezira_CompositeColorBurn_vars_t *vars = nile_Process_vars (p);
     gezira_CompositeColorBurn_vars_t v = *vars;
     
     while (!nile_Buffer_is_empty (in) && !nile_Buffer_quota_hit (out)) {
@@ -9656,7 +9573,7 @@ gezira_CompositeColorBurn_body (nile_Process_t *p,
 static nile_Buffer_t *
 gezira_CompositeColorBurn_epilogue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_CompositeColorBurn_vars_t *vars = (gezira_CompositeColorBurn_vars_t *) nile_Process_vars (p);
+    gezira_CompositeColorBurn_vars_t *vars = nile_Process_vars (p);
     gezira_CompositeColorBurn_vars_t v = *vars;
     return out;
 }
@@ -9681,7 +9598,7 @@ typedef struct {
 static nile_Buffer_t *
 gezira_CompositeHardLight_prologue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_CompositeHardLight_vars_t *vars = (gezira_CompositeHardLight_vars_t *) nile_Process_vars (p);
+    gezira_CompositeHardLight_vars_t *vars = nile_Process_vars (p);
     gezira_CompositeHardLight_vars_t v = *vars;
     *vars = v;
     return out;
@@ -9692,7 +9609,7 @@ gezira_CompositeHardLight_body (nile_Process_t *p,
                                 nile_Buffer_t *in,
                                 nile_Buffer_t *out)
 {
-    gezira_CompositeHardLight_vars_t *vars = (gezira_CompositeHardLight_vars_t *) nile_Process_vars (p);
+    gezira_CompositeHardLight_vars_t *vars = nile_Process_vars (p);
     gezira_CompositeHardLight_vars_t v = *vars;
     
     while (!nile_Buffer_is_empty (in) && !nile_Buffer_quota_hit (out)) {
@@ -9857,7 +9774,7 @@ gezira_CompositeHardLight_body (nile_Process_t *p,
 static nile_Buffer_t *
 gezira_CompositeHardLight_epilogue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_CompositeHardLight_vars_t *vars = (gezira_CompositeHardLight_vars_t *) nile_Process_vars (p);
+    gezira_CompositeHardLight_vars_t *vars = nile_Process_vars (p);
     gezira_CompositeHardLight_vars_t v = *vars;
     return out;
 }
@@ -9882,7 +9799,7 @@ typedef struct {
 static nile_Buffer_t *
 gezira_CompositeSoftLight_prologue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_CompositeSoftLight_vars_t *vars = (gezira_CompositeSoftLight_vars_t *) nile_Process_vars (p);
+    gezira_CompositeSoftLight_vars_t *vars = nile_Process_vars (p);
     gezira_CompositeSoftLight_vars_t v = *vars;
     *vars = v;
     return out;
@@ -9893,7 +9810,7 @@ gezira_CompositeSoftLight_body (nile_Process_t *p,
                                 nile_Buffer_t *in,
                                 nile_Buffer_t *out)
 {
-    gezira_CompositeSoftLight_vars_t *vars = (gezira_CompositeSoftLight_vars_t *) nile_Process_vars (p);
+    gezira_CompositeSoftLight_vars_t *vars = nile_Process_vars (p);
     gezira_CompositeSoftLight_vars_t v = *vars;
     
     while (!nile_Buffer_is_empty (in) && !nile_Buffer_quota_hit (out)) {
@@ -10213,7 +10130,7 @@ gezira_CompositeSoftLight_body (nile_Process_t *p,
 static nile_Buffer_t *
 gezira_CompositeSoftLight_epilogue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_CompositeSoftLight_vars_t *vars = (gezira_CompositeSoftLight_vars_t *) nile_Process_vars (p);
+    gezira_CompositeSoftLight_vars_t *vars = nile_Process_vars (p);
     gezira_CompositeSoftLight_vars_t v = *vars;
     return out;
 }
@@ -10238,7 +10155,7 @@ typedef struct {
 static nile_Buffer_t *
 gezira_CompositeDifference_prologue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_CompositeDifference_vars_t *vars = (gezira_CompositeDifference_vars_t *) nile_Process_vars (p);
+    gezira_CompositeDifference_vars_t *vars = nile_Process_vars (p);
     gezira_CompositeDifference_vars_t v = *vars;
     *vars = v;
     return out;
@@ -10249,7 +10166,7 @@ gezira_CompositeDifference_body (nile_Process_t *p,
                                  nile_Buffer_t *in,
                                  nile_Buffer_t *out)
 {
-    gezira_CompositeDifference_vars_t *vars = (gezira_CompositeDifference_vars_t *) nile_Process_vars (p);
+    gezira_CompositeDifference_vars_t *vars = nile_Process_vars (p);
     gezira_CompositeDifference_vars_t v = *vars;
     
     while (!nile_Buffer_is_empty (in) && !nile_Buffer_quota_hit (out)) {
@@ -10341,7 +10258,7 @@ gezira_CompositeDifference_body (nile_Process_t *p,
 static nile_Buffer_t *
 gezira_CompositeDifference_epilogue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_CompositeDifference_vars_t *vars = (gezira_CompositeDifference_vars_t *) nile_Process_vars (p);
+    gezira_CompositeDifference_vars_t *vars = nile_Process_vars (p);
     gezira_CompositeDifference_vars_t v = *vars;
     return out;
 }
@@ -10366,7 +10283,7 @@ typedef struct {
 static nile_Buffer_t *
 gezira_CompositeExclusion_prologue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_CompositeExclusion_vars_t *vars = (gezira_CompositeExclusion_vars_t *) nile_Process_vars (p);
+    gezira_CompositeExclusion_vars_t *vars = nile_Process_vars (p);
     gezira_CompositeExclusion_vars_t v = *vars;
     *vars = v;
     return out;
@@ -10377,7 +10294,7 @@ gezira_CompositeExclusion_body (nile_Process_t *p,
                                 nile_Buffer_t *in,
                                 nile_Buffer_t *out)
 {
-    gezira_CompositeExclusion_vars_t *vars = (gezira_CompositeExclusion_vars_t *) nile_Process_vars (p);
+    gezira_CompositeExclusion_vars_t *vars = nile_Process_vars (p);
     gezira_CompositeExclusion_vars_t v = *vars;
     
     while (!nile_Buffer_is_empty (in) && !nile_Buffer_quota_hit (out)) {
@@ -10485,7 +10402,7 @@ gezira_CompositeExclusion_body (nile_Process_t *p,
 static nile_Buffer_t *
 gezira_CompositeExclusion_epilogue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_CompositeExclusion_vars_t *vars = (gezira_CompositeExclusion_vars_t *) nile_Process_vars (p);
+    gezira_CompositeExclusion_vars_t *vars = nile_Process_vars (p);
     gezira_CompositeExclusion_vars_t v = *vars;
     return out;
 }
@@ -10510,7 +10427,7 @@ typedef struct {
 static nile_Buffer_t *
 gezira_CompositeSubtract_prologue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_CompositeSubtract_vars_t *vars = (gezira_CompositeSubtract_vars_t *) nile_Process_vars (p);
+    gezira_CompositeSubtract_vars_t *vars = nile_Process_vars (p);
     gezira_CompositeSubtract_vars_t v = *vars;
     *vars = v;
     return out;
@@ -10521,7 +10438,7 @@ gezira_CompositeSubtract_body (nile_Process_t *p,
                                nile_Buffer_t *in,
                                nile_Buffer_t *out)
 {
-    gezira_CompositeSubtract_vars_t *vars = (gezira_CompositeSubtract_vars_t *) nile_Process_vars (p);
+    gezira_CompositeSubtract_vars_t *vars = nile_Process_vars (p);
     gezira_CompositeSubtract_vars_t v = *vars;
     
     while (!nile_Buffer_is_empty (in) && !nile_Buffer_quota_hit (out)) {
@@ -10584,7 +10501,7 @@ gezira_CompositeSubtract_body (nile_Process_t *p,
 static nile_Buffer_t *
 gezira_CompositeSubtract_epilogue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_CompositeSubtract_vars_t *vars = (gezira_CompositeSubtract_vars_t *) nile_Process_vars (p);
+    gezira_CompositeSubtract_vars_t *vars = nile_Process_vars (p);
     gezira_CompositeSubtract_vars_t v = *vars;
     return out;
 }
@@ -10609,7 +10526,7 @@ typedef struct {
 static nile_Buffer_t *
 gezira_CompositeInvert_prologue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_CompositeInvert_vars_t *vars = (gezira_CompositeInvert_vars_t *) nile_Process_vars (p);
+    gezira_CompositeInvert_vars_t *vars = nile_Process_vars (p);
     gezira_CompositeInvert_vars_t v = *vars;
     *vars = v;
     return out;
@@ -10620,7 +10537,7 @@ gezira_CompositeInvert_body (nile_Process_t *p,
                              nile_Buffer_t *in,
                              nile_Buffer_t *out)
 {
-    gezira_CompositeInvert_vars_t *vars = (gezira_CompositeInvert_vars_t *) nile_Process_vars (p);
+    gezira_CompositeInvert_vars_t *vars = nile_Process_vars (p);
     gezira_CompositeInvert_vars_t v = *vars;
     
     while (!nile_Buffer_is_empty (in) && !nile_Buffer_quota_hit (out)) {
@@ -10663,7 +10580,7 @@ gezira_CompositeInvert_body (nile_Process_t *p,
 static nile_Buffer_t *
 gezira_CompositeInvert_epilogue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_CompositeInvert_vars_t *vars = (gezira_CompositeInvert_vars_t *) nile_Process_vars (p);
+    gezira_CompositeInvert_vars_t *vars = nile_Process_vars (p);
     gezira_CompositeInvert_vars_t v = *vars;
     return out;
 }
@@ -10689,7 +10606,7 @@ typedef struct {
 static nile_Buffer_t *
 gezira_InverseOver_prologue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_InverseOver_vars_t *vars = (gezira_InverseOver_vars_t *) nile_Process_vars (p);
+    gezira_InverseOver_vars_t *vars = nile_Process_vars (p);
     gezira_InverseOver_vars_t v = *vars;
     *vars = v;
     return out;
@@ -10700,7 +10617,7 @@ gezira_InverseOver_body (nile_Process_t *p,
                          nile_Buffer_t *in,
                          nile_Buffer_t *out)
 {
-    gezira_InverseOver_vars_t *vars = (gezira_InverseOver_vars_t *) nile_Process_vars (p);
+    gezira_InverseOver_vars_t *vars = nile_Process_vars (p);
     gezira_InverseOver_vars_t v = *vars;
     
     while (!nile_Buffer_is_empty (in) && !nile_Buffer_quota_hit (out)) {
@@ -10787,7 +10704,7 @@ gezira_InverseOver_body (nile_Process_t *p,
 static nile_Buffer_t *
 gezira_InverseOver_epilogue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_InverseOver_vars_t *vars = (gezira_InverseOver_vars_t *) nile_Process_vars (p);
+    gezira_InverseOver_vars_t *vars = nile_Process_vars (p);
     gezira_InverseOver_vars_t v = *vars;
     return out;
 }
@@ -10800,7 +10717,7 @@ gezira_InverseOver (nile_Process_t *p,
     gezira_InverseOver_vars_t v;
     p = nile_Process (p, IN_QUANTUM, sizeof (*vars), gezira_InverseOver_prologue, gezira_InverseOver_body, gezira_InverseOver_epilogue);
     if (p) {
-        vars = (gezira_InverseOver_vars_t *) nile_Process_vars (p);
+        vars = nile_Process_vars (p);
         v.v_A = nile_Real (v_A);
         *vars = v;
     }
@@ -10820,7 +10737,7 @@ typedef struct {
 static nile_Buffer_t *
 gezira_ContrastiveOver_prologue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_ContrastiveOver_vars_t *vars = (gezira_ContrastiveOver_vars_t *) nile_Process_vars (p);
+    gezira_ContrastiveOver_vars_t *vars = nile_Process_vars (p);
     gezira_ContrastiveOver_vars_t v = *vars;
     *vars = v;
     return out;
@@ -10831,7 +10748,7 @@ gezira_ContrastiveOver_body (nile_Process_t *p,
                              nile_Buffer_t *in,
                              nile_Buffer_t *out)
 {
-    gezira_ContrastiveOver_vars_t *vars = (gezira_ContrastiveOver_vars_t *) nile_Process_vars (p);
+    gezira_ContrastiveOver_vars_t *vars = nile_Process_vars (p);
     gezira_ContrastiveOver_vars_t v = *vars;
     
     while (!nile_Buffer_is_empty (in) && !nile_Buffer_quota_hit (out)) {
@@ -10951,7 +10868,7 @@ gezira_ContrastiveOver_body (nile_Process_t *p,
 static nile_Buffer_t *
 gezira_ContrastiveOver_epilogue (nile_Process_t *p, nile_Buffer_t *out)
 {
-    gezira_ContrastiveOver_vars_t *vars = (gezira_ContrastiveOver_vars_t *) nile_Process_vars (p);
+    gezira_ContrastiveOver_vars_t *vars = nile_Process_vars (p);
     gezira_ContrastiveOver_vars_t v = *vars;
     return out;
 }
@@ -10964,7 +10881,7 @@ gezira_ContrastiveOver (nile_Process_t *p,
     gezira_ContrastiveOver_vars_t v;
     p = nile_Process (p, IN_QUANTUM, sizeof (*vars), gezira_ContrastiveOver_prologue, gezira_ContrastiveOver_body, gezira_ContrastiveOver_epilogue);
     if (p) {
-        vars = (gezira_ContrastiveOver_vars_t *) nile_Process_vars (p);
+        vars = nile_Process_vars (p);
         v.v_a = nile_Real (v_a);
         *vars = v;
     }
@@ -10974,6 +10891,3 @@ gezira_ContrastiveOver (nile_Process_t *p,
 #undef IN_QUANTUM
 #undef OUT_QUANTUM
 
-#ifdef __cplusplus
-}
-#endif

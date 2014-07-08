@@ -3,10 +3,6 @@
 
 #include "nile.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 nile_Process_t *
 gezira_TransformBeziers (nile_Process_t *p, 
                          float v_M_a, 
@@ -273,10 +269,9 @@ gezira_GaussianBlur1x21 (nile_Process_t *p,
 
 nile_Process_t *
 gezira_LinearGradient (nile_Process_t *p, 
-                       float v_S_x, 
-                       float v_S_y, 
-                       float v_E_x, 
-                       float v_E_y);
+                       float v_s00, 
+                       float v_dsdx, 
+                       float v_dsdy);
 
 nile_Process_t *
 gezira_RadialGradient (nile_Process_t *p, 
@@ -401,7 +396,7 @@ nile_Process_t *
 gezira_ContrastiveOver (nile_Process_t *p, 
                         float v_a);
 
-#ifdef __cplusplus
-}
+
+
 #endif
-#endif
+

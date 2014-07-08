@@ -18,6 +18,10 @@ static int   is_zooming = 0;
 static float zoom       = 1.00;
 static float dzoom      = 0.01;
 
+static gezira_Window_t  window;
+static nile_Process_t  *init;
+static nile_Process_t  *gate;
+
 typedef struct {
     float x, y, dy, scale, angle, dangle;
 } gezira_snowflake_t;
@@ -40,10 +44,9 @@ gezira_snowflake_offscreen (gezira_snowflake_t *flake)
 }
 
 static void
-gezira_snowflake_render (gezira_snowflake_t *flake,
-                         gezira_Window_t *window, nile_Process_t *init)
+gezira_snowflake_render (gezira_snowflake_t *flake)
 {
-    nile_Process_t *pipeline;
+    nile_Process_t *pipeline, *gate_, *COI;
     Matrix_t M = Matrix ();
     if (gezira_snowflake_offscreen (flake))
         return;
@@ -53,23 +56,26 @@ gezira_snowflake_render (gezira_snowflake_t *flake,
     M = Matrix_translate (M, flake->x, flake->y);
     M = Matrix_rotate (M, flake->angle);
     M = Matrix_scale (M, flake->scale, flake->scale);
+    COI = gezira_CompositeUniformColorOverImage_ARGB32 (init,
+        FLAKE_ALPHA, FLAKE_RED, FLAKE_GREEN, FLAKE_BLUE,
+        window.pixels, window.width, window.height, window.width);
+    gate_ = nile_Identity (init, 8);
+    nile_Process_gate (COI, gate_);
     pipeline = nile_Process_pipe (
         gezira_TransformBeziers (init, M.a, M.b, M.c, M.d, M.e, M.f),
         gezira_ClipBeziers (init, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT),
         gezira_Rasterize (init),
-        gezira_CompositeUniformColorOverImage_ARGB32 (init,
-            &window->image,
-            FLAKE_ALPHA, FLAKE_RED, FLAKE_GREEN, FLAKE_BLUE),
+        gate,
+        COI,
         NILE_NULL);
     nile_Process_feed (pipeline, snowflake_path, snowflake_path_n);
+    gate = gate_;
 }
 
 int
 main (int argc, char **argv)
 {
     int i;
-    gezira_Window_t window;
-    nile_Process_t *init;
     gezira_snowflake_t flakes[NFLAKES];
     int nthreads = 1;
     int mem_size;
@@ -77,8 +83,8 @@ main (int argc, char **argv)
     gezira_Window_init (&window, WINDOW_WIDTH, WINDOW_HEIGHT);
 
     for (i = 0; i < NFLAKES; i++) {
-        flakes[i].x      = gezira_random (0, window.image.width);
-        flakes[i].y      = gezira_random (0, window.image.height);
+        flakes[i].x      = gezira_random (0, window.width);
+        flakes[i].y      = gezira_random (0, window.height);
         flakes[i].dy     = gezira_random (0.5, 3.0);
         flakes[i].scale  = gezira_random (0.2, 0.7);
         flakes[i].angle  = gezira_random (0, 4);
@@ -91,6 +97,8 @@ main (int argc, char **argv)
         fprintf (stderr, "nile_startup failed\n");
         exit (1);
     }
+
+    gate = nile_Identity (init, 8);
 
     for (;;) {
         char c = gezira_Window_key_pressed (&window);
@@ -117,26 +125,26 @@ main (int argc, char **argv)
             if (nthreads < 0 || nthreads > 50)
                 printf ("Invalid thread count\n");
             else {
+                nile_Process_feed (gate, NULL, 0);
                 nile_sync (init);
                 free (nile_shutdown (init));
                 mem_size = nthreads * NBYTES_PER_THREAD;
                 init = nile_startup (malloc (mem_size), mem_size, nthreads);
-                gezira_Image_reset_gate (&window.image);
+                gate = nile_Identity (init, 8);
             }
             c = gezira_Window_key_pressed (&window);
         }
         if (!nthreads)
             break;
 
-        gezira_Window_update_and_clear (&window, init, 1, 0, 0, 0);
+        gate = gezira_Window_update_and_clear (&window, init, gate, 1, 0, 0, 0);
         for (i = 0; i < NFLAKES; i++) {
-            gezira_snowflake_render (&flakes[i], &window, init);
+            gezira_snowflake_render (&flakes[i]);
             gezira_snowflake_update (&flakes[i]);
         }
 
-        if (nile_status (init) != NILE_STATUS_OK) {
-            fprintf (stderr, "Nile error status: %d\n", nile_status (init));
-            fflush (stderr);
+        if (nile_error (init)) {
+            fprintf (stderr, "nile error (OOM)\n"); fflush (stderr);
             break;
         }
 
@@ -149,6 +157,7 @@ main (int argc, char **argv)
         }
     }
 
+    nile_Process_feed (gate, NULL, 0);
     nile_sync (init);
     free (nile_shutdown (init));
     //printf ("Just Window_fini left\n"); fflush (stdout);

@@ -1,9 +1,6 @@
-LinearGradient (S, E : Point) : Point >> Real
-    v = E - S
-    d = v / (v ∙ v)
-    s00 = S ∙ d
-    ∀ P
-        >> P ∙ d - s00
+LinearGradient (s00, dsdx, dsdy : Real) : Point >> Real
+    ∀ (x, y)
+        >> s00 + x × dsdx + y × dsdy
 
 RadialGradient (C : Point, r : Real) : Point >> Real
     ∀ P

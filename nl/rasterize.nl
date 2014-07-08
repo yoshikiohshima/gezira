@@ -15,7 +15,7 @@ DecomposeBeziers : Bezier >> EdgeSample
             M       = {min if nearmin, max if nearmax, ABBC}
             << (M, B ~ C, C) << (A, A ~ B, M) 
 
-CombineEdgeSamples : EdgeSample >> CoverageSpan
+CombineEdgeSamples : EdgeSample >> EdgeSpan
     x = 0
     y = 0
     A = 0
@@ -26,23 +26,24 @@ CombineEdgeSamples : EdgeSample >> CoverageSpan
                 A' = A + a
                 H' = H + h
             else
-                >> (x,     y, |A| ◁ 1,          1)
-                >> (x + 1, y, |H| ◁ 1, x' - x - 1)
+                l = {x' - x - 1 if |H| > 0.5, 0}
+                >> (x, y, |A| ◁ 1, l)
                 A' = H + a
                 H' = H + h
         else
-            >> (x, y, |A| ◁ 1, 1)
+            >> (x, y, |A| ◁ 1, 0)
             A' = a
             H' = h
-    >> (x, y, |A| ◁ 1, 1)
+    >> (x, y, |A| ◁ 1, 0)
 
-Rasterize : Bezier >> CoverageSpan
+Rasterize : Bezier >> EdgeSpan
     ⇒ DecomposeBeziers → SortBy (@x) → SortBy (@y) → CombineEdgeSamples
 
-RectangleSpans (min, max : Point) : Point >> CoverageSpan
-    l = max.x - min.x
-    << min + 0.5
-    ∀ (x, y)
-        if x < max.x ∧ y < max.y
+RectangleSpans (min, max : Point) : Real >> EdgeSpan
+    l = max.x - min.x - 1
+    x = min.x + 0.5
+    << min.y + 0.5
+    ∀ y
+        if y < max.y
             >> (x, y, 1, l)
-            << (x, y + 1)
+            << y + 1

@@ -1,17 +1,13 @@
 NILE_RUNTIME := ../../nile/runtimes/c
-TARGET       := $(shell $(CC) -dumpmachine)
-NO_NATIVE    := $(shell $(CC) -E - </dev/null >/dev/null 2>&1 -march=native; echo $$?)
-NO_FPMATH    := $(shell $(CC) -E - </dev/null >/dev/null 2>&1 -mfpmath=sse;  echo $$?)
-NO_SSSE3     := $(shell $(CC) -E - </dev/null >/dev/null 2>&1 -mssse3;       echo $$?)
-NO_AVX_FLAG  := $(shell $(CC) -E - </dev/null >/dev/null 2>&1 -mavx;         echo $$?)
 
-CFLAGS      := -Wall -Werror -Wno-unused -Wno-uninitialized \
+NO_NATIVE   := $(shell $(CC) -E - </dev/null >/dev/null 2>&1 -march=native; echo $$?)
+NO_FPMATH   := $(shell $(CC) -E - </dev/null >/dev/null 2>&1 -mfpmath=sse;  echo $$?)
+NO_SSSE3    := $(shell $(CC) -E - </dev/null >/dev/null 2>&1 -mssse3;       echo $$?)
+NO_AVX_FLAG := $(shell $(CC) -E - </dev/null >/dev/null 2>&1 -mavx;         echo $$?)
+
+CFLAGS      := -pipe -Wall -Werror -Wno-unused -Wno-uninitialized \
                -I$(NILE_RUNTIME) \
-               -m32 -O3 -ffast-math
-
-ifneq (,$(findstring mingw,$(TARGET))$(findstring cygwin,$(TARGET)))
-  CFLAGS += -mstackrealign
-endif
+               -O3 -ffast-math
 
 ifeq ($(NO_NATIVE), 0)
   CFLAGS += -march=native
@@ -26,11 +22,11 @@ ifeq ($(NO_AVX_FLAG), 0)
   CFLAGS += -mno-avx
 endif
 
+%.o: %.c *.h Makefile.gcc
+	$(CC) -c $(CFLAGS) $<
+
 libgezira.a: gezira.o gezira-image.o
 	$(AR) rcs $@ $^
-
-%.o: %.c *.h Makefile.gcc
-	$(CC) $(CFLAGS) -c $<
 
 clean:
 	$(RM) *.o *.a

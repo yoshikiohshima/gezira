@@ -24,15 +24,16 @@ UniformColor (C : Color) : Texture
 CompositeTextures (t1 : Texture, t2 : Texture, c : Compositor) : Texture
     ⇒ DupZip (t1, t2) → c
 
-ExpandSpans : CoverageSpan >> CoveragePoint
+ExpandSpans : EdgeSpan >> PixelCoverage
     ∀ (x, y, c, l)
-        if c > 0 ∧ l > 0
-            >> (x,     y, c, 1 - c)
-            << (x + 1, y, c, l - 1)
+        if c ≠ 0
+            >> (x, y, c, 1 - c)
+        if l > 0
+            << (x + 1, y, 1, l - 1)
 
-ExtractSamplePoints : CoveragePoint >> Point
+ExtractSamplePoints : PixelCoverage >> Point
     ∀ (x, y, _, _)
         >> (x, y)
 
-ApplyTexture (t : Texture) : CoverageSpan >> (Color, CoveragePoint)
+ApplyTexture (t : Texture) : EdgeSpan >> (Color, PixelCoverage)
     ⇒ ExpandSpans → DupZip (ExtractSamplePoints → t, (→))
