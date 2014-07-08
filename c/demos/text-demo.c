@@ -203,7 +203,6 @@ main (int argc, char **argv)
         }
     }
 
-
     gezira_Window_init (&window, window_width, window_height, window_x, window_y);
 
     ft_error = FT_Init_FreeType (&ft);
@@ -239,7 +238,8 @@ main (int argc, char **argv)
     }
 
     for (;;) {
-        char c = gezira_Window_key_pressed (&window);
+      char c = gezira_Window_key_pressed (&window);
+      if (c == -1) {c = inputChar();}
         while (c != -1) {
             switch (c) {
                 case ')': nthreads = 10; break;
@@ -269,6 +269,7 @@ main (int argc, char **argv)
                 gezira_Image_reset_gate (&window.image);
             }
             c = gezira_Window_key_pressed (&window);
+	    if (c == -1) {c = inputChar();}
         }
         if (!nthreads)
             break;
